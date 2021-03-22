@@ -1,0 +1,174 @@
+body {
+  font: 14px 'Noto Sans','Lucida Grande','Source Sans Pro','Avenir';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: #eceff1;
+  background: #02334a;
+  margin: 0;
+  padding: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+section {
+  margin-bottom: 55px;
+}
+
+p {
+  font-size: 0.8em;
+}
+
+a {
+  color: #eceff1;
+  text-decoration: none;
+}
+
+ul {
+  margin: 0;
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+svg {
+  top: .125em;
+  position: relative;
+
+  display: inline-flex;
+  align-self: center;
+
+  height:2em;
+  width:2em;
+}
+
+.feather {
+  stroke: #eceff1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.profile {
+  width: 100%;
+  height: 9.3em;
+  max-height: 50%;
+  padding: 0 0 10px 0;
+  border-bottom: 1px solid #0c759e;
+  margin-bottom: 1em;
+}
+
+.profile img {
+  width: 65px;
+  height: 65px;
+}
+
+.profile .info {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.profile .info h1 {
+  margin-bottom: 0;
+}
+
+.profile .info h3 {
+  margin-top: 0;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+
+.socialLinks {
+  width: 100%;
+}
+
+.socialLinks li {
+  display: inline;
+  margin-right: 0.5em;
+}
+
+.at {
+  display: none;
+}
+
+#icon {
+  margin: 5px 12px 5px 0;
+}
+
+.title * {
+  display: inline-block;
+}
+.title h2 {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.title svg {
+  height: 1.7em;
+  width: 1.7em;
+  margin-right: 1em;
+}
+.card {
+  background: #084f70;
+  padding: 15px;
+  margin-top: 0.7em;
+}
+
+.card * {
+  margin-top: 3px;
+}
+
+.skills h3 {
+  font-style: italic;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.skills h4 {
+  font-style: italic;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.pure-button {
+  /* Structure */
+  display: inline-block;
+  line-height: normal;
+  white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 80%;
+  padding: 0.3em 1em 0.7em 1em;
+  color: #E6E6E6;
+  border: none rgba(0, 0, 0, 0);
+  background-color: #02334a;
+  text-decoration: none;
+  margin-right: 7px;
+  /* Firefox: Get rid of the inner focus border */
+}
+.pure-button ::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+.pure-button svg {
+  top: 0.2em;
+  height: 1.25em;
+  width: 1.25em;
+  margin-right: 1em;
+}

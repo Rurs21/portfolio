@@ -1,0 +1,99 @@
+extends layout
+
+block content
+
+  .container
+    .profile
+      image(src="public/me1.png")
+      .info
+        h1 Rurs21
+        h3 Software Developper
+
+      ul.socialLinks
+        li
+          a(target="_blank" href='' + socialLinks.github.link)
+            include svg/github.svg
+            div.at(x="50%" y ="50%")='@' + socialLinks.github.username
+        li
+          a(target="_blank" href='' + socialLinks.gitlab.link)
+            include svg/gitlab.svg
+            div.at(x="50%" y ="50%")='@' + socialLinks.gitlab.username
+        li
+          a(target="_blank" href='' + socialLinks.twitter.username)
+            include svg/twitter.svg
+            div.at(x="50%" y ="50%")='@' + socialLinks.twitter.username
+        li
+          a(target="_blank" href='' + socialLinks.twitch.link)
+            include svg/twitch.svg
+            div.at(x="50%" y ="50%")='@' + socialLinks.twitch.username
+
+    main
+
+      section
+        .title 
+          include svg/layout.svg
+          h2 Projects
+        .projects
+        
+          .card
+            h3 This Portfolio
+            p Presents my projects and skills
+            a.pure-button(target="_blank" href='https://github.com/Rurs21/portfolio')
+              include svg/code.svg
+              | Code
+
+          each project in projects
+            div.card
+              h3=project.name
+              p=project.desc
+              a.pure-button(target="_blank" href=''+ project.result) 
+                include svg/link.svg
+                | Result
+              a.pure-button(target="_blank" href=''+ project.repo)
+                include svg/code.svg
+                | Code
+
+      .section
+        .title 
+          include svg/star.svg  
+          h2 Skills
+        .skills
+          .card
+            .title
+              include svg/globe.svg
+              h3 Web
+            h4 The Basics
+            include svg/skills/CSS3.svg
+            include svg/skills/HTML5.svg
+            include svg/skills/JS.svg
+            h4 Backend
+            include svg/skills/php3.svg
+            include svg/skills/node.svg
+            h4 Frontend
+            .skill
+              include svg/skills/vue.svg
+
+          .card
+            .title
+              include svg/database.svg
+              h3 Database
+            h4 Ayy LMAO
+            .skill
+              include svg/skills/mongodb.svg
+              span MongoDB
+            .skill
+              include svg/skills/mysql.svg
+              span MySQL
+
+
+          .card
+            .title
+              include svg/tool.svg
+              h3 Tools
+            h4 Ayy LMAO
+            include svg/skills/git.svg
+            span git
+            include svg/skills/eslint.svg
+            span eslint
+            include svg/skills/webpack.svg
+            span Webpack
