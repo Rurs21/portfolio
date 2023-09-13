@@ -1,0 +1,35 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+	font-family: "Computer Modern", Times, serif;
+
+	background: #e7e9ea; /* Fallback color */
+
+	/* Carrara White -> White Marble */
+	background: linear-gradient(0deg, #f3f4ef,#f0f3ef, #edf1ee, #ebefee, #e9eded, #e8ebec,#e7e9ea);
+  	/* Raven Black -> Graphie
+	  background: linear-gradient(0deg, #1c1e1e, #202425, #252a2c, #2a3034, #31363c, #383c44, #41424c);
+	*/
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+h1, h2 {
+  font-weight: normal;
+}
