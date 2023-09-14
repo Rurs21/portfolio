@@ -1,35 +1,88 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --text-color: #333;
+    /* Carrara White ->  White Marble */
+    --background-color: linear-gradient(0deg, #f3f4ef,#f0f3ef, #edf1ee, #ebefee, #e9eded, #e8ebec,#e7e9ea);
 }
 
 body {
-	font-family: "Computer Modern", Times, serif;
+    font-size: 1em;
+    font-family: "Computer Modern", Times, serif;
 
-	background: #e7e9ea; /* Fallback color */
+    background: #e7e9ea; /* Fallback color (White Marble) */
 
-	/* Carrara White -> White Marble */
-	background: linear-gradient(0deg, #f3f4ef,#f0f3ef, #edf1ee, #ebefee, #e9eded, #e8ebec,#e7e9ea);
-  	/* Raven Black -> Graphie
-	  background: linear-gradient(0deg, #1c1e1e, #202425, #252a2c, #2a3034, #31363c, #383c44, #41424c);
-	*/
+    color: var(--text-color);
+    background: var(--background-color);
+    
 }
 
+body.dark {
+    --text-color: #fff;
+    /* Raven Black -> Graphite */
+    --background-color: linear-gradient(0deg, #1c1e1e, #202425, #252a2c, #2a3034, #31363c, #383c44, #41424c);
+}
+
+.content {
+    padding: 1em;
+}
+
+#theme-toggle {
+    font-size: 2em;
+    background-color: transparent;
+    border: 2px solid var(--text-color);
+    cursor: pointer;
+    color: var(--icon-color);
+    border-radius: 50%;
+    width: 1.77em;
+    height: 1.77em;
+}
+
+@media (min-width: 768px) {
+    :root {
+        font-size: 1.125em; /* 18px (1.125 * 16px) */
+    }
+}
+
+@media (min-width: 1024px) {
+    :root {
+        font-size: 1.25em; /* 20px (1.25 * 16px) */
+    }
+}
+
+@media (min-width: 1440px) {
+    :root {
+        font-size: 1.375em; /* 22px (1.375 * 16px) */
+    }
+}
+
+@media (min-width: 3840px) {
+    :root {
+        font-size: 1.5em; /* 24px (1.5 * 16px) */
+    }
+}
+
+.greeting {
+    padding: 1em;
+    margin: 1em;
+}
+
+/* Fade-in animation */
 .fade-in {
-  opacity: 0;
-  animation: fadeIn 3s ease-in-out forwards;
+    opacity: 0;
+    animation: fadeIn 3s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
-h1, h2 {
-  font-weight: normal;
-}

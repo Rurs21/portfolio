@@ -1,3 +1,15 @@
+/**
+ * Trying to keep it vanilla and simple 🍦
+ * 
+ * Rurs21
+ */
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    drawRose();
+	setupTheme();
+});
+
 function generateSpiral(a, b, c, n, k, thetaIncrement, thetaMax) {
 	let points = [];
 	let maxPetals = n;
@@ -85,6 +97,30 @@ function drawRose() {
 	*/
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    drawRose();
-});
+function setupTheme() {
+	// Get the theme-toggle button and body element
+	const themeToggle = document.getElementById('theme-toggle');
+	const body = document.body;
+
+	// Function to toggle the theme
+	const toggleTheme = function() {
+		body.classList.toggle('dark');
+		// Save the theme preference to localStorage
+		const isDarkMode = body.classList.contains('dark');
+		localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+
+		// Toggle the button icon based on the theme
+		themeToggle.textContent = isDarkMode ? '☾' : '✹';
+	}
+
+	// Add a click event listener to the theme-toggle button
+	themeToggle.addEventListener('click', toggleTheme);
+
+	// Check for the user's theme preference in localStorage
+	const savedTheme = localStorage.getItem('theme');
+	if (savedTheme === 'dark') {
+		body.classList.add('dark');
+
+		themeToggle.textContent = '☾';
+	}
+}
