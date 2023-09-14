@@ -3,60 +3,50 @@
  * 
  * Rurs21
  */
+import { setupTheme } from "./js/theme.js";
+import { archimedeanFlower } from "./js/flower.js"
 
-
-document.addEventListener("DOMContentLoaded", function() {
-    drawRose();
+window.onload = function() {
+	drawRose();
 	setupTheme();
-});
-
-function generateSpiral(a, b, c, n, k, thetaIncrement, thetaMax) {
-	let points = [];
-	let maxPetals = n;
-	
-	for (let theta = 0; theta < thetaMax; theta += thetaIncrement) {
-		let dynamicN = (maxPetals / thetaMax) * theta;  // Gradually increase the number of petals
-
-		let r = (a + b * theta) * (1 + Math.exp(-k * theta) * c * Math.sin(dynamicN * theta));
-		let x = r * Math.cos(theta);
-		let y = r * Math.sin(theta);
-		points.push([x, y]);
-	}
-
-	if(points.length > 2) {
-		// Find the closest point to the last point, excluding the penultimate one
-		let lastPoint = points[points.length - 1];
-		let closestDistance = Infinity;
-		let closestPointIndex = -1;
-
-		for (let i = 0; i < points.length - 2; i++) {  // exclude the last and penultimate points
-			let distance = Math.sqrt(Math.pow(points[i][0] - lastPoint[0], 2) + Math.pow(points[i][1] - lastPoint[1], 2));
-			if (distance < closestDistance) {
-				closestDistance = distance;
-				closestPointIndex = i;
-			}
-		}
-
-		// Append the closest point found to the list
-		points.push(points[closestPointIndex]);
-	}  
-
-	return points;
+	greetingTitle();
 }
 
+function greetingTitle() {
+	const outputElement = document.querySelector('.output');
+	const cursorElement = document.querySelector('.cursor');
+	const title = "Software developer";
+	let currentIndex = 0;
+
+	cursorElement.style.animation = 'blink 1s infinite';
+
+
+	var typeOutTitle = function() {
+		if (currentIndex < title.length) {
+			outputElement.textContent += title[currentIndex];
+			currentIndex++;
+			setTimeout(typeOutTitle, 100); // Typing speed: 100ms per character
+		} else {
+			cursorElement.style.animation = 'none';
+			cursorElement.style.opacity = '0';
+		}
+	}
+
+	setTimeout(typeOutTitle, 2400);
+}
 
 function drawRose() {
 	// Set up our constants and generate the spiral
 	const a = 0, b = 4, c = 0.17, n = 5, k = 0.0257;
 	const thetaIncrement = 0.17;
 	const thetaMax = 9.9777 * Math.PI;
-	const spiralPoints = generateSpiral(a, b, c, n, k, thetaIncrement, thetaMax);
+	const spiralPoints = archimedeanFlower(a, b, c, n, k, thetaIncrement, thetaMax);
 
 	// Create the SVG and the path for the spiral
 	const svgNS = "http://www.w3.org/2000/svg";
 	let svgElem = document.createElementNS(svgNS, "svg");
-	svgElem.setAttribute("width", "400");
-	svgElem.setAttribute("height", "400");
+	svgElem.setAttribute("width", `17em`);
+	svgElem.setAttribute("height", `17em`);
 
 	let pathElem = document.createElementNS(svgNS, "path");
 	pathElem.setAttribute("fill", "none");
@@ -88,39 +78,4 @@ function drawRose() {
 	// Add the path to the SVG and the SVG to the container
 	svgElem.appendChild(pathElem);
 	document.getElementById("svgContainer").appendChild(svgElem);
-
-	/* ROTATE
-	let bbox = pathElem.getBBox();
-	let centerX = (bbox.x + bbox.width / 2);
-	let centerY = (bbox.y + bbox.height / 2);
-	pathElem.setAttribute("transform", `rotate(77, ${centerX}, ${centerY})`);
-	*/
-}
-
-function setupTheme() {
-	// Get the theme-toggle button and body element
-	const themeToggle = document.getElementById('theme-toggle');
-	const body = document.body;
-
-	// Function to toggle the theme
-	const toggleTheme = function() {
-		body.classList.toggle('dark');
-		// Save the theme preference to localStorage
-		const isDarkMode = body.classList.contains('dark');
-		localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-
-		// Toggle the button icon based on the theme
-		themeToggle.textContent = isDarkMode ? '☾' : '✹';
-	}
-
-	// Add a click event listener to the theme-toggle button
-	themeToggle.addEventListener('click', toggleTheme);
-
-	// Check for the user's theme preference in localStorage
-	const savedTheme = localStorage.getItem('theme');
-	if (savedTheme === 'dark') {
-		body.classList.add('dark');
-
-		themeToggle.textContent = '☾';
-	}
 }
