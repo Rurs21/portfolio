@@ -12,23 +12,31 @@ body, html {
 
 body {
     font-size: 1em;
-    font-family: "Computer Modern", Times, serif;
-
-    background: #e7e9ea; /* Fallback color (White Marble) */
+    font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
     color: var(--text-color);
+    background: #e7e9ea; /* Fallback color (White Marble) */
     background: var(--background-color);
-    
 }
 
 body.dark {
     --text-color: #fff;
-    /* Raven Black -> Graphite */
-    --background-color: linear-gradient(0deg, #1c1e1e, #202425, #252a2c, #2a3034, #31363c, #383c44, #41424c);
+    /* Raven Black -> Bitter black */
+    --background-color: linear-gradient(0deg, #1c1e1e, #1b1d1d, #1a1d1c, #1a1c1a, #1a1b18, #1b1a17, #1b1916, #1c1815, #1d1715, #1d1615);
 }
 
 .content {
     padding: 1em;
+    height: 100%;
+}
+
+.greeting * {
+    font-family: 'Shippori Antique B1', "Rubik", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+}
+
+.greeting h1 {
+    font-size: 1.96em;
 }
 
 #theme-toggle {
@@ -51,6 +59,12 @@ body.dark {
 @media (min-width: 1024px) {
     :root {
         font-size: 1.25em; /* 20px (1.25 * 16px) */
+    }
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Ensure full viewport height */
     }
 }
 
