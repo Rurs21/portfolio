@@ -6,23 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,700;1,400&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="script.js"></script>
 </head>
 
 <body>
-    <div class="content">
-
+    <header>
         <div class="greeting">
             <h1 class="fade-in">Hello, I'm Charles.</h1>
-            <h2 class="sr-only">Software Developer</h2>
-            <h2 aria-hidden="true"><span class="output"></span><span class="cursor">▮</span></p></h2>
+            <h2><span class="output"></span><span class="cursor">▮</span></p></h2>
         </div>
-
-        <button id="theme-toggle">✹</button>
-      
-        <div id="svgContainer"></div>
-
+        <button aria-label="Toggle Light/Dark Theme" id="theme-toggle">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
+    </header>
+    <div class="content">
+        <div hidden="true" id="svgContainer"></div>
     </div>  
 </body>
 
