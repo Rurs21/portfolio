@@ -6,22 +6,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,700;1,400&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@300;400;700&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="script.js"></script>
 </head>
 
 <body>
-    <header>
-        <div class="greeting">
-            <h1 class="fade-in">Hello, I'm Charles.</h1>
-            <h2><span class="output"></span><span class="cursor">▮</span></p></h2>
-        </div>
-        <button aria-label="Toggle Light/Dark Theme" id="theme-toggle">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
-    </header>
+    <nav id="navbar" class="hidden">
+        <button aria-label="Toggle Light/Dark Theme" id="theme-toggle" class="round-button">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
+        <button aria-label="Hide navigation bar" id="hide-navbar" class="round-button" >Χ</button>
+    </nav>
+
     <div class="content">
-        <div hidden="true" id="svgContainer"></div>
-    </div>  
+        <button aria-label="Reveal navigation bar" id="reveal-navbar" >⇂</button>
+
+        <header>
+            <div id="greeting">
+                <h1 class="fade-in bolderish">Hello, I'm Charles.</h1>
+                <h2><span class="output"></span><span class="cursor">▮</span></h2>
+            </div>
+        </header>
+       
+        <div id="svgContainer"></div>
+
+        <section class="blabla" style='font-family: "Shippori Antique B1";'>
+            <p>
+                You know what? Sometimes I just don’t get it. Why did I even choose this profession? 
+                What's the point if the heart and soul is missing from the work?
+            </p>
+        </section>
+    </div>
+        
 </body>
 
 </html>

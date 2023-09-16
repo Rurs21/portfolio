@@ -6,53 +6,104 @@ body, html {
 
 :root {
     --text-color: #333;
-    /* Carrara White ->  White Marble */
-    --background-color: linear-gradient(0deg, #f3f4ef,#f0f3ef, #edf1ee, #ebefee, #e9eded, #e8ebec,#e7e9ea);
+    --background-color: #e7e9ea
+    /* Carrara White ->  White Marble 
+    --background-color: linear-gradient(0deg, #f3f4ef,#f0f3ef, #edf1ee, #ebefee, #e9eded, #e8ebec,#e7e9ea);*/
 }
 
 body {
     font-size: 1em;
-    font-family: "Rubik", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-family: 'M PLUS 2', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
     color: var(--text-color);
     background: #e7e9ea; /* Fallback color (White Marble) */
     background: var(--background-color);
+    background-attachment: fixed;
 }
 
 body.dark {
     --text-color: #fff;
-    /* Raven Black -> Bitter black */
-    --background-color: linear-gradient(0deg, #1c1e1e, #1b1d1d, #1a1d1c, #1a1c1a, #1a1b18, #1b1a17, #1b1916, #1c1815, #1d1715, #1d1615);
+    /* Raven Black */
+    --background-color: #1c1e1e;
+}
+
+body > * {
+    width: 100%;
+}
+
+#greeting {
+    margin: 1em 0 0 0;
+    padding: 1em;
+}
+
+
+#greeting h2 {
+    font-weight: 400;
+    line-height: 1.4em;
+}
+
+.bolderish {
+    text-shadow: 0.33px 0 0 #333, 0 0px 0 #333, -0.33px 0 0 #333, 0 -0.33px 0 #333;
+}
+
+.dark .bolderish {
+    text-shadow: 0.33px 0 0 #fff, 0 0px 0 #fff, -0.33px 0 0 #fff, 0 -0.33px 0 #fff;
 }
 
 .content {
-    padding: 1em;
     height: 100%;
+    position: relative;
 }
 
-.greeting * {
-    font-family: 'Shippori Antique B1', "Rubik", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-    font-weight: 400;
-}
-
-.greeting h1 {
-    font-size: 1.96em;
-}
-
-#theme-toggle {
+button {
     font-size: 2em;
-    background-color: transparent;
-    border: 2px solid var(--text-color);
     cursor: pointer;
-    color: var(--icon-color);
-    border-radius: 50%;
+    color: var(--text-color);
+    background-color: var(--background-color);
     width: 1.77em;
     height: 1.77em;
+}
+
+.round-button {
+    border: 2px solid var(--text-color);
+    border-radius: 50%;
+
+}
+
+#navbar {
+    position: fixed;
+    top: 0;
+    transition: top 0.2s;
+    padding: 1em;
+    background: var(--background-color);
+    border-bottom: 0.15em solid var(--text-color);
+    z-index: 3;
+}
+
+#reveal-navbar {
+    font-weight: bold;
+    font-size: 3em;
+    position: absolute;
+    top: 0.25em;
+    right: 0.25em;
+    z-index: 2;
+}
+
+#navbar.hidden {
+    top: -6em; /* Hide the navbar above the viewport */
+}
+
+.blabla {
+    margin: 1em;
+    line-height: 2em;
 }
 
 @media (min-width: 768px) {
     :root {
         font-size: 1.125em; /* 18px (1.125 * 16px) */
+    }
+    h1 {
+        font-size: 2em;
     }
 }
 
@@ -66,11 +117,23 @@ body.dark {
         align-items: center;
         min-height: 100vh; /* Ensure full viewport height */
     }
+    h1 {
+        font-size: 3em;
+    }
+    h2 {
+        font-size: 2.5em;
+    }
+    body > * {
+        width: 75%;
+    }
 }
 
 @media (min-width: 1440px) {
     :root {
         font-size: 1.375em; /* 22px (1.375 * 16px) */
+    }
+    body > * {
+        width: 60%;
     }
 }
 
@@ -78,17 +141,21 @@ body.dark {
     :root {
         font-size: 1.5em; /* 24px (1.5 * 16px) */
     }
-}
-
-.greeting {
-    padding: 1em;
-    margin: 1em;
+    h1 {
+        font-size: 4em;
+    }
+    h2 {
+        font-size: 3em;
+    }
+    body > * {
+        width: 40%;
+    }
 }
 
 /* Fade-in animation */
 .fade-in {
     opacity: 0;
-    animation: fadeIn 3s ease-in-out forwards;
+    animation: fadeIn 2s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
