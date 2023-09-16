@@ -7,12 +7,14 @@ import { setupTheme } from "./js/theme.js";
 import { archimedeanFlower } from "./js/flower.js"
 
 window.onload = function() {
-	drawRose();
 	setupTheme();
-	greetingTitle();
+	setupNavBar();
+
+	greeting();
+	drawRose();
 }
 
-function greetingTitle() {
+function greeting() {
 	const outputElement = document.querySelector('.output');
 	const cursorElement = document.querySelector('.cursor');
 	const title = "Software developer";
@@ -25,14 +27,26 @@ function greetingTitle() {
 		if (currentIndex < title.length) {
 			outputElement.textContent += title[currentIndex];
 			currentIndex++;
-			setTimeout(typeOutTitle, 100); // Typing speed: 100ms per character
+			setTimeout(typeOutTitle, 50); // Typing speed: 100ms per character
 		} else {
-			cursorElement.style.animation = 'none';
-			cursorElement.style.opacity = '0';
+			setTimeout(() => cursorElement.remove(), 1500);
 		}
 	}
 
-	setTimeout(typeOutTitle, 2400);
+	setTimeout(typeOutTitle, 2100);
+}
+
+function setupNavBar() {
+	const revealButton = document.getElementById("reveal-navbar");
+	const hideButton = document.getElementById("hide-navbar");
+	const navbar = document.getElementById("navbar");
+
+	var toggleFunction = function() {
+		navbar.classList.toggle("hidden");
+	};
+
+	revealButton.addEventListener("click", toggleFunction);
+	hideButton.addEventListener("click", toggleFunction);
 }
 
 function drawRose() {
@@ -71,22 +85,21 @@ function drawRose() {
 	animateDrawElem.setAttribute("attributeName", "stroke-dashoffset");
 	animateDrawElem.setAttribute("from", pathLength);
 	animateDrawElem.setAttribute("to", "0");
-	animateDrawElem.setAttribute("dur", "15s");  // Duration of animation
+	animateDrawElem.setAttribute("dur", "10s");  // Duration of animation
 	animateDrawElem.setAttribute("fill", "freeze");
 	pathElem.appendChild(animateDrawElem);
 
-	/*
 	let animateElem = document.createElementNS(svgNS, "animate");
 	animateElem.setAttribute("attributeName", "fill");
 	animateElem.setAttribute("from", "transparent");
 	animateElem.setAttribute("to", "#960018");
-	animateElem.setAttribute("dur", "3s");  // Duration of animation
-	animateElem.setAttribute("begin", "5s");
+	animateElem.setAttribute("dur", "1.5s");  // Duration of animation
+	animateElem.setAttribute("begin", "3s");
 	animateElem.setAttribute("fill", "freeze");
 	pathElem.appendChild(animateElem);
-	*/
 
 	// Add the path to the SVG and the SVG to the container
 	svgElem.appendChild(pathElem);
 	document.getElementById("svgContainer").appendChild(svgElem);
 }
+
