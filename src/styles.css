@@ -8,12 +8,15 @@ body, html {
     --text-color: #333;
     --background-color: #e7e9ea; /* White Marble */
     --secondary-color: #C0C0C0;
+    --system-ui: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 body {
+    margin-top: 5em;
     font-size: 1em;
     font-family: 'M PLUS 2', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
+    color: #333;
     color: var(--text-color);
     background: #e7e9ea; /* Fallback color (White Marble) */
     background: var(--background-color);
@@ -22,8 +25,7 @@ body {
 
 body.dark {
     --text-color: #fff;
-    /* Raven Black */
-    --background-color: #1c1e1e;
+    --background-color: #1c1e1e; /* Raven Black */
     --secondary-color: #41424C;
 }
 
@@ -39,8 +41,8 @@ body > * {
 .cursor {
     width: 0.6em;
     height: 1.3em;
-    background-color: var(--text-color);
     position: absolute;
+    background-color: var(--text-color);
 }
 
 #greeting h2 {
@@ -57,14 +59,16 @@ body > * {
 }
 
 button {
-    font-size: 2em;
     padding: 0;
     width: 1.77em;
     height: 1.77em;
 
-    cursor: pointer;
+    font-size: 2em;
+    font-family: 'Noto Sans Symbols 2', -apple-system, BlinkMacSystemFont, Arial, Helvetica, sans-serif;
     color: var(--text-color);
     background-color: var(--background-color);
+
+    cursor: pointer;
     text-align: center;
     text-decoration: none;
 
@@ -78,10 +82,10 @@ button {
 
 .square-button {
     border-radius: 0;
-    border-top:    0.06em solid var(--text-color);
-    border-left:   0.06em solid var(--text-color);
-    border-right:  0.06em solid var(--secondary-color);
-    border-bottom: 0.06em solid var(--secondary-color);
+    border-top:    0.08em solid var(--text-color);
+    border-left:   0.08em solid var(--text-color);
+    border-right:  0.08em solid var(--secondary-color);
+    border-bottom: 0.08em solid var(--secondary-color);
 }
 
 svg {
@@ -89,16 +93,20 @@ svg {
 }
 
 #navbar {
-    transition: top 0.2s;
+    max-width: 100%;
+    padding: 1em;
     position: fixed;
     top: 0;
-    padding: 1em;
+    z-index: 3;
     background: var(--background-color);
     border-bottom: 0.15em solid var(--text-color);
-    z-index: 3;
     box-sizing: border-box;
-    max-width: 100%;
     flex-grow: 0;
+    transition: top 0.2s;
+}
+
+#navbar button {
+    line-height: 2em;
 }
 
 #menu {
@@ -107,7 +115,6 @@ svg {
 }
 
 #reveal-navbar {
-    font-weight: bold;
     position: absolute;
     right: 0;
     margin: 0.25em;
@@ -214,7 +221,6 @@ svg {
     }
 }
 
-
 /* blink animation */
 @keyframes blink {
     0%, 49% {
@@ -226,13 +232,13 @@ svg {
 }
 
 .sr-only {
-    position: absolute;
     width: 1px;
     height: 1px;
     padding: 0;
     margin: -1px;
+    position: absolute;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
-    white-space: nowrap;  /* Added to keep text from wrapping, useful for longer text */
+    white-space: nowrap;
 }
