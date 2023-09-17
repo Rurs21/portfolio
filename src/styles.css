@@ -52,7 +52,6 @@ body > * {
 
 .content {
     height: 100%;
-    position: relative;
 }
 
 button {
@@ -71,22 +70,41 @@ button {
 }
 
 #navbar {
+    transition: top 0.2s;
     position: fixed;
     top: 0;
-    transition: top 0.2s;
     padding: 1em;
     background: var(--background-color);
     border-bottom: 0.15em solid var(--text-color);
     z-index: 3;
+    box-sizing: border-box;
+    flex-grow: 0; /* Don't allow growth */
+    flex-shrink: 0; /* Don't allow shrinking */
+}
+
+#menu {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    height: 100%;
+    flex-grow: 0; /* Don't allow growth */
+    flex-shrink: 0; /* Don't allow shrinking */
 }
 
 #reveal-navbar {
     font-weight: bold;
-    font-size: 3em;
     position: absolute;
-    top: 0.25em;
-    right: 0.25em;
-    z-index: 2;
+    right: 0;
+    margin: 0.25em;
+}
+
+#hide-navbar {
+    margin: 0 0 0 1em;
 }
 
 #navbar.hidden {
@@ -104,6 +122,12 @@ button {
     }
     h1 {
         font-size: 2em;
+    }
+    #navbar {
+        padding: 1.25em 1em 1em 1em;
+    }
+    #reveal-navbar {
+        margin: 0.35em 0.5em 0.5em 0.5em;
     }
 }
 

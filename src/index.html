@@ -13,13 +13,16 @@
 
 <body>
     <nav id="navbar" class="hidden">
-        <button aria-label="Toggle Light/Dark Theme" id="theme-toggle" class="round-button">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
-        <button aria-label="Hide navigation bar" id="hide-navbar" class="round-button" >Χ</button>
+        <div id="menu">
+            <button aria-label="Toggle Light/Dark Theme" id="theme-toggle" class="round-button">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
+            <button aria-label="Hide navigation bar" id="hide-navbar" >Χ</button>
+        </div>
     </nav>
+    <div class="overlay">
+        <button aria-label="Reveal navigation bar" id="reveal-navbar" >⥥</button> <!--⇂☰⚙-->
+    </div>
 
     <div class="content">
-        <button aria-label="Reveal navigation bar" id="reveal-navbar" >⇂</button>
-
         <header>
             <div id="greeting">
                 <h1 class="fade-in bolderish">Hello, I'm Charles.</h1>
