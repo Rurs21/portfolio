@@ -23,10 +23,10 @@ export function setupTheme() {
 	const changeTheme = function(theme) {
 		if (theme == 'dark') {
 			body.classList.add('dark');
-			themeToggle.textContent = '☾';
+			themeToggle.textContent = '☾'; // ☾ ☽ 🌜 ⏾ ⚉
 		} else {
 			body.classList.remove('dark');
-			themeToggle.textContent = '✹';
+			themeToggle.textContent = '☼'; // ✹ ☼ ☀ 🌣
 		}
 
 		// Save the theme preference to localStorage
