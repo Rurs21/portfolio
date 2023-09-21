@@ -12,14 +12,14 @@
 </head>
 
 <body>
-    <nav id="navbar" class="hidden">
+    <nav id="navbar" class="close hidden">
         <div id="menu">
             <button aria-label="Toggle Light/Dark Theme" id="theme-toggle" class="round-button">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
-            <button aria-label="Hide navigation bar" id="hide-navbar" class="square-button" >Χ</button> <!--🌣 -->
+            <button aria-label="Hide navigation bar" id="close-navbar" class="square-button" >Χ</button> <!--🌣 -->
         </div>
     </nav>
-    <div class="overlay">
-        <button aria-label="Reveal navigation bar" id="reveal-navbar" class="square-button" >⏣</button> <!--⇂☰⚙⥥⌥ ⮛ ⏣-->
+    <div id="top-overlay" class="overlay hidden">
+        <button aria-label="Reveal navigation bar" id="open-navbar" class="square-button"><span class="symbol">⏣</span></button> <!--⇂☰⚙⥥⌥ ⮛ ⏣-->
     </div>
 
     <div class="content">
@@ -32,7 +32,7 @@
        
         <div id="svgContainer"></div>
 
-        <section class="blabla" style='font-family: "Shippori Antique B1";'>
+        <section class="blabla">
             <p>
                 You know what? Sometimes I just don’t get it. Why did I even choose this profession? 
                 What's the point if the heart and soul is missing from the work?
@@ -43,3 +43,4 @@
 </body>
 
 </html>
+   
