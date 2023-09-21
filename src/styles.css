@@ -76,7 +76,7 @@ button {
 }
 
 .round-button {
-    border: 0.06em solid var(--text-color);
+    border: 0.07em solid var(--text-color);
     border-radius: 50%;
 }
 
@@ -87,6 +87,19 @@ button {
     border-right:  0.08em solid var(--secondary-color);
     border-bottom: 0.08em solid var(--secondary-color);
 }
+
+.symbol {
+    /*
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+    */
+    font-size: 1.35em;
+    line-height: 1.3em;
+  }
+  
 
 svg {
     max-width: 100%;
@@ -114,17 +127,17 @@ svg {
     justify-content: flex-end;
 }
 
-#reveal-navbar {
+#open-navbar {
     position: absolute;
     right: 0;
     margin: 0.25em;
 }
 
-#hide-navbar {
+#close-navbar {
     margin: 0 0 0 1em;
 }
 
-#navbar.hidden {
+#navbar.close {
     top: -6em; /* Hide the navbar above the viewport */
 }
 
@@ -229,6 +242,10 @@ svg {
     50%, 100% {
         opacity: 0;
     }
+}
+
+.hidden {
+    visibility: hidden;
 }
 
 .sr-only {
