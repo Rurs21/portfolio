@@ -3,10 +3,15 @@
  * 
  * Rurs21
  */
+import script from "./script.js?url";
+import style from "./styles.css?url"
 import { archimedeanFlower } from "./js/flower.js"
 import { calculatePathLength, calculateWidthAndHeight } from "./js/utils.js"
 
 window.onload = function() {
+	// Hide the loading screen
+	startLoading();
+
 	setupTheme();
 	setupNavBar();
 
@@ -163,4 +168,73 @@ function setupTheme() {
 	checkUserTheme();
 }
 
+// Function to update the loading progress
+function updateLoadingProgress(percentage) {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.querySelector('#progress-bar').style.width = percentage + '%';
+}
+
+// Asynchronously load styles
+function loadStyles() {
+	return fetch(style)
+        .then((response) => response.text())
+        .then((cssText) => {
+            const styleElement = document.createElement('style');
+            styleElement.textContent = cssText;
+            document.head.appendChild(styleElement);
+			console.log("STYLE LOADED!");
+        });
+}
+
+// Asynchronously load JavaScript
+function loadJavaScript() {
+    return fetch(script)
+        .then((response) => response.text())
+        .then((jsText) => {
+            const scriptElement = document.createElement('script');
+            scriptElement.textContent = jsText;
+            document.head.appendChild(scriptElement);
+        });
+}
+
+// Asynchronously load fonts using @font-face
+function loadFonts() {
+    // You can define and load your fonts here using @font-face rules.
+    // Example:
+    // const fontFace = new FontFace('YourFontName', 'url(font.woff2)');
+    // document.fonts.add(fontFace);
+    // return fontFace.load();
+}
+
+// Function to initiate loading and handle progress
+function startLoading() {
+    const totalResources = 2; // Adjust this based on the number of resources you're loading
+    let loadedResources = 0;
+
+    // Update loading progress as each resource is loaded
+    function resourceLoaded() {
+        loadedResources++;
+        const percentage = (loadedResources / totalResources) * 100;
+        updateLoadingProgress(percentage);
+
+        if (loadedResources === totalResources) {
+            // All resources are loaded
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.style.display = 'none';
+			console.log("ALL LOADED")
+        }
+    }
+
+	//setTimeout(resourceLoaded, 1000);
+
+    // Load styles
+    loadStyles().then(resourceLoaded);
+
+    // Load JavaScript
+    loadJavaScript().then(resourceLoaded);
+
+    // Load fonts (if any)
+    //loadFonts().then(resourceLoaded);
+
+}
   

@@ -6,13 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hello World!</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com/" /><link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@300;400;700&family=Noto+Sans+Symbols+2&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <script type="module" src="main.js"></script>
+    <style>
+        body > * { display: none; }
+        #loading-screen { display: contents }
+    </style>
+    <!--link rel="stylesheet" href="styles.css"-->
 </head>
 
 <body>
+    <div id="loading-screen" style="position: fixed; width: 100%; height: 100%;">
+        <p>Loading...</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+
     <nav id="navbar" class="close hidden">
         <div id="menu">
             <button aria-label="Toggle Light/Dark Theme" id="theme-toggle" class="round-button">✹<span class="sr-only">Toggle Light/Dark Theme</span></button>
