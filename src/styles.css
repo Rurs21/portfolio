@@ -33,6 +33,10 @@ body > * {
     width: 100%;
 }
 
+section {
+    padding: 1em;
+}
+
 #greeting {
     margin: 1em 0 0 0;
     padding: 1em;
@@ -98,11 +102,22 @@ button {
     */
     font-size: 1.35em;
     line-height: 1.3em;
-  }
+}
   
 
 svg {
     max-width: 100%;
+}
+
+.icon {
+    display: inline-block;
+    height: 6em;
+    width: 6em;
+    padding: 1.5em;
+}
+
+.dark .icon {
+    fill: var(--text-color);
 }
 
 #navbar {
@@ -154,9 +169,12 @@ svg {
     height: 100%;
 }
 
-.blabla {
-    margin: 1em;
+.about {
     line-height: 2em;
+}
+
+.contact h2 {
+    margin: 0;
 }
 
 @media (min-width: 768px) {
@@ -164,6 +182,9 @@ svg {
         font-size: 1.125em; /* 18px (1.125 * 16px) */
     }
     h1 {
+        font-size: 2.5em;
+    }
+    h2 {
         font-size: 2em;
     }
     #navbar {
