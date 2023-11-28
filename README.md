@@ -20,3 +20,20 @@ deploy
 ```sh
 npm run build
 ```
+
+## assets
+
+### fonts
+
+- M PLUS 2 : 300, 400, 700
+- Noto Sans Symbol 2 : 400
+
+### SVG
+
+- Font Awesome : github-alt, envelope
+- Simple Icons : LinkedIn
+
+## TODO
+
+- accessibility-proof
+- english/french

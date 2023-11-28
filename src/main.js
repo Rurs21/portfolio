@@ -113,7 +113,7 @@ function drawRose() {
 
 	// Add the path to the SVG and the SVG to the container
 	svgElem.appendChild(pathElem);
-	document.getElementById("svgContainer").appendChild(svgElem);
+	document.getElementById("rose").appendChild(svgElem);
 }
 
 function setupTheme() {
