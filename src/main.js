@@ -80,8 +80,7 @@ function drawRose() {
 	// Create the SVG
 	const svgNS = "http://www.w3.org/2000/svg";
 	let svgElem = document.createElementNS(svgNS, "svg");
-	svgElem.setAttribute("width", Math.ceil(width) + strokeWidth);
-	svgElem.setAttribute("height", Math.ceil(height)+ strokeWidth);
+	svgElem.setAttribute("viewBox", `0 0 ${Math.ceil(width) + strokeWidth} ${Math.ceil(height)+ strokeWidth}` );
 
 	let pathElem = document.createElementNS(svgNS, "path");
 	pathElem.setAttribute("fill", "none");
