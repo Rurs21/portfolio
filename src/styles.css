@@ -11,8 +11,13 @@ body, html {
     --system-ui: system-ui, -apple-system, BlinkMacSystemFont, Helvetica, Arial, "Segoe UI", Roboto, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
+body.dark {
+    --text-color: #fff;
+    --background-color: #1c1e1e; /* Raven Black */
+    --secondary-color: #41424C;
+}
+
 body {
-    margin-top: 5em;
     font-size: 1em;
     font-family: 'M PLUS 2', -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
 
@@ -23,22 +28,16 @@ body {
     background-attachment: fixed;
 }
 
-body.dark {
-    --text-color: #fff;
-    --background-color: #1c1e1e; /* Raven Black */
-    --secondary-color: #41424C;
-}
-
 body > * {
     width: 100%;
 }
 
-section {
-    padding: 1em;
+.content {
+    height: 100%;
+    padding: 5em 0 0 0;
 }
 
-#greeting {
-    margin: 1em 0 0 0;
+.content > * {
     padding: 1em;
 }
 
@@ -108,6 +107,7 @@ svg {
     
     width: 90%;
     opacity: 0.95;
+    padding: 0;
 }
 /*
 #rose path {
@@ -172,10 +172,6 @@ svg {
     height: 10%;
     flex-grow: 0;
     flex-shrink: 0;
-}
-
-.content {
-    height: 100%;
 }
 
 .about {
