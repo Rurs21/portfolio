@@ -68,6 +68,7 @@ button {
     height: 1.77em;
 
     font-size: 2em;
+    line-height: 2em;
     font-family: 'Noto Sans Symbols 2', -apple-system, BlinkMacSystemFont, Arial, Helvetica, sans-serif;
     color: var(--text-color);
     background-color: var(--background-color);
@@ -91,19 +92,6 @@ button {
     border-right:  0.08em solid var(--secondary-color);
     border-bottom: 0.08em solid var(--secondary-color);
 }
-
-.symbol {
-    /*
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
-    */
-    font-size: 1.35em;
-    line-height: 1.3em;
-}
-  
 
 svg {
     max-width: 100%;
@@ -158,10 +146,6 @@ svg {
     transition: top 0.2s;
 }
 
-#navbar button {
-    line-height: 2em;
-}
-
 #menu {
     display: flex;
     justify-content: flex-end;
@@ -196,6 +180,7 @@ svg {
 
 .about {
     line-height: 2em;
+    font-size: 1.25em;
 }
 
 .contact h2 {
