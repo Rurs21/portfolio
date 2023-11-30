@@ -124,9 +124,9 @@ svg {
 
 .icon {
     display: inline-block;
-    height: 6em;
-    width: 6em;
-    padding: 1.5em;
+    padding: 5%;
+    width: 22%;
+    max-width: 8.5em;
 }
 
 .dark .icon {
