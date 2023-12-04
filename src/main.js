@@ -44,6 +44,9 @@ function setupNavBar() {
 
 	var toggleFunction = function() {
 		navbar.classList.toggle("close");
+		var isExpended = !navbar.classList.contains("close");
+		revealButton.ariaExpanded = isExpended;
+		hideButton.ariaExpanded = isExpended;
 	};
 
 	revealButton.addEventListener("click", toggleFunction);
@@ -116,17 +119,20 @@ function drawRose() {
 }
 
 function setupTheme() {
-	// Get the theme-toggle button and body element
-	const themeToggle = document.getElementById('theme-toggle');
+	// Get the body & theme-toggle button element
 	const body = document.body;
+	const themeToggle = document.getElementById('theme-toggle');
+	const themeIcon = document.getElementById('theme-icon');
 
 	const changeTheme = function(theme) {
 		if (theme == 'dark') {
 			body.classList.add('dark');
-			themeToggle.textContent = '☾'; // ☾ ☽ 🌜 ⏾ ⚉
+			themeIcon.innerHTML = `&#x263E;&#xFE0E;`; // ☾ ☽ 🌜 ⏾ ⚉
+			themeIcon.ariaLabel = "Dark Symbol";
 		} else {
 			body.classList.remove('dark');
-			themeToggle.textContent = '✦'; // ✦ ☉ ✹ ✵ ☼ ☀ 🌣 🜚︎
+			themeIcon.innerHTML = `&#x2726;&#xFE0E;` // ✦ ☉ ✹ ✵ ☼ ☀
+			themeIcon.ariaLabel = "Light Symbol";
 		}
 
 		// Save the theme preference to localStorage

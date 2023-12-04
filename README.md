@@ -39,3 +39,4 @@ npm run build
 - english/french
 - loading screen ?
 - work without js and css
+- fix chromium colored 🌐︎
