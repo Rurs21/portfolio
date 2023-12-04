@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Software Developer commited to creating impactful, accessible, and efficient applications, ensuring top-notch functionality and user experience.">
     <title>Hello World!</title>
     <link rel="stylesheet" href="styles.css">
     <script type="module" src="main.js"></script>
@@ -13,15 +14,15 @@
 <body>
     <nav id="navbar" class="close hidden" aria-label="Menu">
         <div id="menu" role="menu" >
-            <button aria-label="Langage selection" class="round-button">🌐&#xFE0E;<span class="sr-only">Languages</span></button><!-- 🌎 🌐 ⊕ ℒ -->
-            <button aria-label="Toggle Light/Dark Theme" id="theme-toggle" class="round-button">✦&#xFE0E;<span class="sr-only">Toggle Light/Dark Theme</span></button>
-            <button aria-label="Hide navigation bar" id="close-navbar" class="square-button" >Χ&#xFE0E;</button>
+            <button role="menuitem" aria-label="Langage selection" class="round-button">🌐&#xFE0E;<span class="sr-only">Languages</span></button><!-- 🌎 🌐 ⊕ ℒ -->
+            <button id="theme-toggle" class="round-button" role="menuitem" aria-label="Toggle Light/Dark Theme">✦&#xFE0E;<span class="sr-only">Toggle Light/Dark Theme</span></button>
+            <button id="close-navbar" class="square-button" role="menuitem" aria-label="Hide navigation bar">Χ&#xFE0E;<span class="sr-only">Hide navigation bar</span></button>
         </div>
     </nav>
     <div id="top-overlay" class="overlay hidden" role="dialog" aria-label="Non-modal overlay to access menu">
-        <button aria-label="Reveal navigation bar" id="open-navbar" class="square-button">⌥&#xFE0E;</button>
+        <button id="open-navbar" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="navbar" aria-expanded="false">&#x2699;<span class="sr-only">Reveal navigation bar</span></button>
     </div>
-    <!-- ⏣︎ ☰ ⚙ 🛎 🔧 🛠 🪛 🪠 🌐︎ ⌥-->
+    <!-- ⏣︎ ☰ ⚙ &#x2699; 🛎 🔧 🛠 🪛 🪠 🌐︎ ⌥ -->
     <!-- 🙰 🙵 ⠪ ❦ ＆ ﹠-->
 
     <div class="content" aria-label="Content">
@@ -33,7 +34,7 @@
         </header>
 
         <section class="about" aria-label="About Me">
-            <h3>I'm all about resolving problems and creating cool stuff.</h3>
+            <h3>I'm all about resolving problems and creating cool stuff</h3>
             <p>
                 Seeing a project come to life and really make a difference is what gets me going.
                 I think impactful work comes from open communication, collaborative spirit, and a focus on meaningful outcomes.
