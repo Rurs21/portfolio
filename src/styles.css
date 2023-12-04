@@ -20,7 +20,14 @@ body.dark {
 body {
     font-size: 1em;
     font-family: var(--system-ui);
-    font-variant-alternates: unset;
+
+    /* AAAAAAAAAAA */
+    font-variant-position: normal;
+    font-variant-alternates: historical-forms;
+    font-variation-settings: normal;
+    font-variant-emoji: text;
+
+    text-rendering: optimizeLegibility;
 
     color: #333;
     color: var(--text-color);
@@ -71,7 +78,6 @@ button {
 
     font-family: inherit;
     font-style: normal;
-    font-variant-alternates:inherit;
 
     color: var(--text-color);
     background-color: var(--background-color);
