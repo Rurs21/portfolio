@@ -37,3 +37,5 @@ npm run build
 
 - accessibility-proof
 - english/french
+- loading screen ?
+- work without js and css

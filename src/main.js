@@ -126,7 +126,7 @@ function setupTheme() {
 			themeToggle.textContent = '☾'; // ☾ ☽ 🌜 ⏾ ⚉
 		} else {
 			body.classList.remove('dark');
-			themeToggle.textContent = '☼'; // ✹ ☼ ☀ 🌣
+			themeToggle.textContent = '✦'; // ✦ ☉ ✹ ✵ ☼ ☀ 🌣 🜚︎
 		}
 
 		// Save the theme preference to localStorage
