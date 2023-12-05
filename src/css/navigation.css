@@ -1,0 +1,64 @@
+/* Navigation Related Styling */
+
+#navbar {
+    z-index: 3;
+    background: var(--background-color);
+    border-bottom: 0.15em solid var(--text-color);
+}
+
+#menu {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#menu > * {
+    margin: 0 0 0 0.85em;
+    flex: 0 0 auto;
+}
+
+#language-menu {
+    z-index: 4;
+    background: var(--background-color);
+    border-bottom: 0.15em solid var(--text-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    height: 5em;
+}
+
+#language-menu > *  {
+    margin: 0.25em;
+    flex: 0 0 auto;
+}
+
+.top-menu {
+    max-width: 100%;
+    padding: 1em;
+    position: fixed;
+    top: 0;
+    transition: top 0.2s;
+
+    box-sizing: border-box;
+    flex-grow: 0;
+}
+
+.top-menu.close {
+    top: -6em; /* Hide the navbar above the viewport */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    z-index: 2;
+    height: 10%;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+#menu-button {
+    position: absolute;
+    right: 0;
+    margin: 0.25em;
+}
