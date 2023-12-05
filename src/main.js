@@ -73,6 +73,7 @@ function setupMenu() {
 }
 
 function drawRose() {
+	const roseElement = document.getElementById("rose");
 	// Set up our constants to generate the spiral rose 
 	const a = 0, b = 4, c = 0.17, n = 5, k = 0.0257;
 	const thetaIncrement = 0.17;
@@ -120,18 +121,12 @@ function drawRose() {
 	animateDrawElem.setAttribute("fill", "freeze");
 	pathElem.appendChild(animateDrawElem);
 
-	let animateElem = document.createElementNS(svgNS, "animate");
-	animateElem.setAttribute("attributeName", "fill");
-	animateElem.setAttribute("from", "transparent");
-	animateElem.setAttribute("to", "#960018");
-	animateElem.setAttribute("dur", "2s");
-	animateElem.setAttribute("begin", "4s");
-	animateElem.setAttribute("fill", "freeze");
-	pathElem.appendChild(animateElem);
-
 	// Add the path to the SVG and the SVG to the container
 	svgElem.appendChild(pathElem);
-	document.getElementById("rose").appendChild(svgElem);
+	roseElement.appendChild(svgElem);
+
+	setTimeout(()=> roseElement.classList.remove("unfilled"), 3750);
+	setTimeout(()=> roseElement.classList.remove("start"), 6000);
 }
 
 function setupTheme() {

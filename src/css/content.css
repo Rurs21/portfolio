@@ -22,23 +22,23 @@
     margin-right: auto;
     margin-left: auto;
     z-index: -1;
-    
+
     width: 90%;
     max-width: 25em;
     opacity: 0.95;
     padding: 0;
 }
-/*
+
 #rose path {
-    stroke: rgb(245, 210, 243);
-    fill: rgb(255, 226, 254);
+    transition: fill 0.5s, stroke 0.5s;
+    stroke: #fbc4d0; /* #ffbac1; ##efa3aa; #fcdae4 #fdd7de #ff93a2 #f09bb1 #e86c82 faabbc ffcfcf*/
+    fill: #f7f0f2; /* #fde5ec; #f7f0f2; #fcdae4*/
 }
 
 .dark #rose path {
     stroke: #E4345A;
     fill: #960018;
 }
-*/
 
 .icon {
     display: inline-block;
