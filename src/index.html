@@ -12,24 +12,24 @@
 </head>
 
 <body>
-    <nav id="navbar" class="top-menu close" aria-label="Menu" hidden>
-        <div id="menu" role="menu" >
-            <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" disabled><span role="img" aria-label="Globe">&#x1F310;&#xFE0E;</span><span class="sr-only">Languages</span></button><!-- 🌎 🌐 ⊕ ℒ 🌐︎-->
+    <nav id="navbar" aria-label="Menu" hidden>
+        <div id="main-menu" role="menu" class="top-menu close">
+            <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false"><span role="img" aria-label="Globe">&#x1F310;&#xFE0E;</span><span class="sr-only">Languages</span></button><!-- 🌎 🌐 ⊕ ℒ 🌐︎-->
             <button id="theme-toggle" class="round-button" role="menuitem" aria-label="Toggle Light/Dark Theme"><span id="theme-icon" role="img" aria-label="Star Symbol">&#10026;&#xFE0E;</span><span class="sr-only">Toggle Light/Dark Theme</span></button>
-            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Hide navigation bar"><span role="img" aria-label="X sign">&#x03a7;&#xFE0E;</span><span class="sr-only">Hide navigation bar</span></button>
+            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Hide navigation bar" aria-controls="main-menu"><span role="img" aria-label="X sign">&#x03a7;&#xFE0E;</span><span class="sr-only">Hide navigation bar</span></button>
+        </div>
+        <div id="language-menu" class="top-menu close">
+            <label for="language-select">Langage</label>
+            <div class="select">
+                <select name="languages" id="language-select">
+                    <option value="english">English</option>
+                    <option value="french">Français</option>
+                </select>
+            </div>
         </div>
     </nav>
-    <div id="language-menu" class="top-menu close" hidden>
-        <label for="language-select">Langage</label>
-        <div class="select">
-            <select name="languages" id="language-select">
-                <option value="english">English</option>
-                <option value="french">Français</option>
-            </select>
-        </div>
-    </div>
     <div id="top-overlay" class="overlay" role="dialog" aria-label="Non-modal overlay to access menu" hidden>
-        <button id="menu-button" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="navbar" aria-expanded="false">&#x2630;<span class="sr-only">Reveal navigation bar</span></button>
+        <button id="menu-button" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="main-menu" aria-expanded="false">&#x2630;<span class="sr-only">Reveal navigation bar</span></button>
     </div>
     <!-- ⏣︎ ☰ ⚙ &#x2699; 🛎 🔧 🛠 🪛 🪠 🌐︎ ⌥ &#x2615;&#xFE0E; -->
     <!-- 🙰 🙵 ⠪ ❦ ＆ ﹠-->

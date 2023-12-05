@@ -45,18 +45,28 @@ function setupMenu() {
 
 	// menus & overlay
 	const navbar = document.getElementById("navbar");
+	const mainMenu = document.getElementById("main-menu");
 	const topOverlay = document.getElementById("top-overlay");
 	const languageMenu= document.getElementById("language-menu");
 
-	var toggleFunction = function() {
-		navbar.classList.toggle("close");
-		var isExpended = !navbar.classList.contains("close");
+	var toggleMenu = function() {
+		mainMenu.classList.toggle("close");
+		var isExpended = !mainMenu.classList.contains("close"); 
 		revealButton.ariaExpanded = isExpended;
 		hideButton.ariaExpanded = isExpended;
 	};
 
-	revealButton.addEventListener("click", toggleFunction);
-	hideButton.addEventListener("click", toggleFunction);
+	var toggleLanguage = function() {
+		languageMenu.classList.toggle("close");
+		var isExpended = !languageMenu.classList.contains("close");
+		languageButton.ariaExpanded = isExpended;
+		hideButton.disabled = isExpended;
+	}
+
+	revealButton.addEventListener("click", toggleMenu);
+	hideButton.addEventListener("click", toggleMenu);
+	languageButton.addEventListener("click", toggleLanguage);
+	languageSelect.addEventListener("change", toggleLanguage);
 
 	navbar.removeAttribute("hidden")
 	topOverlay.removeAttribute("hidden");
