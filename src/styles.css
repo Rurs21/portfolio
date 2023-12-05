@@ -21,7 +21,7 @@ body {
     font-size: 1em;
     font-family: var(--system-ui);
 
-    /* AAAAAAAAAAA */
+    /* Fonts */
     font-variant-position: normal;
     font-variant-alternates: historical-forms;
     font-variation-settings: normal;
@@ -109,6 +109,67 @@ button[disabled]{
     border-bottom: 0.08em solid var(--secondary-color);
 }
 
+select {
+    /* styles reset, including removing the default dropdown arrow */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+
+    /* Remove focus outline, will add on alternate element */
+    outline: none;
+}
+.select {
+    position: relative;
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+
+    min-width: 12ch;
+    max-width: 25ch;
+    border: 1px solid var(--secondary-color);
+    border-radius: 0.25em;
+
+    font-size: 1.15rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background: var(--secondary-color);
+}
+.select::before, .select::after {
+    --size: 0.45rem;
+    position: absolute;
+    content: "";
+    right: 1rem;
+    pointer-events: none;
+}
+.select::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid var(--text-color);
+    top: 27.5%;
+}
+.select::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid var(--text-color);
+    top: 55%;
+}
+.select > select {
+    width: 100%;
+    padding: 0.55em 0.75em;
+}
+
+
 svg {
     max-width: 100%;
 }
@@ -152,16 +213,9 @@ svg {
 }
 
 #navbar {
-    max-width: 100%;
-    padding: 1em;
-    position: fixed;
-    top: 0;
     z-index: 3;
     background: var(--background-color);
     border-bottom: 0.15em solid var(--text-color);
-    box-sizing: border-box;
-    flex-grow: 0;
-    transition: top 0.2s;
 }
 
 #menu {
@@ -174,13 +228,36 @@ svg {
     flex: 0 0 auto;
 }
 
-#open-navbar {
-    position: absolute;
-    right: 0;
-    margin: 0.25em;
+#language-menu {
+    z-index: 4;
+    background: var(--background-color);
+    border-bottom: 0.15em solid var(--text-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    height: 5em;
 }
 
-#navbar.close {
+#language-menu > *  {
+    margin: 0.25em;
+    flex: 0 0 auto;
+}
+
+
+.top-menu {
+    max-width: 100%;
+    padding: 1em;
+    position: fixed;
+    top: 0;
+    transition: top 0.2s;
+
+    box-sizing: border-box;
+    flex-grow: 0;
+}
+
+.top-menu.close {
     top: -6em; /* Hide the navbar above the viewport */
 }
 
@@ -191,6 +268,12 @@ svg {
     height: 10%;
     flex-grow: 0;
     flex-shrink: 0;
+}
+
+#menu-button {
+    position: absolute;
+    right: 0;
+    margin: 0.25em;
 }
 
 .about {
@@ -212,10 +295,10 @@ svg {
     h2 {
         font-size: 2em;
     }
-    #navbar {
+    .top-menu {
         padding: 1.25em 1em 1em 1em;
     }
-    #reveal-navbar {
+    #menu-button {
         margin: 0.35em 0.5em 0.5em 0.5em;
     }
     #rose {

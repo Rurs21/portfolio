@@ -8,7 +8,7 @@ import { calculatePathLength, calculateWidthAndHeight } from "./js/utils.js"
 
 window.onload = function() {
 	setupTheme();
-	setupNavBar();
+	setupMenu();
 
 	greeting();
 	drawRose();
@@ -36,11 +36,17 @@ function greeting() {
 	setTimeout(typeOutTitle, 2100);
 }
 
-function setupNavBar() {
-	const revealButton = document.getElementById("open-navbar");
-	const hideButton = document.getElementById("close-navbar");
+function setupMenu() {
+	// buttons
+	const revealButton = document.getElementById("menu-button");
+	const hideButton = document.getElementById("close-menu-button");
+	const languageButton = document.getElementById("language-button");
+	const languageSelect = document.getElementById("language-select");
+
+	// menus & overlay
 	const navbar = document.getElementById("navbar");
 	const topOverlay = document.getElementById("top-overlay");
+	const languageMenu= document.getElementById("language-menu");
 
 	var toggleFunction = function() {
 		navbar.classList.toggle("close");
@@ -52,8 +58,8 @@ function setupNavBar() {
 	revealButton.addEventListener("click", toggleFunction);
 	hideButton.addEventListener("click", toggleFunction);
 
-	navbar.classList.remove("hidden");
-	topOverlay.classList.remove("hidden");
+	navbar.removeAttribute("hidden")
+	topOverlay.removeAttribute("hidden");
 }
 
 function drawRose() {
