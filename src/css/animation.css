@@ -31,3 +31,8 @@
     position: absolute;
     background-color: var(--text-color);
 }
+
+#rose.unfilled path { fill: transparent; }
+#rose.start path {
+    transition: fill 2.75s;
+}
