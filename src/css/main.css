@@ -1,0 +1,152 @@
+/* 
+	Main Styling
+	- Light/Dark Themes
+	- Fonts
+	- default element
+*/
+
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --text-color: #333;
+    --background-color: #E7E9EA; /* White Marble */
+    --secondary-color: #C0C0C0;
+    --system-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, system-ui;
+}
+
+body.dark {
+    --text-color: #fff;
+    --background-color: #1C1E1E; /* Raven Black */
+    --secondary-color: #41424C;
+}
+
+body {
+    font-size: 1em;
+    font-family: var(--system-ui);
+
+    /* Fonts */
+    font-variant-position: normal;
+    font-variant-alternates: historical-forms;
+    font-variation-settings: normal;
+    font-variant-emoji: text;
+
+    text-rendering: optimizeLegibility;
+
+    color: #333;
+    color: var(--text-color);
+    background: #E7E9EA; /* Fallback color (White Marble) */
+    background: var(--background-color);
+    background-attachment: fixed;
+}
+
+body > * {
+    width: 100%;
+}
+
+/* elements */
+
+svg {
+    max-width: 100%;
+}
+
+button {
+    padding: 0;
+    width: 1.77em;
+    height: 1.77em;
+    font-size: 2em;
+    line-height: 1em;
+
+    font-family: inherit;
+    font-style: normal;
+
+    color: var(--text-color);
+    background-color: var(--background-color);
+
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999;
+  background-color: #CCCCCC;
+  color: #666666;
+}
+
+.round-button {
+    border: 0.07em solid var(--text-color);
+    border-radius: 50%;
+}
+
+.square-button {
+    border-radius: 0;
+    border-top:    0.08em solid var(--text-color);
+    border-left:   0.08em solid var(--text-color);
+    border-right:  0.08em solid var(--secondary-color);
+    border-bottom: 0.08em solid var(--secondary-color);
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+
+    outline: none;
+}
+.select {
+    position: relative;
+    display: grid;
+    grid-template-areas: "select";
+    align-items: center;
+
+    min-width: 12ch;
+    max-width: 25ch;
+    border: 1px solid var(--secondary-color);
+    border-radius: 0.25em;
+
+    font-size: 1.15rem;
+    cursor: pointer;
+    line-height: 1.1;
+    background: var(--secondary-color);
+}
+.select::before, .select::after {
+    --size: 0.45rem;
+    position: absolute;
+    content: "";
+    right: 1rem;
+    pointer-events: none;
+}
+.select::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid var(--text-color);
+    top: 27.5%;
+}
+.select::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid var(--text-color);
+    top: 55%;
+}
+.select > select {
+    width: 100%;
+    padding: 0.55em 0.75em;
+}

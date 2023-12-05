@@ -1,0 +1,61 @@
+/* Content specific Stling */
+
+.content {
+    height: 100%;
+    padding: 5em 0 0 0;
+}
+
+.content > * {
+    padding: 1em;
+}
+
+#greeting h2 {
+    font-weight: 400;
+    height: 1.4em;
+}
+
+#rose {
+    position: fixed;
+    top: 1em;
+    left: auto;
+    right: -5em;
+    margin-right: auto;
+    margin-left: auto;
+    z-index: -1;
+    
+    width: 90%;
+    max-width: 25em;
+    opacity: 0.95;
+    padding: 0;
+}
+/*
+#rose path {
+    stroke: rgb(245, 210, 243);
+    fill: rgb(255, 226, 254);
+}
+
+.dark #rose path {
+    stroke: #E4345A;
+    fill: #960018;
+}
+*/
+
+.icon {
+    display: inline-block;
+    padding: 5%;
+    width: 22%;
+    max-width: 8.5em;
+}
+
+.dark .icon {
+    fill: var(--text-color);
+}
+
+.about {
+    line-height: 2em;
+    font-size: 1.25em;
+}
+
+.contact h2 {
+    margin: 0;
+}

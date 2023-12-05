@@ -1,0 +1,25 @@
+/* Miscellaneous */
+
+.hidden {
+    visibility: hidden;
+}
+
+.sr-only {
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+}
+
+.bolderish {
+    text-shadow: 0.33px 0 0 #333, 0 0px 0 #333, -0.33px 0 0 #333, 0 -0.33px 0 #333;
+}
+
+.dark .bolderish {
+    text-shadow: 0.33px 0 0 #FFF, 0 0px 0 #FFF, -0.33px 0 0 #FFF, 0 -0.33px 0 #FFF;
+}
