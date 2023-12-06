@@ -12,24 +12,32 @@
 </head>
 
 <body>
-    <nav id="navbar" aria-label="Menu" hidden>
-        <div id="main-menu" role="menu" class="top-menu close">
-            <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false"><span role="img" aria-label="Globe">&#x1F310;&#xFE0E;</span><span class="sr-only">Languages</span></button><!-- 🌎 🌐 ⊕ ℒ 🌐︎-->
-            <button id="theme-toggle" class="round-button" role="menuitem" aria-label="Toggle Light/Dark Theme"><span id="theme-icon" role="img" aria-label="Star Symbol">&#10026;&#xFE0E;</span><span class="sr-only">Toggle Light/Dark Theme</span></button>
-            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Hide navigation bar" aria-controls="main-menu"><span role="img" aria-label="X sign">&#x03a7;&#xFE0E;</span><span class="sr-only">Hide navigation bar</span></button>
+    <nav id="navbar" aria-label="Navigation Bar" hidden>
+        <div id="main-menu" class="top-menu close" role="menu" aria-label="Main Menu">
+            <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false">
+                <span role="img" aria-label="Globe">&#x1F310;&#xFE0E;</span><span class="sr-only">Languages</span>
+            </button>
+            <button id="theme-toggle" class="round-button" role="menuitem" aria-label="Toggle Light/Dark Theme">
+                <span id="theme-icon" role="img" aria-label="Star Symbol">&#10026;&#xFE0E;</span><span class="sr-only">Toggle Light/Dark Theme</span>
+            </button>
+            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Hide navigation bar" aria-controls="main-menu">
+                <span role="img" aria-label="X sign">&#x03a7;&#xFE0E;</span><span class="sr-only">Hide navigation bar</span>
+            </button>
         </div>
-        <div id="language-menu" class="top-menu close">
+        <div id="language-menu" class="top-menu close" role="menu" aria-label="Language Menu">
             <label for="language-select">Langage</label>
-            <div class="select">
+            <div class="select" role="menuitem" aria-label="Select Langage">
                 <select name="languages" id="language-select">
-                    <option value="english">English</option>
-                    <option value="french">Français</option>
+                    <option value="en" lang="en">English</option>
+                    <option value="fr" lang="fr">Français</option>
                 </select>
             </div>
         </div>
     </nav>
     <div id="top-overlay" class="overlay" role="dialog" aria-label="Non-modal overlay to access menu" hidden>
-        <button id="menu-button" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="main-menu" aria-expanded="false">&#x2630;<span class="sr-only">Reveal navigation bar</span></button>
+        <button id="menu-button" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="main-menu" aria-expanded="false">
+            &#x2630;<span class="sr-only">Reveal navigation bar</span>
+        </button>
     </div>
     <!-- ⏣︎ ☰ ⚙ &#x2699; 🛎 🔧 🛠 🪛 🪠 🌐︎ ⌥ &#x2615;&#xFE0E; -->
     <!-- 🙰 🙵 ⠪ ❦ ＆ ﹠-->
@@ -37,21 +45,24 @@
     <div class="content" aria-label="Content">
         <header id="main-header" aria-label="Greeting !">
             <div id="greeting">
-                <h1 class="fade-in bolderish">Hello, I'm Charles.</h1>
-                <h2><span class="output"></span><span class="cursor"></span></h2>
+                <h1 class="fade-in" data-translate="greeting">Hello, I'm Charles.</h1>
+                <h2>
+                    <span id="job-title" data-translate="job-title" class="sr-only">Software Developer</span>
+                    <span class="output" aria-hidden="true"></span><span class="cursor" aria-hidden="true"></span>
+                </h2>
             </div>
         </header>
 
         <section class="about" aria-label="About Me">
-            <h3>I'm all about resolving problems and creating cool stuff</h3>
-            <p>
+            <h3 data-translate="my-summary">I'm all about resolving problems and creating cool stuff</h3>
+            <p data-translate="about-me">
                 Seeing a project come to life and really make a difference is what gets me going.
                 I think impactful work comes from open communication, collaborative spirit, and a focus on meaningful outcomes.
             </p>
         </section>
 
         <section class="contact" aria-label="Contacts">
-            <h2>Link up</h2>
+            <h2 data-translate="contact-me">Link up</h2>
             <div>
                 <a class="icon" href="https://github.com/Rurs21" target="_blank" aria-label="GitHub link">
                     <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><title>GitHub icon</title><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>

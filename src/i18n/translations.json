@@ -1,0 +1,16 @@
+{
+	"en": {
+		"greeting": "Hello, I'm Charles.",
+		"job-title": "Software developer",
+		"my-summary": "I'm all about resolving problems and creating cool stuff",
+		"about-me": "Seeing a project come to life and really make a difference is what gets me going. I think impactful work comes from open communication, collaborative spirit, and a focus on meaningful outcomes.",
+		"contact-me": "Link up"
+	},
+	"fr": {
+		"greeting": "Allô, moi c'est Charles.",
+		"job-title": "Développeur logiciel ",
+		"my-summary": "Je suis passionné par la résolution de problèmes et la création de choses cool",
+		"about-me": "Voir un projet prendre vie et faire une différence, c'est ce qui me motive. Je crois que la réalisation efficace d'un projet qui se démarque nécessite une communication ouverte, un esprit collaboratif, et se concentrer sur des résultats concrets.",
+		"contact-me": "Faites-moi signe"
+	}
+}

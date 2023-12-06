@@ -5,8 +5,10 @@
  */
 import { archimedeanFlower } from "./js/flower.js"
 import { calculatePathLength, calculateWidthAndHeight } from "./js/utils.js"
+import translations from "./i18n/translations.json"
 
 window.onload = function() {
+	checkUserLanguage();
 	setupTheme();
 	setupMenu();
 
@@ -17,7 +19,7 @@ window.onload = function() {
 function greeting() {
 	const outputElement = document.querySelector('.output');
 	const cursorElement = document.querySelector('.cursor');
-	const title = "Software developer";
+	const title = document.getElementById('job-title').innerText;
 	let currentIndex = 0;
 
 	cursorElement.style.animation = 'blink 1s infinite';
@@ -29,6 +31,7 @@ function greeting() {
 			currentIndex++;
 			setTimeout(typeOutTitle, 50); // Typing speed: 100ms per character
 		} else {
+			outputElement.setAttribute('data-translate',"job-title");
 			setTimeout(() => cursorElement.remove(), 1500);
 		}
 	}
@@ -66,7 +69,10 @@ function setupMenu() {
 	revealButton.addEventListener("click", toggleMenu);
 	hideButton.addEventListener("click", toggleMenu);
 	languageButton.addEventListener("click", toggleLanguage);
-	languageSelect.addEventListener("change", toggleLanguage);
+	languageSelect.addEventListener("change", function() {
+		changeLanguage(this.value);
+		toggleLanguage();
+	});
 
 	navbar.removeAttribute("hidden")
 	topOverlay.removeAttribute("hidden");
@@ -185,8 +191,29 @@ function setupTheme() {
 		const newScheme = event.matches ? "dark" : "light";
 		changeTheme(newScheme)
 	});
-	
+
 	checkUserTheme();
 }
 
-  
+function checkUserLanguage() {
+	const defaultLang = navigator.language.startsWith('fr') ? 'fr' : 'en';
+	const savedLang = localStorage.getItem('language');
+
+	const languageSelect = document.getElementById("language-select");
+	if (savedLang != null) {
+		changeLanguage(savedLang);
+		languageSelect.value = savedLang;
+	} else {
+		changeLanguage(defaultLang);
+		languageSelect.value = defaultLang;
+	}
+}
+
+function changeLanguage(lang) {
+	document.documentElement.lang = lang
+	document.querySelectorAll("[data-translate]").forEach(el => {
+		const key = el.getAttribute("data-translate");
+		el.textContent = translations[lang][key] || key;
+	});
+	localStorage.setItem('language', lang);
+}
