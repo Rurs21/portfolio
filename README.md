@@ -35,8 +35,7 @@ npm run build
 
 ## TODO
 
-- accessibility-proof
-- english/french
-- loading screen ?
+- accessibility-proof (left handed control ?)
+- better error handling
+- choose fonts or svg for icons (loading screen ?)
 - work without js and css
-- fix chromium colored 🌐︎
