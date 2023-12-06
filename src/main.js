@@ -1,6 +1,6 @@
 /**
  * Trying to keep it vanilla and simple 🍦
- * 
+ *
  * Rurs21
  */
 import { archimedeanFlower } from "./js/flower.js"
@@ -56,7 +56,7 @@ function setupMenu() {
 
 	var toggleMenu = function() {
 		mainMenu.classList.toggle("close");
-		var isExpended = !mainMenu.classList.contains("close"); 
+		var isExpended = !mainMenu.classList.contains("close");
 		revealButton.ariaExpanded = isExpended;
 		hideButton.ariaExpanded = isExpended;
 	};
@@ -81,7 +81,7 @@ function setupMenu() {
 }
 
 function drawRose() {
-	// Set up our constants to generate the spiral rose 
+	// Set up our constants to generate the spiral rose
 	const a = 0, b = 4, c = 0.17, n = 5, k = 0.0257;
 	const thetaIncrement = 0.17;
 	const thetaMax = 9.9777 * Math.PI;
@@ -168,7 +168,7 @@ function setupTheme() {
 		localStorage.setItem('theme', theme);
 	}
 
-	const toggleTheme = function() {	
+	const toggleTheme = function() {
 		const isDark = body.classList.contains('dark');
 		isDark ? changeTheme('light') : changeTheme('dark');
 	}
