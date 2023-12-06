@@ -17,21 +17,23 @@ window.onload = function() {
 }
 
 function greeting() {
-	const outputElement = document.querySelector('.output');
-	const cursorElement = document.querySelector('.cursor');
-	const title = document.getElementById('job-title').innerText;
-	let currentIndex = 0;
+	const titleElement = document.getElementById('job-title');
+	const title = titleElement.innerText;
 
+	const cursorElement = document.createElement('span');
+	cursorElement.classList.add("cursor");
 	cursorElement.style.animation = 'blink 1s infinite';
 
+	titleElement.innerHTML = "";
+	titleElement.append(cursorElement);
 
+	let currentIndex = 0;
 	var typeOutTitle = function() {
 		if (currentIndex < title.length) {
-			outputElement.textContent += title[currentIndex];
+			titleElement.textContent += title[currentIndex];
 			currentIndex++;
-			setTimeout(typeOutTitle, 50); // Typing speed: 100ms per character
+			setTimeout(typeOutTitle, 50); // Typing speed: 50ms per character
 		} else {
-			outputElement.setAttribute('data-translate',"job-title");
 			setTimeout(() => cursorElement.remove(), 1500);
 		}
 	}
