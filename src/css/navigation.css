@@ -46,13 +46,14 @@
 .top-menu {
     position: fixed;
     top: 0;
-    transition: top 0.3s;
 
 	width: inherit;
     max-width: 100%;
     padding: 1em;
     box-sizing: border-box;
     flex-grow: 0;
+
+    transition: top 0.3s;
 }
 
 /* closed menu position */

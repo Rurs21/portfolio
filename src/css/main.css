@@ -80,6 +80,7 @@ button[disabled]{
   border: 1px solid #999999;
   background-color: #CCCCCC;
   color: #666666;
+  transition: background-color 0.1s, color 0.1s, border-color 0.1s;
 }
 
 .round-button {
@@ -110,8 +111,6 @@ select {
     font-size: inherit;
     cursor: inherit;
     line-height: inherit;
-
-    outline: none;
 }
 .select {
     position: relative;

@@ -41,43 +41,60 @@ function greeting() {
 	setTimeout(typeOutTitle, 2100);
 }
 
+
 function setupMenu() {
 	// buttons
-	const revealButton = document.getElementById("menu-button");
-	const hideButton = document.getElementById("close-menu-button");
+	const menuButton = document.getElementById("menu-button");
+	const closeButton = document.getElementById("close-menu-button");
 	const languageButton = document.getElementById("language-button");
 	const languageSelect = document.getElementById("language-select");
 
-	// menus & overlay
-	const navbar = document.getElementById("navbar");
+	// TODO create Menu Class
+	// menus
 	const mainMenu = document.getElementById("main-menu");
-	const topOverlay = document.getElementById("top-overlay");
 	const languageMenu= document.getElementById("language-menu");
 
-	var toggleMenu = function() {
-		mainMenu.classList.toggle("close");
-		var isExpended = !mainMenu.classList.contains("close");
-		revealButton.ariaExpanded = isExpended;
-		hideButton.ariaExpanded = isExpended;
+	var menus = [mainMenu, languageMenu];
+
+	const animationCooldown = 310;
+
+	var toggleMenu = function(menuElement, ...buttons) {
+		var isExpended = !menuElement.classList.contains("close");
+		if (isExpended) {
+			menuElement.classList.add("close");
+			setTimeout(() => menuElement.classList.add("hidden"), animationCooldown); // wait for the 0.3s animation before hidding it
+		} else {
+			menuElement.classList.remove("hidden", "close");
+		}
+		buttons.forEach(button => button.ariaExpanded = !isExpended);
 	};
 
-	var toggleLanguage = function() {
-		languageMenu.classList.toggle("close");
-		var isExpended = !languageMenu.classList.contains("close");
-		languageButton.ariaExpanded = isExpended;
-		hideButton.disabled = isExpended;
-	}
-
-	revealButton.addEventListener("click", toggleMenu);
-	hideButton.addEventListener("click", toggleMenu);
-	languageButton.addEventListener("click", toggleLanguage);
+	// setup for each Menu (Class)
+	menuButton.addEventListener("click", () => {
+		menuButton.disabled = true;
+		toggleMenu(mainMenu, menuButton, closeButton);
+	});
+	closeButton.addEventListener("click",  () => {
+		closeButton.disabled = true;
+		toggleMenu(mainMenu, menuButton, closeButton)
+		if (!languageMenu.classList.contains("close"))
+			toggleMenu(languageMenu, languageButton);
+		setTimeout(() => {
+			closeButton.disabled = false;
+			menuButton.disabled = false;
+		}, animationCooldown);
+	});
+	languageButton.addEventListener("click", () => {
+		toggleMenu(languageMenu, languageButton);
+	});
 	languageSelect.addEventListener("change", function() {
 		changeLanguage(this.value);
-		toggleLanguage();
+		toggleMenu(languageMenu, languageButton);
 	});
 
-	navbar.removeAttribute("hidden")
-	topOverlay.removeAttribute("hidden");
+	// Reveal overlay & navbar when menu all setup
+	document.getElementById("top-overlay").removeAttribute("hidden")
+	document.getElementById("navbar").removeAttribute("hidden");
 }
 
 function drawRose() {
