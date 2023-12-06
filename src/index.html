@@ -14,8 +14,13 @@
 </head>
 
 <body>
+    <div id="top-overlay" class="overlay" role="dialog" aria-label="Non-modal overlay to access menu" hidden>
+        <button id="menu-button" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="main-menu" aria-expanded="false">
+            &#x2630;<span class="sr-only">Reveal navigation bar</span>
+        </button>
+    </div>
     <nav id="navbar" aria-label="Navigation Bar" hidden>
-        <div id="main-menu" class="top-menu close" role="menu" aria-label="Main Menu">
+        <div id="main-menu" class="top-menu close hidden" role="menu" aria-label="Main Menu">
             <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false">
                 <span role="img" aria-label="Globe">&#x1F310;&#xFE0E;</span><span class="sr-only">Languages</span>
             </button>
@@ -26,7 +31,7 @@
                 <span role="img" aria-label="X sign">&#x03a7;&#xFE0E;</span><span class="sr-only">Hide navigation bar</span>
             </button>
         </div>
-        <div id="language-menu" class="top-menu close" role="menu" aria-label="Language Menu">
+        <div id="language-menu" class="top-menu close hidden" role="menu" aria-label="Language Menu">
             <label for="language-select">Langage</label>
             <div class="select" role="menuitem" aria-label="Select Langage">
                 <select name="languages" id="language-select">
@@ -36,11 +41,6 @@
             </div>
         </div>
     </nav>
-    <div id="top-overlay" class="overlay" role="dialog" aria-label="Non-modal overlay to access menu" hidden>
-        <button id="menu-button" class="square-button" role="button" aria-label="Reveal navigation bar" aria-controls="main-menu" aria-expanded="false">
-            &#x2630;<span class="sr-only">Reveal navigation bar</span>
-        </button>
-    </div>
 
     <div class="content" aria-label="Content">
         <header id="main-header" aria-label="Greeting !">
