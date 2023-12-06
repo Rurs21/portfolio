@@ -73,7 +73,6 @@ function setupMenu() {
 }
 
 function drawRose() {
-	const roseElement = document.getElementById("rose");
 	// Set up our constants to generate the spiral rose 
 	const a = 0, b = 4, c = 0.17, n = 5, k = 0.0257;
 	const thetaIncrement = 0.17;
@@ -90,7 +89,7 @@ function drawRose() {
 
 	let halfWidth = Math.ceil(width/2);
 	let halfHeight = Math.floor(height/2);
-	
+
 	// Convert points to a path string and set the "d" attribute
 	let d = `M ${rosePoints[0][0] + halfWidth} ${halfHeight - rosePoints[0][1]}`;
 	rosePoints.slice(1).forEach(point => {
@@ -109,7 +108,6 @@ function drawRose() {
 	pathElem.setAttribute("d", d);
 
 	// Animate the spiral drawing
-	
 	pathElem.setAttribute("stroke-dasharray", pathLength);
 	pathElem.setAttribute("stroke-dashoffset", pathLength);
 
@@ -121,7 +119,19 @@ function drawRose() {
 	animateDrawElem.setAttribute("fill", "freeze");
 	pathElem.appendChild(animateDrawElem);
 
+	// Get svg container and add class for fill animation (css)
+	const roseElement = document.getElementById("rose");
+	roseElement.classList.add("start", "unfilled");
+
+	// Title element
+	const titleElement = document.createElementNS(svgNS, "title");
+	titleElement.textContent = "Archimedean's Rose";
+	const descElement = document.createElementNS(svgNS, "desc");
+	descElement.textContent = "A Scalable Vector Graphic of a rose drawn with the Archimedean spirals equation"
+
 	// Add the path to the SVG and the SVG to the container
+	svgElem.appendChild(titleElement);
+	svgElem.appendChild(descElement);
 	svgElem.appendChild(pathElem);
 	roseElement.appendChild(svgElem);
 
@@ -158,7 +168,7 @@ function setupTheme() {
 	const checkUserTheme = function() {
 		const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		const savedTheme = localStorage.getItem('theme');
-		
+
 		// Set previously selected theme
 		if (savedTheme != null) {
 			changeTheme(savedTheme)
