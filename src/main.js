@@ -3,9 +3,11 @@
  *
  * Rurs21
  */
+
+import translations from "./i18n/translations.json"
+import { Menu } from "./js/Menu.js"
 import { archimedeanFlower } from "./js/flower.js"
 import { calculatePathLength, calculateWidthAndHeight } from "./js/utils.js"
-import translations from "./i18n/translations.json"
 
 window.onload = function() {
 	checkUserLanguage();
@@ -49,47 +51,15 @@ function setupMenu() {
 	const languageButton = document.getElementById("language-button");
 	const languageSelect = document.getElementById("language-select");
 
-	// TODO create Menu Class
 	// menus
-	const mainMenu = document.getElementById("main-menu");
-	const languageMenu= document.getElementById("language-menu");
+	const mainMenu = new Menu(document.getElementById("main-menu"), menuButton, closeButton);
+	const languageMenu= new Menu(document.getElementById("language-menu"), languageButton);
 
-	var menus = [mainMenu, languageMenu];
+	mainMenu.addSubMenu(languageMenu);
 
-	const animationCooldown = 310;
-
-	var toggleMenu = function(menuElement, ...buttons) {
-		var isExpended = !menuElement.classList.contains("close");
-		if (isExpended) {
-			menuElement.classList.add("close");
-			setTimeout(() => menuElement.classList.add("hidden"), animationCooldown); // wait for the 0.3s animation before hidding it
-		} else {
-			menuElement.classList.remove("hidden", "close");
-		}
-		buttons.forEach(button => button.ariaExpanded = !isExpended);
-	};
-
-	// setup for each Menu (Class)
-	menuButton.addEventListener("click", () => {
-		menuButton.disabled = true;
-		toggleMenu(mainMenu, menuButton, closeButton);
-	});
-	closeButton.addEventListener("click",  () => {
-		closeButton.disabled = true;
-		toggleMenu(mainMenu, menuButton, closeButton)
-		if (!languageMenu.classList.contains("close"))
-			toggleMenu(languageMenu, languageButton);
-		setTimeout(() => {
-			closeButton.disabled = false;
-			menuButton.disabled = false;
-		}, animationCooldown);
-	});
-	languageButton.addEventListener("click", () => {
-		toggleMenu(languageMenu, languageButton);
-	});
 	languageSelect.addEventListener("change", function() {
 		changeLanguage(this.value);
-		toggleMenu(languageMenu, languageButton);
+		mainMenu.close();
 	});
 
 	// Reveal overlay & navbar when menu all setup
