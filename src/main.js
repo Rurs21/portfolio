@@ -10,12 +10,92 @@ import { archimedeanFlower } from "./js/flower.js"
 import { calculatePathLength, calculateWidthAndHeight } from "./js/utils.js"
 
 window.onload = function() {
-	checkUserLanguage();
+	setupLanguage();
 	setupTheme();
 	setupMenu();
 
 	greeting();
 	drawRose();
+}
+
+function setupLanguage() {
+	const userLanguage = checkUserLanguage();
+	changeLanguage(userLanguage);
+
+	const languageSelect = document.getElementById("language-select");
+	languageSelect.value = userLanguage;
+}
+
+function setupTheme() {
+	// Cache references
+	const body = document.body;
+	const themeToggle = document.getElementById('theme-toggle');
+	const themeIcon = document.getElementById('theme-icon');
+
+	const changeTheme = function(theme) {
+		if (theme == 'dark') {
+			body.classList.add('dark');
+			themeIcon.innerHTML = `&#x263E;&#xFE0E;`; // ☾ ☽ 🌜 ⏾ ⚉
+			themeIcon.ariaLabel = "Dark Symbol";
+		} else {
+			body.classList.remove('dark');
+			themeIcon.innerHTML = `&#x2726;&#xFE0E;` // ✦ ☉ ✹ ✵ ☼ ☀
+			themeIcon.ariaLabel = "Light Symbol";
+		}
+
+		// Save the theme preference to localStorage
+		localStorage.setItem('theme', theme);
+	}
+
+	const toggleTheme = function() {
+		const isDark = body.classList.contains('dark');
+		isDark ? changeTheme('light') : changeTheme('dark');
+	}
+
+	const checkUserTheme = function() {
+		const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const savedTheme = localStorage.getItem('theme');
+
+		// Set previously selected theme
+		if (savedTheme != null) {
+			changeTheme(savedTheme)
+		}
+		else if (prefersDarkMode) {
+			changeTheme('dark')
+		}
+	}
+
+	// Add a click event listener to the theme-toggle button
+	themeToggle.addEventListener('click', toggleTheme);
+	// Add event listener is the prefers color scheme change
+	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+		const newScheme = event.matches ? "dark" : "light";
+		changeTheme(newScheme)
+	});
+
+	checkUserTheme();
+}
+
+function setupMenu() {
+	// Sub menu language
+	const languageButton = document.getElementById("language-button");
+	const languageMenu = new Menu(document.getElementById("language-menu"), languageButton);
+	// Main menu
+	const menuButton = document.getElementById("menu-button");
+	const closeButton = document.getElementById("close-menu-button");
+	const mainMenu = new Menu(document.getElementById("main-menu"), menuButton, closeButton);
+	mainMenu.addSubMenu(languageMenu);
+
+	// TODO to improve
+	const languageSelect = document.getElementById("language-select");
+	languageSelect.addEventListener("change", function() {
+		changeLanguage(this.value);
+		mainMenu.close();
+	});
+
+	// Reveal overlay & navbar when menu all setup
+	document.getElementById("top-overlay").removeAttribute("hidden")
+	document.getElementById("navbar").removeAttribute("hidden");
 }
 
 function greeting() {
@@ -41,30 +121,6 @@ function greeting() {
 	}
 
 	setTimeout(typeOutTitle, 2100);
-}
-
-
-function setupMenu() {
-	// buttons
-	const menuButton = document.getElementById("menu-button");
-	const closeButton = document.getElementById("close-menu-button");
-	const languageButton = document.getElementById("language-button");
-	const languageSelect = document.getElementById("language-select");
-
-	// menus
-	const mainMenu = new Menu(document.getElementById("main-menu"), menuButton, closeButton);
-	const languageMenu= new Menu(document.getElementById("language-menu"), languageButton);
-
-	mainMenu.addSubMenu(languageMenu);
-
-	languageSelect.addEventListener("change", function() {
-		changeLanguage(this.value);
-		mainMenu.close();
-	});
-
-	// Reveal overlay & navbar when menu all setup
-	document.getElementById("top-overlay").removeAttribute("hidden")
-	document.getElementById("navbar").removeAttribute("hidden");
 }
 
 function drawRose() {
@@ -134,68 +190,11 @@ function drawRose() {
 	setTimeout(()=> roseElement.classList.remove("start"), 6000);
 }
 
-function setupTheme() {
-	// Get the body & theme-toggle button element
-	const body = document.body;
-	const themeToggle = document.getElementById('theme-toggle');
-	const themeIcon = document.getElementById('theme-icon');
-
-	const changeTheme = function(theme) {
-		if (theme == 'dark') {
-			body.classList.add('dark');
-			themeIcon.innerHTML = `&#x263E;&#xFE0E;`; // ☾ ☽ 🌜 ⏾ ⚉
-			themeIcon.ariaLabel = "Dark Symbol";
-		} else {
-			body.classList.remove('dark');
-			themeIcon.innerHTML = `&#x2726;&#xFE0E;` // ✦ ☉ ✹ ✵ ☼ ☀
-			themeIcon.ariaLabel = "Light Symbol";
-		}
-
-		// Save the theme preference to localStorage
-		localStorage.setItem('theme', theme);
-	}
-
-	const toggleTheme = function() {
-		const isDark = body.classList.contains('dark');
-		isDark ? changeTheme('light') : changeTheme('dark');
-	}
-
-	const checkUserTheme = function() {
-		const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		const savedTheme = localStorage.getItem('theme');
-
-		// Set previously selected theme
-		if (savedTheme != null) {
-			changeTheme(savedTheme)
-		}
-		else if (prefersDarkMode) {
-			changeTheme('dark')
-		}
-	}
-
-	// Add a click event listener to the theme-toggle button
-	themeToggle.addEventListener('click', toggleTheme);
-	// Add event listener is the prefers color scheme change
-	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-		const newScheme = event.matches ? "dark" : "light";
-		changeTheme(newScheme)
-	});
-
-	checkUserTheme();
-}
-
 function checkUserLanguage() {
 	const defaultLang = navigator.language.startsWith('fr') ? 'fr' : 'en';
 	const savedLang = localStorage.getItem('language');
 
-	const languageSelect = document.getElementById("language-select");
-	if (savedLang != null) {
-		changeLanguage(savedLang);
-		languageSelect.value = savedLang;
-	} else {
-		changeLanguage(defaultLang);
-		languageSelect.value = defaultLang;
-	}
+	return savedLang || defaultLang;
 }
 
 function changeLanguage(lang) {
