@@ -25,6 +25,12 @@
     #rose {
         width: 70%;
     }
+    #links {
+        justify-content: flex-start;
+    }
+    .icon {
+        max-width: 5em;
+    }
 }
 
 @media (min-width: 1024px) {
