@@ -40,15 +40,26 @@
     fill: #960018;
 }
 
-.icon {
-    display: inline-block;
-    padding: 5%;
-    width: 22%;
-    max-width: 8.5em;
+#links {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-around;
 }
 
-.dark .icon {
-    fill: var(--text-color);
+#links > * {
+    flex: 0 0 auto;
+}
+
+.icon {
+    padding: 1em;
+    width: 23%;
+    max-width: 8em;
+}
+
+.icon > svg {
+    width: 100%;
 }
 
 .about {

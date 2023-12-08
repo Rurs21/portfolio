@@ -16,6 +16,21 @@ window.onload = function() {
 
 	greeting();
 	drawRose();
+
+	var svgImages = document.querySelectorAll('img[src$=".svg"]');
+	svgImages.forEach(function (imgElement) {
+		var src = imgElement.getAttribute('src');
+		console.log(src); // This will print the src value to the console
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', src, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Replace the image with the inline SVG content
+                imgElement.outerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+	});
 }
 
 function setupLanguage() {
