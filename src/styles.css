@@ -25,11 +25,10 @@
     #rose {
         width: 70%;
     }
-    #links {
-        justify-content: flex-start;
-    }
-    .icon {
-
+    #links.icon > a {
+        height: 4.25em;
+        width: 4.25em;
+        margin-right: 1em;
     }
 }
 

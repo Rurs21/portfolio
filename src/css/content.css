@@ -61,13 +61,15 @@
     fill: var(--background-color);
     background: var(--text-color);
     border-radius: 1em;
-    height: 3em;
-    width: 3em;
+    height: 3.75em;
+    width: 3.75em;
+    margin-right: 0.5em;
 }
 
 .about {
     line-height: 2em;
     font-size: 1.25em;
+    max-width: 50ch;
 }
 
 .contact h2 {
