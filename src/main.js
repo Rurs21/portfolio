@@ -1,21 +1,18 @@
 import translations from "./i18n/translations.json"
 import { Menu } from "./js/Menu.js"
 import { archimedeanFlower } from "./js/flower.js"
-import { calculatePathLength, calculateWidthAndHeight, isCssLoaded } from "./js/utils.js"
-import cssURL from "./styles.css?url"
-
-var cssLoaded = false;
+import { calculatePathLength, calculateWidthAndHeight, isCssLoaded, fetchInlineSVG } from "./js/utils.js"
 
 window.onload = function() {
 	setupLanguage();
-
-	isCssLoaded(cssURL, (isLoaded) => {
-		cssLoaded = isLoaded;
+	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
 			setupTheme();
+			setupMenu();
 			fetchInlineSVG();
+		} else {
+			enableNonCssFunctions();
 		}
-		setupMenu();
 	});
 
 	greeting();
@@ -28,6 +25,9 @@ function setupLanguage() {
 
 	const languageSelect = document.getElementById("language-select");
 	languageSelect.value = userLanguage;
+	languageSelect.addEventListener("change", function() {
+		changeLanguage(this.value);
+	});
 }
 
 function setupTheme() {
@@ -90,12 +90,16 @@ function setupMenu() {
 	const mainMenu = new Menu(document.getElementById("main-menu"), menuButton, closeButton);
 	mainMenu.addSubMenu(languageMenu);
 
-	// TODO to improve
-	const languageSelect = document.getElementById("language-select");
-	languageSelect.addEventListener("change", function() {
-		changeLanguage(this.value);
-		mainMenu.close();
+	// Create a MutationObserver for the lang (overkill ?)
+	const langObserver = new MutationObserver((mutationsList, observer) => {
+		for (const mutation of mutationsList) {
+			if (mutation.type === 'attributes' && mutation.attributeName === 'lang') {
+				mainMenu.close();
+			}
+		}
 	});
+	// Start observing the html tag for that change
+	langObserver.observe(document.documentElement, { attributes: true });
 
 	// Reveal overlay & navbar when menu all setup
 	document.getElementById("top-overlay").removeAttribute("hidden")
@@ -125,24 +129,6 @@ function greeting() {
 	}
 
 	setTimeout(typeOutTitle, 2100);
-}
-
-function fetchInlineSVG() {
-	var svgImages = document.querySelectorAll('img[src$=".svg"]');
-	var replaceSVG = function(imgElement) {
-		var src = imgElement.getAttribute('src');
-		return fetch(src)
-			.then(response => response.text())
-			.then(data =>imgElement.outerHTML = data);
-	}
-	const fetchPromises = Array.from(svgImages, element => replaceSVG(element));
-	Promise.all(fetchPromises)
-		.then(() => {
-			document.getElementById("links").classList.add("icon")
-		})
-		.catch(error => {
-			console.error(error);
-		});
 }
 
 function drawRose() {
@@ -226,4 +212,9 @@ function changeLanguage(lang) {
 		el.textContent = translations[lang][key] || key;
 	});
 	localStorage.setItem('language', lang);
+}
+
+function enableNonCssFunctions() {
+	document.getElementById("main-menu").setAttribute("hidden","");
+	document.getElementById("navbar").removeAttribute("hidden")
 }

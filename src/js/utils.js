@@ -42,14 +42,36 @@ export function calculateWidthAndHeight(coordinates) {
 	return { width, height };
 }
 
-export function isCssLoaded(cssUrl, callback) {
+export function isCssLoaded(callback) {
 	const styleSheets = document.styleSheets;
-	for (let i = 0; i < styleSheets.length; i++) {
-		const styleSheet = new URL(styleSheets[i].href).pathname;
-		if (styleSheet === cssUrl) {
-			callback(true);
-			return;
-		}
+	if (styleSheets.length > 0) {
+		callback(true);
+		return;
 	}
 	callback(false);
+}
+
+export function fetchInlineSVG() {
+	// if inline data, simply convert URI into svg and replace
+	var svgImages = document.querySelectorAll('img[src^="data:image/svg"]');
+	svgImages.forEach(imgElement => {
+		const svgData = decodeURIComponent(imgElement.src.slice(imgElement.src.indexOf(',') + 1));
+		imgElement.outerHTML = svgData;
+	})
+	// else fetch the svg
+	var svgImages = document.querySelectorAll('img[src$=".svg"]');
+	var replaceSVG = function(imgElement) {
+		var src = imgElement.getAttribute('src');
+		return fetch(src)
+			.then(response => response.text())
+			.then(data =>imgElement.outerHTML = data);
+	}
+	const fetchPromises = Array.from(svgImages, element => replaceSVG(element));
+	Promise.all(fetchPromises)
+		.then(() => {
+			document.getElementById("links").classList.add("icon")
+		})
+		.catch(error => {
+			console.error(error);
+		});
 }
