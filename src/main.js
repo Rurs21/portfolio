@@ -1,36 +1,25 @@
-/**
- * Trying to keep it vanilla and simple 🍦
- *
- * Rurs21
- */
-
 import translations from "./i18n/translations.json"
 import { Menu } from "./js/Menu.js"
 import { archimedeanFlower } from "./js/flower.js"
-import { calculatePathLength, calculateWidthAndHeight } from "./js/utils.js"
+import { calculatePathLength, calculateWidthAndHeight, isCssLoaded } from "./js/utils.js"
+import cssURL from "./styles.css?url"
+
+var cssLoaded = false;
 
 window.onload = function() {
 	setupLanguage();
-	setupTheme();
-	setupMenu();
+
+	isCssLoaded(cssURL, (isLoaded) => {
+		cssLoaded = isLoaded;
+		if (isLoaded) {
+			setupTheme();
+			fetchInlineSVG();
+		}
+		setupMenu();
+	});
 
 	greeting();
 	drawRose();
-
-	var svgImages = document.querySelectorAll('img[src$=".svg"]');
-	svgImages.forEach(function (imgElement) {
-		var src = imgElement.getAttribute('src');
-		console.log(src); // This will print the src value to the console
-		var xhr = new XMLHttpRequest();
-		xhr.open('GET', src, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Replace the image with the inline SVG content
-                imgElement.outerHTML = xhr.responseText;
-            }
-        };
-        xhr.send();
-	});
 }
 
 function setupLanguage() {
@@ -136,6 +125,24 @@ function greeting() {
 	}
 
 	setTimeout(typeOutTitle, 2100);
+}
+
+function fetchInlineSVG() {
+	var svgImages = document.querySelectorAll('img[src$=".svg"]');
+	var replaceSVG = function(imgElement) {
+		var src = imgElement.getAttribute('src');
+		return fetch(src)
+			.then(response => response.text())
+			.then(data =>imgElement.outerHTML = data);
+	}
+	const fetchPromises = Array.from(svgImages, element => replaceSVG(element));
+	Promise.all(fetchPromises)
+		.then(() => {
+			document.getElementById("links").classList.add("icon")
+		})
+		.catch(error => {
+			console.error(error);
+		});
 }
 
 function drawRose() {

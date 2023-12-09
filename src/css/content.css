@@ -44,22 +44,25 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-around;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-#links > * {
+#links > a {
     flex: 0 0 auto;
-}
 
-.icon {
+    fill: var(--text-color);
+    width: 5em;
     padding: 1em;
-    width: 23%;
-    max-width: 8em;
+    margin: 0.25em;
 }
 
-.icon > svg {
-    width: 100%;
+#links.icon > a {
+    fill: var(--background-color);
+    background: var(--text-color);
+    border-radius: 1em;
+    height: 3em;
+    width: 3em;
 }
 
 .about {
