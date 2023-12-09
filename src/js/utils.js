@@ -41,3 +41,15 @@ export function calculateWidthAndHeight(coordinates) {
 	const height = maxY - minY;
 	return { width, height };
 }
+
+export function isCssLoaded(cssUrl, callback) {
+	const styleSheets = document.styleSheets;
+	for (let i = 0; i < styleSheets.length; i++) {
+		const styleSheet = new URL(styleSheets[i].href).pathname;
+		if (styleSheet === cssUrl) {
+			callback(true);
+			return;
+		}
+	}
+	callback(false);
+}
