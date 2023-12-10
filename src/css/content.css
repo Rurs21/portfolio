@@ -73,5 +73,6 @@
 }
 
 .contact h2 {
-    margin: 0;
+    margin-block-start: .5em;
+    margin-block-end: .5em;
 }
