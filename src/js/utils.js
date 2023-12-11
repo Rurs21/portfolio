@@ -94,8 +94,17 @@ export function setImagesToSVG(svgImages) {
 		return Promise.reject(new Error("Not an HTML image element with an SVG source."));
 	}
 
+	const parser = new DOMParser();
+
 	return Promise.all(Array.from(svgImages,
 		imgElement => retrieveSVG(imgElement)
-			.then(svg => imgElement.outerHTML = svg)
+			.then(svg => {
+				const svgDoc = parser.parseFromString(svg, "image/svg+xml");
+				const svgElement = svgDoc.documentElement;
+				svgElement.id = imgElement.id;
+				svgElement.ariaLabel = imgElement.getAttribute('alt');
+				imgElement.parentNode.replaceChild(svgElement, imgElement);
+				return svgElement;
+			})
 	));
 }
