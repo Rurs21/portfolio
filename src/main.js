@@ -108,7 +108,7 @@ function setupMenu() {
 
 function setUpIcons() {
 	var svgImages = document.querySelectorAll('img[src$=".svg"], img[src^="data:image/svg"]');
-	Promise.all(setImagesToSVG(svgImages))
+	setImagesToSVG(svgImages)
 	.then(() => {
 		document.getElementById("links").classList.add("icon")
 	})

@@ -56,7 +56,7 @@ export function isCssLoaded(callback) {
  * and inline SVG sources (starting with "data:image/svg"), into inline SVG elements.
  *
  * @param {NodeList} svgImages - A NodeList containing HTML <img> elements with SVG sources.
- * @returns {Array<Promise>} An array of Promises, each representing the processing of an svg image.
+ * @returns {Promise} Promise that resolves when all image elements have been replaced with their SVG markup.
  * @throws {Error} If an element is not an HTML <img> element with an SVG source.
  */
 export function setImagesToSVG(svgImages) {
@@ -70,21 +70,20 @@ export function setImagesToSVG(svgImages) {
 				}
 				return response.text();
 			})
-			.then(data =>imgElement.outerHTML = data);
 	}
 	var decodeBase64ToSVG = function(imgElement) {
 		return new Promise((resolve, reject) => {
 			try {
 				const base64svg = imgElement.src.slice(imgElement.src.indexOf(',') + 1);
 				const svgData = decodeURIComponent(base64svg);
-				imgElement.outerHTML = svgData;
-				resolve();
+				resolve(svgData);
 			} catch (error) {
 				reject(error);
 			}
 		});
 	}
-	return Array.from(svgImages, imgElement => {
+
+	var retrieveSVG = function(imgElement) {
 		if (imgElement instanceof HTMLImageElement) {
 			if (imgElement.src.endsWith(".svg")) {
 				return fetchSVG(imgElement)
@@ -93,5 +92,10 @@ export function setImagesToSVG(svgImages) {
 			}
 		}
 		return Promise.reject(new Error("Not an HTML image element with an SVG source."));
-	});
+	}
+
+	return Promise.all(Array.from(svgImages,
+		imgElement => retrieveSVG(imgElement)
+			.then(svg => imgElement.outerHTML = svg)
+	));
 }
