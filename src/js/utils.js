@@ -51,27 +51,47 @@ export function isCssLoaded(callback) {
 	callback(false);
 }
 
-export function fetchInlineSVG() {
-	// if inline data, simply convert URI into svg and replace
-	var svgImages = document.querySelectorAll('img[src^="data:image/svg"]');
-	svgImages.forEach(imgElement => {
-		const svgData = decodeURIComponent(imgElement.src.slice(imgElement.src.indexOf(',') + 1));
-		imgElement.outerHTML = svgData;
-	})
-	// else fetch the svg
-	var svgImages = document.querySelectorAll('img[src$=".svg"]');
-	var replaceSVG = function(imgElement) {
+/**
+ * Transforms HTML image elements with SVG sources, including external SVG files (ending in ".svg")
+ * and inline SVG sources (starting with "data:image/svg"), into inline SVG elements.
+ *
+ * @param {NodeList} svgImages - A NodeList containing HTML <img> elements with SVG sources.
+ * @returns {Array<Promise>} An array of Promises, each representing the processing of an svg image.
+ * @throws {Error} If an element is not an HTML <img> element with an SVG source.
+ */
+export function setImagesToSVG(svgImages) {
+	var fetchSVG = function(imgElement) {
 		var src = imgElement.getAttribute('src');
 		return fetch(src)
-			.then(response => response.text())
+			.then(response => {
+				const contentType = response.headers.get("Content-Type");
+				if (!response.ok || !contentType.includes("svg")) {
+					throw new Error(`Failed to fetch SVG: ${response.statusText}`);
+				}
+				return response.text();
+			})
 			.then(data =>imgElement.outerHTML = data);
 	}
-	const fetchPromises = Array.from(svgImages, element => replaceSVG(element));
-	Promise.all(fetchPromises)
-		.then(() => {
-			document.getElementById("links").classList.add("icon")
-		})
-		.catch(error => {
-			console.error(error);
+	var decodeBase64ToSVG = function(imgElement) {
+		return new Promise((resolve, reject) => {
+			try {
+				const base64svg = imgElement.src.slice(imgElement.src.indexOf(',') + 1);
+				const svgData = decodeURIComponent(base64svg);
+				imgElement.outerHTML = svgData;
+				resolve();
+			} catch (error) {
+				reject(error);
+			}
 		});
+	}
+	return Array.from(svgImages, imgElement => {
+		if (imgElement instanceof HTMLImageElement) {
+			if (imgElement.src.endsWith(".svg")) {
+				return fetchSVG(imgElement)
+			} else if (imgElement.src.startsWith("data:image/svg")) {
+				return decodeBase64ToSVG(imgElement)
+			}
+		}
+		return Promise.reject(new Error("Not an HTML image element with an SVG source."));
+	});
 }
