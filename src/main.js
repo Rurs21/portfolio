@@ -1,7 +1,7 @@
 import translations from "./i18n/translations.json"
 import { Menu } from "./js/Menu.js"
 import { archimedeanFlower } from "./js/flower.js"
-import { calculatePathLength, calculateWidthAndHeight, isCssLoaded, fetchInlineSVG } from "./js/utils.js"
+import { calculatePathLength, calculateWidthAndHeight, isCssLoaded, setImagesToSVG } from "./js/utils.js"
 
 window.onload = function() {
 	setupLanguage();
@@ -9,7 +9,7 @@ window.onload = function() {
 		if (isLoaded) {
 			setupTheme();
 			setupMenu();
-			fetchInlineSVG();
+			setUpIcons();
 		} else {
 			enableNonCssFunctions();
 		}
@@ -104,6 +104,17 @@ function setupMenu() {
 	// Reveal overlay & navbar when menu all setup
 	document.getElementById("top-overlay").removeAttribute("hidden")
 	document.getElementById("navbar").removeAttribute("hidden");
+}
+
+function setUpIcons() {
+	var svgImages = document.querySelectorAll('img[src$=".svg"], img[src^="data:image/svg"]');
+	Promise.all(setImagesToSVG(svgImages))
+	.then(() => {
+		document.getElementById("links").classList.add("icon")
+	})
+	.catch(error => {
+		console.error(error);
+	});
 }
 
 function greeting() {
