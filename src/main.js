@@ -7,9 +7,9 @@ window.onload = function() {
 	setupLanguage();
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
-			setupTheme();
+			setUpIcons()
+				.then(setupTheme)
 			setupMenu();
-			setUpIcons();
 		} else {
 			enableNonCssFunctions();
 		}
@@ -34,17 +34,16 @@ function setupTheme() {
 	// Cache references
 	const body = document.body;
 	const themeToggle = document.getElementById('theme-toggle');
-	const themeIcon = document.getElementById('theme-icon');
+	const lightIcon = document.getElementById('light-theme-icon');
+	const darkIcon = document.getElementById('dark-theme-icon');
 
 	const changeTheme = function(theme) {
 		if (theme == 'dark') {
 			body.classList.add('dark');
-			themeIcon.innerHTML = `&#x263E;&#xFE0E;`; // ☾ ☽ 🌜 ⏾ ⚉
-			themeIcon.ariaLabel = "Dark Symbol";
+			themeToggle.replaceChild(darkIcon, lightIcon);
 		} else {
 			body.classList.remove('dark');
-			themeIcon.innerHTML = `&#x2726;&#xFE0E;` // ✦ ☉ ✹ ✵ ☼ ☀
-			themeIcon.ariaLabel = "Light Symbol";
+			themeToggle.replaceChild(lightIcon, darkIcon);
 		}
 
 		// Save the theme preference to localStorage
@@ -107,11 +106,30 @@ function setupMenu() {
 }
 
 function setUpIcons() {
-	var svgImages = document.querySelectorAll('img[src$=".svg"], img[src^="data:image/svg"]');
-	setImagesToSVG(svgImages)
-	.then(() => {
-		document.getElementById("links").classList.add("icon")
-	})
+	// selectors
+	const imgSelector = 'img[src$=".svg"], img[src^="data:image/svg"]'
+	const btnSelector = 'button > img[src$=".svg"], button > img[src^="data:image/svg"]'
+	// icons elements
+	const contactIcons = document.getElementById("links").querySelectorAll(imgSelector);
+	const buttonIcons = document.querySelectorAll(btnSelector);
+
+	return Promise.all([
+		// Contact Icons
+		setImagesToSVG(contactIcons).then((svgElements) => {
+			for (const svgElem of svgElements) {
+				svgElem.parentElement.classList.remove("icon");
+				svgElem.parentElement.classList.add("square-icon");
+			}
+		}),
+		// Buttons Icons
+		setImagesToSVG(buttonIcons).then((svgElements) => {
+			for (const svgElem of svgElements) {
+				svgElem.classList.add("icon");
+				svgElem.removeAttribute("width");
+				svgElem.removeAttribute("height");
+			}
+		})
+	])
 	.catch(error => {
 		console.error(error);
 	});
