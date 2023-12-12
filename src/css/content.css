@@ -64,23 +64,6 @@
     margin-right: 0.5em;
 }
 
-.icon {
-    fill: var(--text-color);
-}
-
-.icon-solid {
-    stroke: var(--text-color);
-}
-
-.square-icon {
-    fill: var(--background-color);
-    background: var(--text-color);
-    height: 3.75em;
-    width: 3.75em;
-    padding: 1em;
-    border-radius: 1em;
-}
-
 .about {
     line-height: 2em;
     font-size: 1.25em;

@@ -74,6 +74,7 @@ button {
     text-decoration: none;
 
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    touch-action: manipulation;
 }
 
 button:disabled,
@@ -95,6 +96,25 @@ button[disabled]{
     border-left:   0.2em solid var(--text-color);
     border-right:  0.2em solid var(--secondary-color);
     border-bottom: 0.2em solid var(--secondary-color);
+}
+
+.icon {
+    fill: var(--text-color);
+}
+
+.icon-solid {
+    stroke: var(--text-color);
+}
+
+.square-icon {
+    fill: var(--background-color);
+    background: var(--text-color);
+    height: 3.75em;
+    width: 3.75em;
+    padding: 1em;
+    border-radius: 1em;
+
+    transition: background-color 0.3s, fill 0.3s, stroke 0.3s;
 }
 
 .glyphe {
