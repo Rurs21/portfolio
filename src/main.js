@@ -1,7 +1,9 @@
 import translations from "./i18n/translations.json"
 import { Menu } from "./js/Menu.js"
+import { setImagesToSVG } from "./js/utils/svg.js"
+import { isCssLoaded } from "./js/utils/misc.js"
+import { calculatePathLength, calculateWidthAndHeight } from "./js/utils/geometry.js";
 import { archimedeanFlower } from "./js/flower.js"
-import { calculatePathLength, calculateWidthAndHeight, isCssLoaded, setImagesToSVG } from "./js/utils.js"
 
 window.onload = function() {
 	setupLanguage();
