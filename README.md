@@ -27,17 +27,16 @@ npm run build
 
 ### fonts
 
-- M PLUS 2 : 300, 400, 700
-- Noto Sans Symbol 2 : 400
+None
 
 ### SVG
 
-- Font Awesome : github-alt, envelope
-- Simple Icons : LinkedIn
+- [Font Awesome](https://github.com/FortAwesome/Font-Awesome) : Github-alt, Envelope-solid, LinkedIn-in
+- [Boxicons](https://github.com/atisawd/boxicons) : X, Moon, Sun
+- [teeny-icons](https://github.com/teenyicons/teenyicons) : Globe-US
 
 ## TODO
 
 - accessibility-proof (left handed control ?)
 - better error handling
-- choose fonts or svg for icons (loading screen ?)
 - work without js and css
