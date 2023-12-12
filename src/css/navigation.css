@@ -16,7 +16,7 @@
 }
 
 #main-menu > * {
-    margin: 0 0 0 0.85em;
+    margin: 0 0 0 1.5em;
     flex: 0 0 auto;
 }
 
@@ -29,7 +29,7 @@
     align-items: center;
     justify-content: flex-end;
 
-	padding-top: 6.5em;
+	padding-top: 7em;
 }
 
 #language-menu > *  {
@@ -40,7 +40,7 @@
 #menu-button {
     position: absolute;
     right: 0;
-    margin: 0.25em;
+    margin: 0.5em;
 }
 
 .top-menu {

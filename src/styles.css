@@ -20,14 +20,16 @@
         padding: 1.25em 1em 1em 1em;
     }
     #menu-button {
-        margin: 0.35em 0.5em 0.5em 0.5em;
+        margin: 0.72em 1em 1em 1em;
     }
     #rose {
         width: 70%;
     }
-    #links.icon > a {
+    .square-icon {
         height: 4.25em;
         width: 4.25em;
+    }
+    #links > .square-icon {
         margin-right: 1em;
     }
 }

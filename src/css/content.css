@@ -2,7 +2,7 @@
 
 .content {
     height: 100%;
-    padding: 5em 0 0 0;
+    padding: 7.5em 0 0 0;
 }
 
 .content > * {
@@ -48,22 +48,37 @@
     justify-content: flex-start;
 }
 
-#links > a {
+#links > * {
     flex: 0 0 auto;
-
-    fill: var(--text-color);
-    width: 5em;
-    padding: 1em;
     margin: 0.25em;
 }
 
-#links.icon > a {
+#links > .icon {
+    width: 5em;
+    height: 5em;
+    padding: 1em;
+    margin-right: 1em;
+}
+
+#links > .square-icon {
+    margin-right: 0.5em;
+}
+
+.icon {
+    fill: var(--text-color);
+}
+
+.icon-solid {
+    stroke: var(--text-color);
+}
+
+.square-icon {
     fill: var(--background-color);
     background: var(--text-color);
-    border-radius: 1em;
     height: 3.75em;
     width: 3.75em;
-    margin-right: 0.5em;
+    padding: 1em;
+    border-radius: 1em;
 }
 
 .about {
