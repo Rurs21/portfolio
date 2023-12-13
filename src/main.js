@@ -1,9 +1,9 @@
 import translations from "./i18n/translations.json"
-import { Menu } from "./js/Menu.js"
+import { Menu } from "./js/menu.js"
 import { setImagesToSVG } from "./js/utils/svg.js"
 import { isCssLoaded } from "./js/utils/misc.js"
-import { calculatePathLength, calculateWidthAndHeight } from "./js/utils/geometry.js";
-import { archimedeanFlower } from "./js/flower.js"
+import { archimedeanFlower } from "./js/archimedeanFlower.js";
+import { createDrawingCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 
 window.onload = function() {
 	setupLanguage();
@@ -171,60 +171,14 @@ function drawRose() {
 	const rosePoints = archimedeanFlower(a, b, c, n, k, thetaIncrement, thetaMax);
 
 	// svg properties
-	const strokeWidth = 2.7
-	const pathLength = calculatePathLength(rosePoints);
-	var { width, height } = calculateWidthAndHeight(rosePoints);
-	width+=strokeWidth;
-	height+=strokeWidth;
+	const strokeWidth = 2.7;
 
-	let halfWidth = Math.ceil(width/2);
-	let halfHeight = Math.floor(height/2);
+	const svgElement = createDrawingCoordinatesSVG(rosePoints, "#E4345A", strokeWidth, "4.5s");
+	defineSVG(svgElement, "rose-svg", "Archimedean's Rose", "A Scalable Vector Graphic of a rose drawn with the Archimedean spirals equation");
 
-	// Convert points to a path string and set the "d" attribute
-	let d = `M ${rosePoints[0][0] + halfWidth} ${halfHeight - rosePoints[0][1]}`;
-	rosePoints.slice(1).forEach(point => {
-		d += ` L ${point[0] + halfWidth} ${halfHeight - point[1]}`;
-	});
-
-	// Create the SVG
-	const svgNS = "http://www.w3.org/2000/svg";
-	let svgElem = document.createElementNS(svgNS, "svg");
-	svgElem.setAttribute("viewBox", `0 0 ${Math.ceil(width) + strokeWidth} ${Math.ceil(height)+ strokeWidth}` );
-
-	let pathElem = document.createElementNS(svgNS, "path");
-	pathElem.setAttribute("fill", "none");
-	pathElem.setAttribute("stroke", "#E4345A");
-	pathElem.setAttribute("stroke-width", strokeWidth);
-	pathElem.setAttribute("d", d);
-
-	// Animate the spiral drawing
-	pathElem.setAttribute("stroke-dasharray", pathLength);
-	pathElem.setAttribute("stroke-dashoffset", pathLength);
-
-	let animateDrawElem = document.createElementNS(svgNS, "animate");
-	animateDrawElem.setAttribute("attributeName", "stroke-dashoffset");
-	animateDrawElem.setAttribute("from", pathLength);
-	animateDrawElem.setAttribute("to", "0");
-	animateDrawElem.setAttribute("dur", "4.5s");
-	animateDrawElem.setAttribute("fill", "freeze");
-	pathElem.appendChild(animateDrawElem);
-
-	// Get svg container and add class for fill animation (css)
 	const roseElement = document.getElementById("rose");
 	roseElement.classList.add("start", "unfilled");
-
-	// Title element
-	const titleElement = document.createElementNS(svgNS, "title");
-	titleElement.textContent = "Archimedean's Rose";
-	const descElement = document.createElementNS(svgNS, "desc");
-	descElement.textContent = "A Scalable Vector Graphic of a rose drawn with the Archimedean spirals equation"
-
-	// Add the path to the SVG and the SVG to the container
-	svgElem.appendChild(titleElement);
-	svgElem.appendChild(descElement);
-	svgElem.appendChild(pathElem);
-	roseElement.appendChild(svgElem);
-
+	roseElement.appendChild(svgElement);
 	setTimeout(()=> roseElement.classList.remove("unfilled"), 3750);
 	setTimeout(()=> roseElement.classList.remove("start"), 6000);
 }
