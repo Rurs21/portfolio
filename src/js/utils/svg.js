@@ -5,9 +5,123 @@
  *
  * @module svgUtils
  */
+import { findMinMaxCoordinates } from "./geometry.js";
 
 // SVG Namespace
 const svgNS = "http://www.w3.org/2000/svg";
+
+export function createDrawingCoordinatesSVG(coordinates, color, strokeWidth, duration) {
+	let svgElement = document.createElementNS(svgNS, "svg");
+
+	var pathElement = createPathElement(coordinates, color, strokeWidth);
+	if (duration != null) {
+		pathElement = animateDrawingPath(pathElement, duration);
+	}
+
+	const {minX, minY, width, height} = determineViewBox(coordinates, strokeWidth);
+
+
+	svgElement.setAttribute("viewBox", `${minX} ${minY} ${width} ${height}` );
+	svgElement.setAttribute("transform", `matrix(1, 0, 0, -1, 0, 0)`);
+	svgElement.appendChild(pathElement);
+
+	return svgElement;
+}
+
+export function defineSVG(svgElement, id, title, desc) {
+	svgElement.id = id;
+
+	const titleElement = document.createElementNS(svgNS, 'title');
+	const descElement = document.createElementNS(svgNS, 'desc');
+
+	const titleId = id + "-title";
+	const descId = id + "-desc";
+
+	titleElement.id = titleId;
+	titleElement.textContent = title;
+
+	descElement.id = descId;
+	descElement.textContent = desc;
+
+	svgElement.insertBefore(titleElement, svgElement.firstChild);
+	svgElement.insertBefore(descElement, titleElement.nextSibling);
+	svgElement.setAttribute('aria-labelledby', `${titleId} ${descId}`);
+}
+
+/**
+ * Determines the optimal viewBox dimensions for an SVG element based on a set of coordinates
+ * and adjusted with the stroke width. This Ensure that the entire path, including
+ * its stroke, is visible within the SVG viewBox
+ *
+ * @param {number[][]} coordinates - An array of coordinate pairs (x,y).
+ * @param {number} strokeWidth - The width of the stroke for the path, used to adjust the viewBox.
+ * @returns {Object} An object containing the viewBox properties: minX, minY, width, and height.
+ */
+function determineViewBox(coordinates, strokeWidth) {
+	var { minX, minY, maxX, maxY } = findMinMaxCoordinates(coordinates);
+
+	minX = Math.floor(minX - strokeWidth / 2);
+	minY = Math.floor(minY - strokeWidth / 2);
+	maxX = Math.ceil(maxX + strokeWidth / 2);
+	maxY = Math.ceil(maxY + strokeWidth / 2);
+
+	const width = maxX - minX;
+	const height = maxY - minY;
+
+	return {minX, minY, width, height}
+}
+
+/**
+ * Creates an SVG path element using the specified coordinates, stroke color and stroke width.
+ *
+ * @param {number[][]} coordinates - An array of coordinate pairs (x,y).
+ * @param {string} [color="#000000"] - The color of the stroke.
+ * @param {number} [strokeWidth=1] - The width of the stroke for the path.
+ * @returns {SVGPathElement} The created SVG path element
+ */
+function createPathElement(coordinates, color = "#000000", strokeWidth = 1) {
+	// Convert points to a path string and set the "d" attribute
+	let d = `M ${coordinates[0][0]} ${coordinates[0][1]}`;
+	coordinates.slice(1).forEach(point => {
+		d += ` L ${point[0]} ${point[1]}`;
+	});
+
+	let pathElem = document.createElementNS(svgNS, "path");
+	pathElem.setAttribute("fill", "none");
+	pathElem.setAttribute("stroke", color);
+	pathElem.setAttribute("stroke-width", strokeWidth);
+	pathElem.setAttribute("d", d);
+
+	return pathElem;
+}
+
+/**
+ * Creates an animated version of a given SVG path element to simulate drawing the path over time.
+ *
+ * @param {SVGPathElement} pathElement - The SVG path element to animate
+ * @param {<clock-value>} duration of an animation.must be greater than 0 and can be expressed with hours (h), minutes (m), seconds (s) or milliseconds (ms). Could be hh:mm:ss.iii for exemple.
+* @returns {SVGPathElement} A clone of the original path element, with added animation properties.
+ *
+ * @todo could be functionnal ? (make copy of path element ?)
+ */
+function animateDrawingPath(pathElement, duration) {
+	const pathLength = pathElement.getTotalLength();
+	var animatedPath = pathElement.cloneNode(true)
+
+	// Animate the spiral drawing
+	animatedPath.setAttribute("stroke-dasharray", pathLength);
+	animatedPath.setAttribute("stroke-dashoffset", pathLength);
+
+	let animateDrawElem = document.createElementNS(svgNS, "animate");
+	animateDrawElem.setAttribute("attributeName", "stroke-dashoffset");
+	animateDrawElem.setAttribute("from", pathLength);
+	animateDrawElem.setAttribute("to", 0);
+	animateDrawElem.setAttribute("dur", duration);
+	animateDrawElem.setAttribute("fill", "freeze");
+	animatedPath.appendChild(animateDrawElem);
+
+	return animatedPath;
+}
 
 /**
  * This function fetches SVG content or decodes base64-encoded SVG images and replaces the `img`

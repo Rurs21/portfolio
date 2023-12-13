@@ -14,7 +14,7 @@
  * Calculates the length of a path defined by an array of coordinates.
  *
  * @param {Array<Array<number>>} coordinates - An array of coordinate pairs.
- * @returns {number} The length of the path.
+ * @returns {number} The length of the path draw by the coordinates.
  * @throws {Error} Throws an error if the input coordinates array is empty.
  */
 export function calculatePathLength(coordinates) {
@@ -22,16 +22,16 @@ export function calculatePathLength(coordinates) {
 	  return 0; // A path with fewer than two points has zero length
 	}
 
-	let pathLength = 0;
+	let length = 0;
 
 	for (let i = 1; i < coordinates.length; i++) {
 	  const [x1, y1] = coordinates[i - 1];
 	  const [x2, y2] = coordinates[i];
 	  const distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
-	  pathLength += distance;
+	  length += distance;
 	}
 
-	return pathLength;
+	return length;
 }
 
 /**
@@ -41,7 +41,7 @@ export function calculatePathLength(coordinates) {
  * @returns {Object} An object containing minX, minY, maxX, and maxY values.
  * @throws {Error} Throws an error if the input coordinates array is empty.
  */
-function findMinMaxCoordinates(coordinates) {
+export function findMinMaxCoordinates(coordinates) {
 	let minX = Infinity;
 	let minY = Infinity;
 	let maxX = -Infinity;
