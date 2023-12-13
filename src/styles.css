@@ -16,11 +16,8 @@
     h2 {
         font-size: 2em;
     }
-    .top-menu {
+    .horizontal-menu {
         padding: 1.25em 1em 1em 1em;
-    }
-    #menu-button {
-        margin: 0.72em 1em 1em 1em;
     }
     #rose {
         width: 70%;
