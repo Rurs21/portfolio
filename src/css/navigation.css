@@ -1,5 +1,23 @@
 /* Navigation Related Styling */
 
+.horizontal-menu {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    box-sizing: border-box;
+    padding: 1em 0.85em 1em 0.85em;
+
+    background: var(--background-color);
+    border-bottom: 0.15em solid var(--text-color);
+
+    touch-action: manipulation;
+}
+
+.horizontal-menu > * {
+    flex: 0 0 auto;
+}
+
 #navbar {
 	position: absolute;
 	top: 0;
@@ -8,51 +26,25 @@
 
 #main-menu {
 	z-index: 4;
-    display: flex;
-    justify-content: flex-end;
-
-    background: var(--background-color);
-    border-bottom: 0.15em solid var(--text-color);
 }
 
 #main-menu > * {
     margin: 0 0 0 1.5em;
-    flex: 0 0 auto;
 }
 
 #language-menu {
     z-index: 3;
-    background: var(--background-color);
-    border-bottom: 0.15em solid var(--text-color);
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
 	padding-top: 7em;
 }
 
 #language-menu > *  {
     margin: 0.25em;
-    flex: 0 0 auto;
-}
-
-#menu-button {
-    position: absolute;
-    right: 0;
-    margin: 0.5em;
 }
 
 .top-menu {
     position: fixed;
     top: 0;
-
-	width: inherit;
-    max-width: 100%;
-    padding: 1em;
-    box-sizing: border-box;
-    flex-grow: 0;
-
+    width: inherit;
     transition: top 0.3s;
 }
 
@@ -70,7 +62,6 @@
     position: fixed;
     top: 0;
     z-index: 2;
-    height: 10%;
-    flex-grow: 0;
-    flex-shrink: 0;
+    background: none;
+    border-bottom: none;
 }
