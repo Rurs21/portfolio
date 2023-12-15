@@ -11,6 +11,10 @@ body, html {
     padding: 0;
 }
 
+[hidden]{
+    display:none !important;
+}
+
 :root {
     --text-color: #333;
     --background-color: #E7E9EA; /* White Marble */
