@@ -10,12 +10,25 @@ import { findMinMaxCoordinates } from "./geometry.js";
 // SVG Namespace
 const svgNS = "http://www.w3.org/2000/svg";
 
-export function createDrawingCoordinatesSVG(coordinates, color, strokeWidth, duration) {
+/**
+ * This function generates an SVG element that includes a path element defined by the given coordinates.
+ * The path is styled with the specified color and stroke width. If a drawing duration is provided,
+ * the path is animated to draw the path over the specified duration.
+ *
+ * @param {number[][]} coordinates - An array of coordinate pairs (x,y).
+ * @param {string} color - The color of the path stroke.
+ * @param {number} strokeWidth - The width of the path stroke.
+ * @param {<clock-value>} duration of an animation. Must be greater than 0 and can be expressed with hours (h), minutes (m), seconds (s) or milliseconds (ms). Could be hh:mm:ss.iii for exemple.
+ *                                        Pass `null` to skip animation.
+ *
+ * @returns {SVGElement} - The SVG element containing the drawn path.;
+ */
+export function createCoordinatesSVG(coordinates, color, strokeWidth, drawingDuration) {
 	let svgElement = document.createElementNS(svgNS, "svg");
 
 	var pathElement = createPathElement(coordinates, color, strokeWidth);
-	if (duration != null) {
-		pathElement = animateDrawingPath(pathElement, duration);
+	if (drawingDuration != null) {
+		pathElement = animateDrawingPath(pathElement, drawingDuration);
 	}
 
 	const {minX, minY, width, height} = determineViewBox(coordinates, strokeWidth);
@@ -99,7 +112,7 @@ function createPathElement(coordinates, color = "#000000", strokeWidth = 1) {
  * Creates an animated version of a given SVG path element to simulate drawing the path over time.
  *
  * @param {SVGPathElement} pathElement - The SVG path element to animate
- * @param {<clock-value>} duration of an animation.must be greater than 0 and can be expressed with hours (h), minutes (m), seconds (s) or milliseconds (ms). Could be hh:mm:ss.iii for exemple.
+ * @param {<clock-value>} duration of an animation. Must be greater than 0 and can be expressed with hours (h), minutes (m), seconds (s) or milliseconds (ms). Could be hh:mm:ss.iii for exemple.
 * @returns {SVGPathElement} A clone of the original path element, with added animation properties.
  *
  * @todo could be functionnal ? (make copy of path element ?)
@@ -225,7 +238,7 @@ function decodeBase64ToSVG(imgElement) {
 	return new Promise((resolve, reject) => {
 		try {
 			const base64svg = imgElement.src.slice(imgElement.src.indexOf(',') + 1);
-			const svgData = decodeURIComponent(base64svg);
+			const svgData = decodeURIComponent(base64svg); //actually not base64 encoded lol
 			resolve(svgData);
 		} catch (error) {
 			reject(`Failed to decode base64 SVG: ${error.message}`);

@@ -3,7 +3,7 @@ import { Menu } from "./js/menu.js"
 import { setImagesToSVG } from "./js/utils/svg.js"
 import { isCssLoaded } from "./js/utils/misc.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js";
-import { createDrawingCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
+import { createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 
 window.onload = function() {
 	setupLanguage();
@@ -173,7 +173,7 @@ function drawRose() {
 	// svg properties
 	const strokeWidth = 2.7;
 
-	const svgElement = createDrawingCoordinatesSVG(rosePoints, "#E4345A", strokeWidth, "4.5s");
+	const svgElement = createCoordinatesSVG(rosePoints, "#E4345A", strokeWidth, "4.5s");
 	defineSVG(svgElement, "rose-svg", "Archimedean's Rose", "A Scalable Vector Graphic of a rose drawn with the Archimedean spirals equation");
 
 	const roseElement = document.getElementById("rose");
