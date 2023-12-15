@@ -63,10 +63,12 @@ function setupTheme() {
 
 		// Set previously selected theme
 		if (savedTheme != null) {
-			changeTheme(savedTheme)
+			changeTheme(savedTheme);
 		}
 		else if (prefersDarkMode) {
-			changeTheme('dark')
+			changeTheme('dark');
+		} else {
+			changeTheme('light');
 		}
 	}
 
