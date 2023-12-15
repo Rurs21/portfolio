@@ -21,15 +21,20 @@
     </div>
     <nav id="navbar" aria-label="Navigation Bar" hidden>
         <div id="main-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Main Menu">
+            <button id="settings-button" class="round-button" role="menuitem" aria-label="Settings" aria-controls="settings-menu" aria-expanded="false">
+                <image src="./assets/svg/tiny-cog.svg" alt="Cog" width="50px"></image>
+            </button>
+            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Close navigation bar" aria-controls="main-menu">
+                <image src="./assets/svg/bx-x.svg" alt="X" width="50px"></image>
+            </button>
+        </div>
+        <div id="settings-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Settings Menu">
             <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false">
                 <image src="./assets/svg/tiny-globe-us.svg" alt="Globe" width="50px"></image>
             </button>
             <button id="theme-toggle" class="round-button" role="menuitem" aria-label="Toggle Light/Dark Theme">
                 <image id="light-theme-icon" src="./assets/svg/bx-sun.svg" alt="sun" width="50px"></image>
                 <image id="dark-theme-icon" src="./assets/svg/bx-moon.svg" alt="moon" width="50px"></image>
-            </button>
-            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Close navigation bar" aria-controls="main-menu">
-                <image src="./assets/svg/bx-x.svg" alt="X" width="50px"></image>
             </button>
         </div>
         <div id="language-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Language Menu">

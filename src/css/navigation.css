@@ -16,37 +16,39 @@
 
 .horizontal-menu > * {
     flex: 0 0 auto;
+    margin: 0 0 0 1.5em;
 }
 
 #navbar {
 	position: absolute;
 	top: 0;
-	z-index: 5;
+	z-index: 6;
 }
 
 #main-menu {
-	z-index: 4;
+	z-index: 5;
 }
 
-#main-menu > * {
-    margin: 0 0 0 1.5em;
-}
-
-#language-menu {
+#settings-menu {
     z-index: 3;
 	padding-top: 7em;
 }
 
+#language-menu {
+    z-index: 4;
+	padding-top: 7.3em;
+    transition: top 0.25s;
+}
+
 #language-menu > *  {
     margin: 0.25em;
-    font-size: x-large;
 }
 
 .top-menu {
     position: fixed;
     top: 0;
     width: inherit;
-    transition: top 0.3s;
+    transition: top 0.25s;
 }
 
 /* closed menu position */
@@ -56,6 +58,10 @@
 }
 
 #language-menu.close {
+    top: -12em; /* Hide the navbar above the viewport */
+}
+
+#settings-menu.close {
     top: -12em; /* Hide the navbar above the viewport */
 }
 

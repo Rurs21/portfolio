@@ -33,7 +33,7 @@ None
 
 - [Font Awesome](https://github.com/FortAwesome/Font-Awesome) : Github-alt, Envelope-solid, LinkedIn-in
 - [Boxicons](https://github.com/atisawd/boxicons) : X, Moon, Sun
-- [teeny-icons](https://github.com/teenyicons/teenyicons) : Globe-US
+- [teeny-icons](https://github.com/teenyicons/teenyicons) : Globe-US, Cog
 
 ## TODO
 
