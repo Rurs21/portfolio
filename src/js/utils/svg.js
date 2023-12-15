@@ -24,7 +24,8 @@ const svgNS = "http://www.w3.org/2000/svg";
  * @returns {SVGElement} - The SVG element containing the drawn path.;
  */
 export function createCoordinatesSVG(coordinates, color, strokeWidth, drawingDuration) {
-	let svgElement = document.createElementNS(svgNS, "svg");
+	const svgElement = document.createElementNS(svgNS, "svg");
+	const group = document.createElementNS(svgNS, "g");
 
 	var pathElement = createPathElement(coordinates, color, strokeWidth);
 	if (drawingDuration != null) {
@@ -33,10 +34,11 @@ export function createCoordinatesSVG(coordinates, color, strokeWidth, drawingDur
 
 	const {minX, minY, width, height} = determineViewBox(coordinates, strokeWidth);
 
-
 	svgElement.setAttribute("viewBox", `${minX} ${minY} ${width} ${height}` );
-	svgElement.setAttribute("transform", `matrix(1, 0, 0, -1, 0, 0)`);
-	svgElement.appendChild(pathElement);
+	group.setAttribute('transform-origin', "0 -4")
+	group.setAttribute('transform', `matrix(1, 0, 0, -1, 0, 0)`);
+	svgElement.appendChild(group);
+	group.appendChild(pathElement);
 
 	return svgElement;
 }
