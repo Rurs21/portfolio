@@ -144,14 +144,14 @@ select {
     grid-template-areas: "select";
     align-items: center;
 
-    min-width: 12ch;
+    min-width: 13ch;
     max-width: 25ch;
     border: 1px solid var(--secondary-color);
     border-radius: 0.25em;
 
     font-size: 1.15rem;
     cursor: pointer;
-    line-height: 1.1;
+    line-height: 1.5;
     background: var(--secondary-color);
 }
 .select::before, .select::after {
