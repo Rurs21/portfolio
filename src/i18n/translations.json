@@ -1,5 +1,6 @@
 {
 	"en": {
+		"language": "Language",
 		"greeting": "Hello, I'm Charles.",
 		"job-title": "Software developer",
 		"my-summary": "I'm all about resolving problems and creating cool stuff",
@@ -7,6 +8,7 @@
 		"contact-me": "Link up"
 	},
 	"fr": {
+		"language": "Langage",
 		"greeting": "Allô, moi c'est Charles.",
 		"job-title": "Développeur logiciel ",
 		"my-summary": "J'trippe à résoudre des problèmes pour créer du stock cool",

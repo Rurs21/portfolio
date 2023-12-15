@@ -126,7 +126,6 @@ function setUpIcons() {
 		// Buttons Icons
 		setImagesToSVG(buttonIcons).then((svgElements) => {
 			for (const svgElem of svgElements) {
-				svgElem.classList.add("icon");
 				svgElem.removeAttribute("width");
 				svgElem.removeAttribute("height");
 			}
