@@ -85,11 +85,15 @@ function setupMenu() {
 	// Sub menu language
 	const languageButton = document.getElementById("language-button");
 	const languageMenu = new Menu(document.getElementById("language-menu"), languageButton);
+	// Sub menu settings
+	const settingsButton = document.getElementById("settings-button");
+	const settingsMenu = new Menu(document.getElementById("settings-menu"), settingsButton);
 	// Main menu
 	const menuButton = document.getElementById("menu-button");
 	const closeButton = document.getElementById("close-menu-button");
 	const mainMenu = new Menu(document.getElementById("main-menu"), menuButton, closeButton);
-	mainMenu.addSubMenu(languageMenu);
+	mainMenu.addSubMenu(settingsMenu);
+	settingsMenu.addSubMenu(languageMenu);
 
 	// Create a MutationObserver for the lang (overkill ?)
 	const langObserver = new MutationObserver((mutationsList, observer) => {

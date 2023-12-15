@@ -1,5 +1,5 @@
 export class Menu {
-	#animationDuration = 300;
+	#animationDuration = 250;
 
 	constructor(menuElement, ...controlButtons) {
 		this.menu = menuElement;
@@ -50,6 +50,7 @@ export class Menu {
 		this.subMenus.forEach(subMenu => {
 			if (!subMenu.isClosed()) {
 				subMenu.toggle();
+				subMenu.closeSubMenus();
 			}
 		});
 	}
