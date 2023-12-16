@@ -9,10 +9,10 @@
  * whether CSS stylesheets are loaded (true) or not (false).
  */
 export function isCssLoaded(callback) {
-	const styleSheets = document.styleSheets;
+	const styleSheets = document.styleSheets
 	if (styleSheets.length > 0) {
-		callback(true);
-		return;
+		callback(true)
+		return
 	}
-	callback(false);
+	callback(false)
 }
