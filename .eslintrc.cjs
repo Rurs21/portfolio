@@ -1,5 +1,3 @@
-import eslintConfigPrettier from "eslint-config-prettier";
-
 module.exports = {
 	env: {
 		browser: true,
@@ -7,7 +5,7 @@ module.exports = {
 	},
 	extends: [
 		"eslint:recommended",
-		eslintConfigPrettier,
+		"prettier",
 	],
 	overrides: [
 		{
@@ -33,7 +31,15 @@ module.exports = {
 		],
 		"no-duplicate-imports": [
 			"error",
-			"never"
+			{ "includeExports": true }
+		],
+		"no-unused-vars": [
+			"error",
+			{
+				"vars": "all",
+				"args": "none",
+				"ignoreRestSiblings": false
+			}
 		]
 	}
 }
