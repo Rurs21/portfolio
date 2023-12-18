@@ -3,6 +3,7 @@ import { Menu } from "./js/menu.js"
 import { isCssLoaded } from "./js/utils/misc.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
+import { main } from "./js/graphic.js"
 
 window.onload = function () {
 	setupLanguage()
@@ -17,6 +18,8 @@ window.onload = function () {
 
 	greeting()
 	drawRose()
+
+	main()
 }
 
 function setupLanguage() {
