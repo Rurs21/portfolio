@@ -3,6 +3,9 @@
 .content {
     height: 100%;
     padding: 7.5em 0 0 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 .content > * {
@@ -73,4 +76,18 @@
 .contact h2 {
     margin-block-start: .5em;
     margin-block-end: .5em;
+}
+
+#main-footer {
+    margin: 25% 0 1em 0;
+}
+
+.copyright {
+    font-size: xx-small;
+    max-width: 135ch;
+    color: #696969
+}
+
+.dark .copyright {
+    color: #858585
 }
