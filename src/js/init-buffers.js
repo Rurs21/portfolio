@@ -5,8 +5,11 @@ function initBuffers(gl) {
 
 	const indexBuffer = initIndexBuffer(gl)
 
+	const normalBuffer = initNormalBuffer(gl)
+
 	return {
 		position: positionBuffer,
+		normal: normalBuffer,
 		color: colorBuffer,
 		indices: indexBuffer
 	}
@@ -63,31 +66,17 @@ function initColorBuffer(gl) {
 	]
 	var colors = []
 
+	const white = [1.0, 1.0, 1.0, 1.0]
+	const red = [1.0, 0.0, 0.0, 1.0]
+	const green = [0.0, 1.0, 0.0, 1.0]
+	const blue = [0.0, 0.0, 1.0, 1.0]
+
 	for (var j = 0; j < faceColors.length; ++j) {
-		const c = faceColors[j]
+		// const c = faceColors[j]
 		// Repeat each color four times for the four vertices of the face
-		colors = colors.concat(c, c, c, c)
+		// colors = colors.concat(c, c, c, c)
+		colors = colors.concat(red, green, blue, white)
 	}
-	/*
-	const colors = [
-		1.0,
-		1.0,
-		1.0,
-		1.0, // white
-		1.0,
-		0.0,
-		0.0,
-		1.0, // red
-		0.0,
-		1.0,
-		0.0,
-		1.0, // green
-		0.0,
-		0.0,
-		1.0,
-		1.0 // blue
-	]
-	*/
 
 	const colorBuffer = gl.createBuffer()
 	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
@@ -103,7 +92,6 @@ function initIndexBuffer(gl) {
 	// This array defines each face as two triangles, using the
 	// indices into the vertex array to specify each triangle's
 	// position.
-
 	const indices = [
 		0,
 		1,
@@ -152,6 +140,39 @@ function initIndexBuffer(gl) {
 	)
 
 	return indexBuffer
+}
+
+function initNormalBuffer(gl) {
+	const normalBuffer = gl.createBuffer()
+	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer)
+
+	const vertexNormals = [
+		// Front
+		0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
+
+		// Back
+		0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0,
+
+		// Top
+		0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
+
+		// Bottom
+		0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
+
+		// Right
+		1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
+
+		// Left
+		-1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0
+	]
+
+	gl.bufferData(
+		gl.ARRAY_BUFFER,
+		new Float32Array(vertexNormals),
+		gl.STATIC_DRAW
+	)
+
+	return normalBuffer
 }
 
 export { initBuffers }
