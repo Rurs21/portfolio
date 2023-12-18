@@ -1,26 +1,20 @@
 # シャルル の 名刺
 
-My portfolio website.
+My portfolio website,<br/>
+titled シャルル の 名刺 (Charles' Business Card)
 
-In designing this portfolio website, I drew inspiration from the Japanese business card, 名刺 (Meishi), renowned for its simplicity, elegance, and pivotal role in professional interactions. I opted for vanilla JavaScript and engineered a site that remains functional without JS and CSS. This approach ensures broad compatibility and rapid load times, with a focus on efficiently and elegantly delivering content. It's a design choice that embraces the business card's philosophy of being simple, direct, and universally accessible, while also demonstrating a commitment to creating user-friendly, accessible web experiences.
+## Design choice
+
+tl;dr: Portfolio uses  vanilla JS and the main content is still accessible without JS and CSS.
+
+In creating this portfolio website, I drew inspiration from the Japanese business card, 名刺 (Meishi), renowned for its simplicity, elegance, and pivotal role in professional interactions. I opted for vanilla JavaScript and engineered a site that remains functional without JS and CSS. This approach ensures broad compatibility and rapid load times, with a focus on efficiently and elegantly delivering content. It's a design choice that embraces the business card's philosophy of being simple, direct, and universally accessible, while also demonstrating a commitment to creating user-friendly, accessible web experiences.
 
 ## dependencies
 
 Made with the help of [Vite](https://vitejs.dev/) ⚡
 
-setup
 ```sh
 npm install
-```
-
-dev
-```sh
-npm run dev
-```
-
-deploy
-```sh
-npm run build
 ```
 
 ## assets
