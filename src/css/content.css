@@ -89,7 +89,7 @@
 }
 
 .dark .copyright {
-    color: #868686
+    color: #858585
 }
 
 .copyright a { color: currentColor; }
@@ -100,3 +100,7 @@
 .dark .copyright a:hover { color:white; }
 .dark .copyright a:focus { color:white; }
 .dark .copyright a:active { color:white; }
+
+#glcanvas {
+    width: 100%;
+}
