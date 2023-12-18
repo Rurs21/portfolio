@@ -14,9 +14,7 @@ export function main() {
 
 	// Only continue if WebGL is available and working
 	if (gl === null) {
-		alert(
-			"Unable to initialize WebGL. Your browser or machine may not support it."
-		)
+		alert("Unable to initialize WebGL. Your browser or machine may not support it.")
 		return
 	}
 
@@ -25,11 +23,7 @@ export function main() {
 	// Clear the color buffer with specified clear color
 	gl.clear(gl.COLOR_BUFFER_BIT)
 
-	const shaderProgram = initShaderProgram(
-		gl,
-		vertexShaderSource,
-		fragmentShaderSource
-	)
+	const shaderProgram = initShaderProgram(gl,vertexShaderSource,fragmentShaderSource)
 
 	// Collect all the info needed to use the shader program.
 	// Look up which attributes our shader program is using
@@ -38,21 +32,14 @@ export function main() {
 	const programInfo = {
 		program: shaderProgram,
 		attribLocations: {
-			vertexPosition: gl.getAttribLocation(
-				shaderProgram,
-				"aVertexPosition"
-			),
+			vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+			vertexNormal: gl.getAttribLocation(shaderProgram, "aVertexNormal"),
 			vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor")
 		},
 		uniformLocations: {
-			projectionMatrix: gl.getUniformLocation(
-				shaderProgram,
-				"uProjectionMatrix"
-			),
-			modelViewMatrix: gl.getUniformLocation(
-				shaderProgram,
-				"uModelViewMatrix"
-			)
+			projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+			modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+			normalMatrix: gl.getUniformLocation(shaderProgram, "uNormalMatrix")
 		}
 	}
 
@@ -91,11 +78,7 @@ function initShaderProgram(gl, vsSource, fsSource) {
 	// If creating the shader program failed, alert
 
 	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-		alert(
-			`Unable to initialize the shader program: ${gl.getProgramInfoLog(
-				shaderProgram
-			)}`
-		)
+		alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`)
 		return null
 	}
 
@@ -120,11 +103,7 @@ function loadShader(gl, type, source) {
 	// See if it compiled successfully
 
 	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-		alert(
-			`An error occurred compiling the shaders: ${gl.getShaderInfoLog(
-				shader
-			)}`
-		)
+		alert(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`)
 		gl.deleteShader(shader)
 		return null
 	}
