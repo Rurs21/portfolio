@@ -1,6 +1,5 @@
 import { resizeCanvasToDisplaySize } from "./utils/canvas.js"
-
-const { mat4 } = glMatrix
+import * as mat4 from "gl-matrix/mat4"
 
 function drawScene(gl, programInfo, buffers, cubeRotation) {
 	// https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
