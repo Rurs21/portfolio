@@ -1,11 +1,10 @@
 /* Content specific Stling */
 
 .content {
-    height: 100%;
-    padding: 7.5em 0 0 0;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
+    padding: 7.5em 0 0 0;
 }
 
 .content > * {
