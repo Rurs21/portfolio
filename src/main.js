@@ -5,22 +5,25 @@ import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
 
+// TODO fix greeting and language change
+
 const navigation = new Map()
 
 window.onload = function () {
 	setupLanguage()
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
-			setUpIcons().then(setupTheme)
+			setUpIcons().then(() => {
+				setupTheme()
+				setUpNavgiation()
+				greeting()
+			})
 			setupMenu()
-			setUpNavgiation()
+			drawRose()
 		} else {
 			enableNonCssFunctions()
 		}
 	})
-
-	greeting()
-	drawRose()
 }
 
 function setupLanguage() {
@@ -135,27 +138,27 @@ function setUpNavgiation() {
 	const mainHeader = document.getElementById("main-header")
 	const mainContent = document.querySelector("main")
 
-	navigation.set("home-nav", [mainHeader.innerHTML, mainContent.innerHTML])
+	navigation.set("home-nav", [mainHeader.innerHTML, mainContent.innerHTML, greeting])
 	navigation.set("webgl-nav", [
 		`<h1>Work in progress...</h1><h2>Sorry nothing to see here</h2>`,
-		`<canvas id="glcanvas"></canvas>`
+		`<canvas id="glcanvas"></canvas>`, main
 	])
 
-	document
-		.getElementById("home-nav")
-		.addEventListener("click", replaceMainContent)
-	document
-		.getElementById("webgl-nav")
-		.addEventListener("click", (event) => {
-			replaceMainContent(event)
-			main()
-	})
+	const navButtons = document.querySelectorAll('[id$="-nav"]')
+	for (const button of navButtons) {
+		button.addEventListener("click", replaceMainContent)
+	}
 
 	function replaceMainContent(event) {
 		const content = navigation.get(event.currentTarget.id)
 
 		mainHeader.innerHTML = content[0]
 		mainContent.innerHTML = content[1]
+
+		const userLanguage = checkUserLanguage()
+		changeLanguage(userLanguage)
+
+		content[2]()
 	}
 }
 
