@@ -5,12 +5,15 @@ import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
 
+const navigation = new Map()
+
 window.onload = function () {
 	setupLanguage()
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
 			setUpIcons().then(setupTheme)
 			setupMenu()
+			setUpNavgiation()
 		} else {
 			enableNonCssFunctions()
 		}
@@ -18,8 +21,6 @@ window.onload = function () {
 
 	greeting()
 	drawRose()
-
-	main()
 }
 
 function setupLanguage() {
@@ -128,6 +129,34 @@ function setupMenu() {
 	// Reveal overlay & navbar when menu all setup
 	document.getElementById("top-overlay").removeAttribute("hidden")
 	document.getElementById("navbar").removeAttribute("hidden")
+}
+
+function setUpNavgiation() {
+	const mainHeader = document.getElementById("main-header")
+	const mainContent = document.querySelector("main")
+
+	navigation.set("home-nav", [mainHeader.innerHTML, mainContent.innerHTML])
+	navigation.set("webgl-nav", [
+		`<h1>Work in progress...</h1><h2>Sorry nothing to see here</h2>`,
+		`<canvas id="glcanvas"></canvas>`
+	])
+
+	document
+		.getElementById("home-nav")
+		.addEventListener("click", replaceMainContent)
+	document
+		.getElementById("webgl-nav")
+		.addEventListener("click", (event) => {
+			replaceMainContent(event)
+			main()
+	})
+
+	function replaceMainContent(event) {
+		const content = navigation.get(event.currentTarget.id)
+
+		mainHeader.innerHTML = content[0]
+		mainContent.innerHTML = content[1]
+	}
 }
 
 function setUpIcons() {
