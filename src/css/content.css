@@ -5,11 +5,11 @@
     flex-direction: column;
     box-sizing: border-box;
     height: 100%;
-    padding: 7.5em 0 0 0;
+    padding: 7.5em 1em 0 1em;
 }
 
 .content > * {
-    padding: 1em;
+    margin: 1em 0 1em 0;
 }
 
 #greeting h2 {
@@ -68,42 +68,11 @@
 }
 
 .about {
+    margin-top: 4em;
     line-height: 2em;
     font-size: 1.25em;
     max-width: 50ch;
 }
-
-.contact {
-    margin: 3em 0 0 0;
-}
-
-.contact h2 {
-    margin-block-start: .5em;
-    margin-block-end: .5em;
-}
-
-#main-footer {
-    margin: 25% 0 1em 0;
-}
-
-.copyright {
-    font-size: xx-small;
-    max-width: 135ch;
-    color: #676869
-}
-
-.dark .copyright {
-    color: #858585
-}
-
-.copyright a { color: currentColor; }
-.copyright a:visited { color: currentColor; }
-.copyright a:hover { color:black; }
-.copyright a:focus { color:black; }
-.copyright a:active { color:black }
-.dark .copyright a:hover { color:white; }
-.dark .copyright a:focus { color:white; }
-.dark .copyright a:active { color:white; }
 
 #glcanvas {
     width: 100%;
