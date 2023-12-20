@@ -78,11 +78,14 @@ svg {
     text-decoration: none;
 
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-    touch-action: manipulation;
 
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;
     box-sizing: content-box;
+}
+
+.icon-button svg {
+    pointer-events: none;
 }
 
 .icon-button:disabled,

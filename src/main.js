@@ -4,6 +4,7 @@ import { isCssLoaded } from "./js/utils/misc.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
+import { route, template, router } from "./js/router.js"
 
 // TODO fix greeting and language change
 
@@ -14,7 +15,7 @@ window.onload = function () {
 			setupMenu()
 			loadIcons().then(() => {
 				setupTheme()
-				setUpNavgiation()
+				setUpRouter()
 			})
 			drawRose()
 			greeting()
@@ -132,31 +133,22 @@ function setupMenu() {
 	document.getElementById("navbar").removeAttribute("hidden")
 }
 
-function setUpNavgiation() {
-	const mainHeader = document.getElementById("main-header")
-	const mainContent = document.querySelector("main")
+function setUpRouter() {
+	template("home", function () {
+		greeting()
+	})
 
-	navigation.set("home-nav", [mainHeader.innerHTML, mainContent.innerHTML, greeting])
-	navigation.set("webgl-nav", [
-		`<h1>Work in progress...</h1><h2>Sorry nothing to see here</h2>`,
-		`<canvas id="glcanvas"></canvas>`, main
-	])
+	template("webgl", function () {
+		main()
+	})
 
-	const navButtons = document.querySelectorAll('[id$="-nav"]')
-	for (const button of navButtons) {
-		button.addEventListener("click", replaceMainContent)
-	}
+	route("/", "home")
+	route("/webgl", "webgl")
 
-	function replaceMainContent(event) {
-		const content = navigation.get(event.currentTarget.id)
-
-		mainHeader.innerHTML = content[0]
-		mainContent.innerHTML = content[1]
-
-		const userLanguage = checkUserLanguage()
-		changeLanguage(userLanguage)
-
-		content[2]()
+	if (window.location.pathname !== "/") {
+		router()
+	} else {
+		greeting()
 	}
 }
 
