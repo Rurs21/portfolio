@@ -7,19 +7,17 @@ import { main } from "./js/graphic.js"
 
 // TODO fix greeting and language change
 
-const navigation = new Map()
-
 window.onload = function () {
 	setupLanguage()
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
-			setUpIcons().then(() => {
+			setupMenu()
+			loadIcons().then(() => {
 				setupTheme()
 				setUpNavgiation()
-				greeting()
 			})
-			setupMenu()
 			drawRose()
+			greeting()
 		} else {
 			enableNonCssFunctions()
 		}
@@ -162,35 +160,27 @@ function setUpNavgiation() {
 	}
 }
 
-function setUpIcons() {
+function loadIcons() {
 	// selectors
 	const imgSelector = 'img[src$=".svg"], img[src^="data:image/svg"]'
-	const btnSelector =
-		'button > img[src$=".svg"], button > img[src^="data:image/svg"]'
 	// icons elements
-	const contactIcons = document
-		.getElementById("links")
-		.querySelectorAll(imgSelector)
-	const buttonIcons = document.querySelectorAll(btnSelector)
+	const imgIcons = document.querySelectorAll(imgSelector)
 
-	return Promise.all([
-		// Contact Icons
-		setImagesToSVG(contactIcons).then((svgElements) => {
-			for (const svgElem of svgElements) {
-				svgElem.parentElement.classList.remove("icon")
-				svgElem.parentElement.classList.add("square-icon")
-			}
-		}),
-		// Buttons Icons
-		setImagesToSVG(buttonIcons).then((svgElements) => {
+	return setImagesToSVG(imgIcons)
+		.then((svgElements) => {
 			for (const svgElem of svgElements) {
 				svgElem.removeAttribute("width")
 				svgElem.removeAttribute("height")
 			}
+			const contactLinks = document.querySelectorAll("#links a")
+			for (const link of contactLinks) {
+				link.classList.remove("icon")
+				link.classList.add("square-icon")
+			}
 		})
-	]).catch((error) => {
-		console.error(error)
-	})
+		.catch((error) => {
+			console.error(`Error while loading icons : ${error}`)
+		})
 }
 
 function greeting() {
