@@ -15,30 +15,30 @@
 
 <body>
     <div id="top-overlay" class="overlay horizontal-menu" role="dialog" aria-label="Non-modal overlay to access menu" hidden>
-        <button id="menu-button" class="square-button" role="button" aria-label="Open navigation bar" aria-controls="main-menu" aria-expanded="false">
+        <button id="menu-button" class="icon-button square-button" role="button" aria-label="Open navigation bar" aria-controls="main-menu" aria-expanded="false">
             <image src="./assets/svg/bx-menu.svg" alt="Trigram For Heaven" width="50px"></image>
         </button>
     </div>
     <nav id="navbar" aria-label="Navigation Bar" hidden>
         <div id="main-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Main Menu">
-            <button id="webgl-nav" class="round-button" role="menuitem" aria-label="WebGL">
+            <a id="webgl-nav" class="icon-button round-button" role="menuitem" aria-label="WebGL" href="/webgl">
                 <image src="./assets/svg/bx-cube.svg" alt="Cube" width="50px"></image>
-            </button>
-            <button id="home-nav" class="round-button" role="menuitem" aria-label="Home">
+            </a>
+            <a id="home-nav" class="icon-button round-button" role="menuitem" aria-label="Home" href="/">
                 <image src="./assets/svg/bx-home-heart.svg" alt="Home" width="50px"></image>
-            </button>
-            <button id="settings-button" class="round-button" role="menuitem" aria-label="Settings" aria-controls="settings-menu" aria-expanded="false">
+            </a>
+            <button id="settings-button" class="icon-button round-button" role="menuitem" aria-label="Settings" aria-controls="settings-menu" aria-expanded="false">
                 <image src="./assets/svg/tiny-cog.svg" alt="Cog" width="50px"></image>
             </button>
-            <button id="close-menu-button" class="square-button" role="menuitem" aria-label="Close navigation bar" aria-controls="main-menu">
+            <button id="close-menu-button" class="icon-button square-button" role="menuitem" aria-label="Close navigation bar" aria-controls="main-menu">
                 <image src="./assets/svg/bx-x.svg" alt="X" width="50px"></image>
             </button>
         </div>
         <div id="settings-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Settings Menu">
-            <button id="language-button" class="round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false">
+            <button id="language-button" class="icon-button round-button" role="menuitem" aria-label="Langage selection" aria-controls="language-menu" aria-expanded="false">
                 <image src="./assets/svg/tiny-globe-us.svg" alt="Globe" width="50px"></image>
             </button>
-            <button id="theme-toggle" class="round-button" role="menuitem" aria-label="Toggle Light/Dark Theme">
+            <button id="theme-toggle" class="icon-button round-button" role="menuitem" aria-label="Toggle Light/Dark Theme">
                 <image id="light-theme-icon" src="./assets/svg/bx-sun.svg" alt="sun" width="50px"></image>
                 <image id="dark-theme-icon" src="./assets/svg/bx-moon.svg" alt="moon" width="50px"></image>
             </button>
@@ -55,14 +55,13 @@
     </nav>
 
     <div class="content" aria-label="Content">
-        <header id="main-header" aria-label="Greeting !">
-            <div id="greeting">
-                <h1 class="fade-in" data-translate="greeting">Hello, I'm Charles.</h1>
-                <h2 id="job-title" data-translate="job-title">Software Developer</h2>
-            </div>
-        </header>
-
         <main>
+            <header id="main-header" aria-label="Greeting !">
+                <div id="greeting">
+                    <h1 class="fade-in" data-translate="greeting">Hello, I'm Charles.</h1>
+                    <h2 id="job-title" data-translate="job-title">Software Developer</h2>
+                </div>
+            </header>
             <section class="about" aria-label="About Me">
                 <h3 data-translate="my-summary">I'm all about resolving problems and creating cool stuff</h3>
                 <p data-translate="about-me">
@@ -70,7 +69,9 @@
                     I think impactful work comes from open communication, collaborative spirit, and a focus on meaningful outcomes.
                 </p>
             </section>
+        </main>
 
+        <footer id="main-footer" aria-label="Contact, Copyright, Acknowledgment and other boring stuff" >
             <section class="contact" aria-label="Contacts">
                 <h2 data-translate="contact-me">Link up</h2>
                 <div id="links" role="complementary">
@@ -85,9 +86,6 @@
                     </a>
                 </div>
             </section>
-        </main>
-
-        <footer id="main-footer" aria-label="Copyright and other boring stuff" >
             <section class="copyright" aria-label="Copyright">
                 <small>
                     <p>

@@ -33,4 +33,4 @@ None
 
 - accessibility-proof (left handed control ?)
 - better error handling
-- work without js and css
+- clean css

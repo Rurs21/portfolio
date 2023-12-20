@@ -59,11 +59,11 @@ svg {
     max-width: 100%;
 }
 
-button {
+.icon-button {
     font-size: 1em;
     padding: 0.5em;
-    width: 4em;
-    height: 4em;
+    width: 2.65em;
+    height: 2.65em;
 
     line-height: 1em;
 
@@ -79,11 +79,15 @@ button {
 
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     touch-action: manipulation;
+
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
 }
 
-button:disabled,
-button[disabled]{
-  border: 1px solid #999999;
+.icon-button:disabled,
+.icon-button[disabled]{
+  border: 0.2em solid #999999;
   background-color: #CCCCCC;
   color: #666666;
   transition: background-color 0.1s, color 0.1s, border-color 0.1s;
