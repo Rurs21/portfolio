@@ -1,72 +1,73 @@
-let routes = {}
-let templates = {}
-
 const parser = new DOMParser()
+const mainContent = document.body.querySelector("main")
 
-// add an event listener to the window that watches for url changes
-window.onpopstate = resolveRoute
+class Router {
+	constructor() {
+		this.routes = {}
+		this.templates = {}
 
-// call the urlLocationHandler function to handle the initial url
-window.route = router
-
-document.addEventListener("click", async (event) => {
-	const { target } = event
-	if (!target.matches("nav a")) {
-		return
+		window.onpopstate = this.resolveRoute
 	}
-	event.preventDefault()
-	router()
-})
 
-export function route(path, template) {
-	if (typeof template === "function") {
-		return (routes[path] = template)
-	} else if (typeof template === "string") {
-		return (routes[path] = templates[template])
-	} else {
-		return
-	}
-}
-
-export function template(name, templateFunction) {
-	return (templates[name] = templateFunction)
-}
-
-async function resolveRoute(route) {
-	let url = route || window.location.pathname || "/"
-	try {
-		if (routes[url] !== undefined) {
-			await fetchTemplate(url).then((html) => {
-				routes[url]()
+	addRoute(path, template) {
+		if (typeof template === "function") {
+			return (this.routes[path] = { content: null, template: template })
+		} else if (typeof template === "string") {
+			return (this.routes[path] = {
+				content: null,
+				template: this.templates[template]
 			})
+		} else {
+			return
 		}
-	} catch (e) {
-		throw new Error(`Route ${url} not found`)
+	}
+
+	addTemplate(name, templateFunction) {
+		return (this.templates[name] = templateFunction)
+	}
+
+	async resolveRoute(route) {
+		let url = route || window.location.pathname || "/"
+		try {
+			if (this.routes[url] !== undefined) {
+				if (this.routes[url].content !== null) {
+					mainContent.innerHTML = this.routes[url].content.innerHTML
+					this.routes[url].template()
+				} else {
+					await this.fetchPage(url).then((html) => {
+						this.routes[url].template()
+					})
+				}
+			}
+		} catch (e) {
+			throw new Error(`Route ${url} not found`)
+		}
+	}
+
+	async fetchPage(location) {
+		const response = await fetch("pages" + location + ".html")
+		const html = await response.text()
+
+		var doc = parser.parseFromString(html, "text/html")
+		var description = doc.querySelector('meta[name="description"]').content
+
+		document.title = doc.title
+		document
+			.querySelector('meta[name="description"]')
+			.setAttribute("content", description)
+
+		const newContent = doc.body.querySelector("main")
+
+		this.routes[location].content = newContent
+		mainContent.innerHTML = newContent.innerHTML
+
+		return doc
+	}
+
+	cacheMainContent() {
+		const route = window.location.pathname || "/"
+		this.routes[route].content = mainContent
 	}
 }
 
-export function router(event) {
-	event = event || window.event
-	if (event) {
-		event.preventDefault()
-		window.history.pushState({}, "", event.target.href)
-	}
-	resolveRoute()
-}
-
-async function fetchTemplate(location) {
-	const response = await fetch(location + ".html")
-	const html = await response.text()
-
-	var doc = parser.parseFromString(html, "text/html")
-	var description = doc.querySelector('meta[name="description"]').content
-
-	document.title = doc.title
-	document
-		.querySelector('meta[name="description"]')
-		.setAttribute("content", description)
-
-	document.querySelector("main").innerHTML = doc.body.querySelector("main").innerHTML
-
-	return doc
-}
+export { Router }

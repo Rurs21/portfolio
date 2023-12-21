@@ -4,22 +4,22 @@ import { isCssLoaded } from "./js/utils/misc.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
-import { route, template, router } from "./js/router.js"
+import { Router } from "./js/router.js"
 
 // TODO fix greeting and language change
 
 window.onload = function () {
-	setupLanguage()
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
 			setupMenu()
 			loadIcons().then(() => {
 				setupTheme()
 				setUpRouter()
+				setupLanguage()
 			})
 			drawRose()
-			greeting()
 		} else {
+			setupLanguage()
 			enableNonCssFunctions()
 		}
 	})
@@ -134,22 +134,30 @@ function setupMenu() {
 }
 
 function setUpRouter() {
-	template("home", function () {
+	var router = new Router()
+	router.addTemplate("home", function () {
 		greeting()
 	})
-
-	template("webgl", function () {
+	router.addTemplate("webgl", function () {
 		main()
 	})
+	router.addRoute("/","home")
+	router.addRoute("/webgl","webgl")
 
-	route("/", "home")
-	route("/webgl", "webgl")
-
-	if (window.location.pathname !== "/") {
-		router()
-	} else {
-		greeting()
+	for (const navlink of document.querySelectorAll('[id$="-nav"]')) {
+		navlink.onclick = (event) => {
+			event = event || window.event
+			if (event) {
+				event.preventDefault()
+				if (event.target.href != window.location.href) {
+					window.history.pushState({}, "", event.target.href)
+					router.resolveRoute()
+				}
+			}
+		}
 	}
+
+	router.resolveRoute()
 }
 
 function loadIcons() {
