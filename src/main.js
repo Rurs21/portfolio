@@ -1,6 +1,6 @@
-import translations from "./i18n/translations.json"
 import { Menu } from "./js/menu.js"
 import { isCssLoaded } from "./js/utils/misc.js"
+import { checkUserLanguage, changeLanguage } from "./i18n/l10n.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
@@ -9,17 +9,16 @@ import { Router } from "./js/router.js"
 // TODO fix greeting and language change
 
 window.onload = function () {
+	setupLanguage()
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
 			setupMenu()
 			loadIcons().then(() => {
 				setupTheme()
 				setUpRouter()
-				setupLanguage()
 			})
 			drawRose()
 		} else {
-			setupLanguage()
 			enableNonCssFunctions()
 		}
 	})
@@ -232,22 +231,6 @@ function drawRose() {
 	roseElement.appendChild(svgElement)
 	setTimeout(() => roseElement.classList.remove("unfilled"), 3750)
 	setTimeout(() => roseElement.classList.remove("start"), 6000)
-}
-
-function checkUserLanguage() {
-	const defaultLang = navigator.language.startsWith("fr") ? "fr" : "en"
-	const savedLang = localStorage.getItem("language")
-
-	return savedLang || defaultLang
-}
-
-function changeLanguage(lang) {
-	document.documentElement.lang = lang
-	document.querySelectorAll("[data-translate]").forEach((el) => {
-		const key = el.getAttribute("data-translate")
-		el.textContent = translations[lang][key] || key
-	})
-	localStorage.setItem("language", lang)
 }
 
 function enableNonCssFunctions() {
