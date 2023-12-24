@@ -102,6 +102,12 @@ function setupMenu() {
 		document.getElementById("settings-menu"),
 		settingsButton
 	)
+	// Sub menu navigation
+	const navigationButton = document.getElementById("navigation-button")
+	const navigationMenu = new Menu(
+		document.getElementById("navigation-menu"),
+		navigationButton
+	)
 	// Main menu
 	const menuButton = document.getElementById("menu-button")
 	const closeButton = document.getElementById("close-menu-button")
@@ -111,6 +117,7 @@ function setupMenu() {
 		closeButton
 	)
 	mainMenu.addSubMenu(settingsMenu)
+	mainMenu.addSubMenu(navigationMenu)
 	settingsMenu.addSubMenu(languageMenu)
 
 	// Create a MutationObserver for the lang (overkill ?)
@@ -143,7 +150,7 @@ function setUpRouter() {
 	router.addRoute("/","home")
 	router.addRoute("/webgl","webgl")
 
-	for (const navlink of document.querySelectorAll('[id$="-nav"]')) {
+	for (const navlink of document.querySelectorAll("#navigation-menu a")) {
 		navlink.onclick = (event) => {
 			event = event || window.event
 			if (event) {
