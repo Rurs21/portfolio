@@ -42,7 +42,6 @@
 #language-menu {
     z-index: 4;
 	padding-top: 7.3em;
-    transition: top 0.25s;
 }
 
 #language-menu > *  {
