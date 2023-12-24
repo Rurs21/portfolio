@@ -22,7 +22,7 @@ export class Menu {
 
 	addSubMenu(subMenu) {
 		this.subMenus.push(subMenu)
-		// close other opnened sub menu
+		// close other sub menu
 		for (const subButton of subMenu.buttons) {
 			subButton.addEventListener("click", () => {
 				for (const otherSubMenu of this.subMenus) {
