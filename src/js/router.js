@@ -1,5 +1,4 @@
 const parser = new DOMParser()
-const mainContent = document.body.querySelector("main")
 
 class Router {
 	constructor() {
@@ -13,10 +12,7 @@ class Router {
 		if (typeof template === "function") {
 			return (this.routes[path] = { content: null, template: template })
 		} else if (typeof template === "string") {
-			return (this.routes[path] = {
-				content: null,
-				template: this.templates[template]
-			})
+			return (this.routes[path] = {content: null, template: this.templates[template] })
 		} else {
 			return
 		}
@@ -30,43 +26,43 @@ class Router {
 		let url = route || window.location.pathname || "/"
 		try {
 			if (this.routes[url] !== undefined) {
-				if (this.routes[url].content !== null) {
-					mainContent.innerHTML = this.routes[url].content.innerHTML
-					this.routes[url].template()
-				} else {
-					await this.fetchPage(url).then((html) => {
-						this.routes[url].template()
-					})
+				if (this.routes[url].content == null) {
+					const html = await this.fetchDocument(url)
+					this.cacheRouteContent(url, html)
 				}
+				this.render(url)
+				this.routes[url].template()
 			}
 		} catch (e) {
+			console.log(e)
 			throw new Error(`Route ${url} not found`)
 		}
 	}
 
-	async fetchPage(location) {
+	async fetchDocument(location) {
 		const response = await fetch("pages" + location + ".html")
 		const html = await response.text()
 
 		var doc = parser.parseFromString(html, "text/html")
-		var description = doc.querySelector('meta[name="description"]').content
-
-		document.title = doc.title
-		document
-			.querySelector('meta[name="description"]')
-			.setAttribute("content", description)
-
-		const newContent = doc.body.querySelector("main")
-
-		this.routes[location].content = newContent
-		mainContent.innerHTML = newContent.innerHTML
 
 		return doc
 	}
 
-	cacheMainContent() {
-		const route = window.location.pathname || "/"
-		this.routes[route].content = mainContent
+	cacheRouteContent(route, doc) {
+		this.routes[route].content = {
+			title: doc.title,
+			description: doc.querySelector('meta[name="description"]').content,
+			main: doc.body.querySelector("main").cloneNode(true)
+		}
+	}
+
+	render(path) {
+		const route = this.routes[path]
+		document.title = route.content.title
+		document
+			.querySelector('meta[name="description"]')
+			.setAttribute("content", route.content.description)
+		document.body.querySelector("main").replaceWith(route.content.main)
 	}
 }
 

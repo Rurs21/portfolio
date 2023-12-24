@@ -156,7 +156,11 @@ function setUpRouter() {
 		}
 	}
 
-	router.resolveRoute()
+	router.cacheRouteContent("/",document)
+	if(window.location.pathname != "/") {
+		router.resolveRoute()
+	}
+
 }
 
 function loadIcons() {

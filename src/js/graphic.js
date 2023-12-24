@@ -9,6 +9,9 @@ let deltaTime = 0
 
 export function main() {
 	const canvas = document.querySelector("#glcanvas")
+	// reset to auto after route change
+	canvas.setAttribute("height", "auto")
+	canvas.setAttribute("width", "auto")
 	// Initialize the GL context
 	const gl = canvas.getContext("webgl")
 
@@ -48,7 +51,8 @@ export function main() {
 	// Draw the scene
 	let then = 0
 
-	observeCanvasResize(canvas)
+	// To Fix with router
+	//observeCanvasResize(canvas)
 
 	// Draw the scene repeatedly
 	function render(now) {
