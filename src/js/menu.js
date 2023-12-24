@@ -20,6 +20,10 @@ export class Menu {
 		})
 	}
 
+	getId() {
+		return this.menu.id
+	}
+
 	addSubMenu(subMenu) {
 		this.subMenus.push(subMenu)
 		// close other sub menu
