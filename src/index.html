@@ -21,12 +21,9 @@
     </div>
     <nav id="navbar" aria-label="Navigation Bar" hidden>
         <div id="main-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Main Menu">
-            <a id="webgl-nav" class="icon-button round-button" role="menuitem" aria-label="WebGL" href="/webgl">
-                <image src="./assets/svg/bxs-cube.svg" alt="Cube" width="50px"></image>
-            </a>
-            <a id="home-nav" class="icon-button round-button" role="menuitem" aria-label="Home" href="/">
-                <image src="./assets/svg/bxs-home-heart.svg" alt="Home" width="50px"></image>
-            </a>
+            <button id="navigation-button" class="icon-button round-button" role="menuitem" aria-label="Navigation" aria-controls="navigation-menu" aria-expanded="false">
+                <image src="./assets/svg/bxs-compass.svg" alt="Cog" width="50px"></image>
+            </button>
             <button id="settings-button" class="icon-button round-button" role="menuitem" aria-label="Settings" aria-controls="settings-menu" aria-expanded="false">
                 <image src="./assets/svg/bxs-cog.svg" alt="Cog" width="50px"></image>
             </button>
@@ -42,6 +39,14 @@
                 <image id="light-theme-icon" src="./assets/svg/bx-sun.svg" alt="sun" width="50px"></image>
                 <image id="dark-theme-icon" src="./assets/svg/bx-moon.svg" alt="moon" width="50px"></image>
             </button>
+        </div>
+        <div id="navigation-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Navigation Menu">
+            <a id="webgl-nav" class="icon-button round-button" role="menuitem" aria-label="WebGL" href="/webgl">
+                <image src="./assets/svg/bxs-cube.svg" alt="Cube" width="50px"></image>
+            </a>
+            <a id="home-nav" class="icon-button round-button" role="menuitem" aria-label="Home" href="/">
+                <image src="./assets/svg/bxs-home-heart.svg" alt="Home" width="50px"></image>
+            </a>
         </div>
         <div id="language-menu" class="top-menu horizontal-menu close hidden" role="menu" aria-label="Language Menu">
             <label for="language-select" data-translate="language">Language</label>

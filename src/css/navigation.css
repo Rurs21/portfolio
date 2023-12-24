@@ -34,6 +34,11 @@
 	padding-top: 7em;
 }
 
+#navigation-menu {
+    z-index: 3;
+	padding-top: 7em;
+}
+
 #language-menu {
     z-index: 4;
 	padding-top: 7.3em;
@@ -52,17 +57,22 @@
 }
 
 /* closed menu position */
+/* Hide the navbar above the viewport */
 
 #main-menu.close {
-    top: -6em; /* Hide the navbar above the viewport */
+    top: -6em;
 }
 
 #language-menu.close {
-    top: -12em; /* Hide the navbar above the viewport */
+    top: -12em;
 }
 
 #settings-menu.close {
-    top: -12em; /* Hide the navbar above the viewport */
+    top: -12em;
+}
+
+#navigation-menu.close {
+    top: -12em;
 }
 
 .overlay {

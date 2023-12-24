@@ -22,6 +22,16 @@ export class Menu {
 
 	addSubMenu(subMenu) {
 		this.subMenus.push(subMenu)
+		// close other opnened sub menu
+		for (const subButton of subMenu.buttons) {
+			subButton.addEventListener("click", () => {
+				for (const otherSubMenu of this.subMenus) {
+					if (otherSubMenu !== subMenu && !otherSubMenu.isClosed()) {
+						otherSubMenu.close()
+					}
+				}
+			})
+		}
 	}
 
 	isClosed() {
