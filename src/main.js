@@ -7,12 +7,13 @@ import { main } from "./js/graphic.js"
 import { Router } from "./js/router.js"
 
 // TODO fix greeting and language change
+const app = {};
 
 window.onload = function () {
 	setupLanguage()
 	isCssLoaded((isLoaded) => {
 		if (isLoaded) {
-			setupMenu()
+			app.menus = setupMenu()
 			loadIcons().then(() => {
 				setupTheme()
 				setUpRouter()
@@ -32,6 +33,7 @@ function setupLanguage() {
 	languageSelect.value = userLanguage
 	languageSelect.addEventListener("change", function () {
 		changeLanguage(this.value)
+		app.menus["main-menu"].close()
 	})
 }
 
@@ -90,6 +92,7 @@ function setupTheme() {
 }
 
 function setupMenu() {
+	const menus = {};
 	// Sub menu language
 	const languageButton = document.getElementById("language-button")
 	const languageMenu = new Menu(
@@ -120,23 +123,15 @@ function setupMenu() {
 	mainMenu.addSubMenu(navigationMenu)
 	settingsMenu.addSubMenu(languageMenu)
 
-	// Create a MutationObserver for the lang (overkill ?)
-	const langObserver = new MutationObserver((mutationsList, observer) => {
-		for (const mutation of mutationsList) {
-			if (
-				mutation.type === "attributes" &&
-				mutation.attributeName === "lang"
-			) {
-				mainMenu.close()
-			}
-		}
-	})
-	// Start observing the html tag for that change
-	langObserver.observe(document.documentElement, { attributes: true })
-
 	// Reveal overlay & navbar when menu all setup
 	document.getElementById("top-overlay").removeAttribute("hidden")
 	document.getElementById("navbar").removeAttribute("hidden")
+
+	menus[mainMenu.getId()] = mainMenu
+	menus[settingsMenu.getId()] = settingsMenu
+	menus[navigationMenu.getId()] = navigationMenu
+	menus[languageMenu.getId()] = languageMenu
+	return menus
 }
 
 function setUpRouter() {
@@ -158,6 +153,7 @@ function setUpRouter() {
 				if (event.target.href != window.location.href) {
 					window.history.pushState({}, "", event.target.href)
 					router.resolveRoute()
+					app.menus["main-menu"].close()
 				}
 			}
 		}
@@ -247,5 +243,6 @@ function drawRose() {
 function enableNonCssFunctions() {
 	document.getElementById("main-menu").setAttribute("hidden", "")
 	document.getElementById("settings-menu").setAttribute("hidden", "")
+	document.getElementById("navigation-menu").setAttribute("hidden", "")
 	document.getElementById("navbar").removeAttribute("hidden")
 }
