@@ -5,7 +5,7 @@ class Router {
 		this.routes = {}
 		this.templates = {}
 
-		window.onpopstate = this.resolveRoute
+		window.onpopstate = () => {this.resolveRoute()}
 	}
 
 	addRoute(path, template) {
