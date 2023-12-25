@@ -51,6 +51,19 @@ export function createCoordinatesSVG(
 	return svgElement
 }
 
+/**
+ * Define attributes and elements within an SVG element to provide accessibility information.
+ *
+ * This function sets the id, title, and description attributes of an SVG element and
+ * inserts <title> and <desc> elements with appropriate content for accessibility.
+ * It also sets the "aria-labelledby" attribute to associate the title and description
+ * elements with the SVG element.
+ *
+ * @param {SVGElement} svgElement - The SVG element to define.
+ * @param {string} id - The id attribute to set on the SVG element.
+ * @param {string} title - The text content to set as the title of the SVG.
+ * @param {string} desc - The text content to set as the description of the SVG.
+ */
 export function defineSVG(svgElement, id, title, desc) {
 	svgElement.id = id
 
@@ -150,31 +163,31 @@ function animateDrawingPath(pathElement, duration) {
  * This function fetches SVG content or decodes base64-encoded SVG images and replaces the `img`
  * elements with the corresponding SVG elements.
  *
- * @param {NodeList} svgImages - A NodeList containing HTML <img> elements with SVG sources.
- * @returns {Promise<Array<SVGSVGElement>>} A promise that resolves to an array of newly created SVG elements.
+ * @param {HTMLElement} element - The root element to search for elements with SVG sources.
+ * @returns {Promise<SVGSVGElement[]>} A promise that resolves to an array of newly created SVG elements.
  * @throws {Error} If an element is not an HTML <img> element with an SVG source.
  */
-export async function setImagesToSVG(svgImages) {
+export async function loadInlineSVG(element) {
 	const parser = new DOMParser()
+	const svgs = []
 
-	return Promise.all(
-		Array.from(svgImages, (imgElement) =>
-			retrieveSVG(imgElement).then((svgContent) => {
-				// Parse svg content string into svg document
-				const svgDoc = parser.parseFromString(
-					svgContent,
-					"image/svg+xml"
-				)
-				const svgElement = svgDoc.documentElement
-				// Set the svg element with image attributes
-				svgElement.id = imgElement.id
-				setAriaAttributes(svgElement, imgElement.getAttribute("alt"))
-				// Replace the img element with the svg element and return its reference
-				imgElement.parentNode.replaceChild(svgElement, imgElement)
-				return svgElement
-			})
-		)
-	)
+	const imgSelector = 'img[src$=".svg"], img[src^="data:image/svg"]'
+	const svgImages = element.querySelectorAll(imgSelector)
+
+	for (const imgElement of svgImages) {
+		const svgContent = await retrieveSVG(imgElement)
+		// Parse svg content string into svg document
+		const svgDoc = parser.parseFromString(svgContent, "image/svg+xml")
+		const svgElement = svgDoc.documentElement
+		// Set the svg element with image attributes
+		svgElement.id = imgElement.id
+		setAriaAttributes(svgElement, imgElement.getAttribute("alt"))
+		// Replace the img element with the svg element and return its reference
+		imgElement.replaceWith(svgElement)
+		svgs.push(svgElement)
+	}
+
+	return svgs
 }
 
 /**

@@ -11,7 +11,7 @@ body, html {
     padding: 0;
 }
 
-[hidden]{
+[hidden] {
     display:none !important;
 }
 
@@ -89,7 +89,7 @@ svg {
 }
 
 .icon-button:disabled,
-.icon-button[disabled]{
+.icon-button[disabled] {
   border: 0.2em solid #999999;
   background-color: #CCCCCC;
   color: #666666;

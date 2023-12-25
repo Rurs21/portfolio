@@ -29,23 +29,18 @@
 	z-index: 5;
 }
 
-#settings-menu {
+.sub-menu {
     z-index: 3;
 	padding-top: 7em;
 }
 
-#navigation-menu {
-    z-index: 3;
-	padding-top: 7em;
-}
-
-#language-menu {
+.sub-sub-menu {
     z-index: 4;
-	padding-top: 7.3em;
+	padding-top: 7.5em;
 }
 
 #language-menu > *  {
-    margin: 0.25em;
+    margin: 0 0 0.25em 1em;
 }
 
 .top-menu {
@@ -62,15 +57,7 @@
     top: -6em;
 }
 
-#language-menu.close {
-    top: -12em;
-}
-
-#settings-menu.close {
-    top: -12em;
-}
-
-#navigation-menu.close {
+.horizontal-menu.close {
     top: -12em;
 }
 

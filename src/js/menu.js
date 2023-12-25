@@ -1,4 +1,4 @@
-export class Menu {
+export default class Menu {
 	#animationDuration = 250
 
 	constructor(menuElement, ...controlButtons) {
