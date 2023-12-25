@@ -17,8 +17,12 @@
     h2 {
         font-size: 2em;
     }
+    #main-menu {
+        padding-top: 1.25em;
+    }
     .horizontal-menu {
-        padding: 1.25em 1em 1em 1em;
+        padding-right: 1em;
+        padding-left: 1em;
     }
     #rose {
         width: 70%;

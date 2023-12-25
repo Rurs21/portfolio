@@ -1,28 +1,29 @@
-import { Menu } from "./js/menu.js"
+import Menu from "./js/menu.js"
 import { isCssLoaded } from "./js/utils/misc.js"
 import { checkUserLanguage, changeLanguage } from "./i18n/l10n.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
-import { setImagesToSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
+import { loadInlineSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
 import { Router } from "./js/router.js"
 
-// TODO fix greeting and language change
+/**
+ * TODO:
+ * - fix greeting with language & route change
+ * - add transition animation with route
+ */
 const app = {};
 
-window.onload = function () {
+window.onload = async function () {
 	setupLanguage()
-	isCssLoaded((isLoaded) => {
-		if (isLoaded) {
-			app.menus = setupMenu()
-			loadIcons().then(() => {
-				setupTheme()
-				setUpRouter()
-			})
-			drawRose()
-		} else {
-			enableNonCssFunctions()
-		}
-	})
+	if (isCssLoaded(document)) {
+		app.menus = setupMenu()
+		await loadIcons(document)
+		setupTheme()
+		app.router = setUpRouter()
+		drawRose()
+	} else {
+		enableNonCssFunctions()
+	}
 }
 
 function setupLanguage() {
@@ -68,7 +69,6 @@ function setupTheme() {
 		).matches
 		const savedTheme = localStorage.getItem("theme")
 
-		// Set previously selected theme
 		if (savedTheme != null) {
 			changeTheme(savedTheme)
 		} else if (prefersDarkMode) {
@@ -135,7 +135,7 @@ function setupMenu() {
 }
 
 function setUpRouter() {
-	var router = new Router()
+	const router = new Router()
 	router.addTemplate("home", function () {
 		greeting()
 	})
@@ -152,7 +152,7 @@ function setUpRouter() {
 				event.preventDefault()
 				if (event.target.href != window.location.href) {
 					window.history.pushState({}, "", event.target.href)
-					router.resolveRoute()
+					router.resolveRoute(window.location.pathname)
 					app.menus["main-menu"].close()
 				}
 			}
@@ -163,30 +163,25 @@ function setUpRouter() {
 	if(window.location.pathname != "/") {
 		router.resolveRoute()
 	}
-
+	return router
 }
 
-function loadIcons() {
-	// selectors
-	const imgSelector = 'img[src$=".svg"], img[src^="data:image/svg"]'
-	// icons elements
-	const imgIcons = document.querySelectorAll(imgSelector)
-
-	return setImagesToSVG(imgIcons)
-		.then((svgElements) => {
-			for (const svgElem of svgElements) {
-				svgElem.removeAttribute("width")
-				svgElem.removeAttribute("height")
-			}
-			const contactLinks = document.querySelectorAll("#links a")
-			for (const link of contactLinks) {
+async function loadIcons(element) {
+	try {
+		const svgElements = await loadInlineSVG(element)
+		for (const svgElem of svgElements) {
+			svgElem.removeAttribute("width")
+			svgElem.removeAttribute("height")
+			if (svgElem.parentElement.matches("#links a")) {
+				const link = svgElem.parentElement
 				link.classList.remove("icon")
 				link.classList.add("square-icon")
 			}
-		})
-		.catch((error) => {
-			console.error(`Error while loading icons : ${error}`)
-		})
+		}
+		return svgElements;
+	} catch (error) {
+		console.error(`Error while loading icons : ${error}`)
+	}
 }
 
 function greeting() {

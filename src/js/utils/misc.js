@@ -3,16 +3,12 @@
  */
 
 /**
- * Checks if any CSS stylesheets are loaded in the current document.
+ * Checks if any CSS stylesheets are loaded in a specified document.
  *
- * @param {function(boolean)} callback - A callback function that receives a boolean indicating
- * whether CSS stylesheets are loaded (true) or not (false).
+ * @param {Document} doc - The document in which to check for loaded CSS stylesheets.
+ * @returns {boolean} Returns `true` if there are CSS stylesheets loaded in the specified document; otherwise, returns `false`.
  */
-export function isCssLoaded(callback) {
-	const styleSheets = document.styleSheets
-	if (styleSheets.length > 0) {
-		callback(true)
-		return
-	}
-	callback(false)
+export function isCssLoaded(doc) {
+	const styleSheets = doc.styleSheets
+	return (styleSheets.length > 0)
 }
