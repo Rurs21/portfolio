@@ -15,15 +15,15 @@ const app = {}
 
 window.onload = async function () {
 	setupLanguage()
+	app.router = setUpRouter()
+	setUpNavigation()
 	if (isCssLoaded(document)) {
 		drawRose()
-		app.router = setUpRouter()
 		app.menus = setupMenu()
-		setUpNavigation()
 		await loadIcons(document)
 		setupTheme()
 	} else {
-		enableNonCssFunctions()
+		enableNonCssFeatures()
 	}
 }
 
@@ -155,13 +155,17 @@ function setUpRouter() {
 }
 
 function setUpNavigation() {
-	for (const navlink of document.querySelectorAll("#navigation-menu a")) {
+	const navigationLinks = document.querySelectorAll("#navigation-menu a")
+
+	for (const navlink of navigationLinks) {
 		navlink.onclick = (event) => {
 			event = event || window.event
-			if (event.target.href) {
+			// handle event target is the child <img> or <svg> instead of the <button> or <a>
+			let href = event.target.href || event.target.parentElement.href
+			if (href) {
 				event.preventDefault()
-				if (event.target.href != window.location.href) {
-					app.router.resolveRoute(event.target.href)
+				if (href != window.location.href) {
+					app.router.resolveRoute(href)
 					app.menus["main-menu"].close()
 				}
 			}
@@ -198,6 +202,8 @@ function setUpNavigation() {
 	urlObserver.observe(document.getElementById("content"), { childList: true })
 
 	setActiveLink()
+
+	return navigationLinks
 }
 
 async function loadIcons(element) {
@@ -281,9 +287,16 @@ function drawRose() {
 	setTimeout(() => roseElement.classList.remove("start"), 6000)
 }
 
-function enableNonCssFunctions() {
+function enableNonCssFeatures() {
+	// hide unused menu
 	document.getElementById("main-menu").setAttribute("hidden", "")
 	document.getElementById("settings-menu").setAttribute("hidden", "")
-	document.getElementById("navigation-menu").setAttribute("hidden", "")
-	document.getElementById("navbar").removeAttribute("hidden")
+	// unhide navbar
+	const navbar = document.getElementById("navbar")
+	navbar.removeAttribute("hidden")
+	// add separator (horizontal rule)
+	navbar.insertBefore(
+		document.createElement("hr"),
+		document.getElementById("language-menu")
+	)
 }

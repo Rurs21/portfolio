@@ -39,10 +39,6 @@
 	padding-top: 7.5em;
 }
 
-#language-menu > *  {
-    margin: 0 0 0.25em 1em;
-}
-
 .top-menu {
     position: fixed;
     top: 0;
@@ -80,4 +76,14 @@ a[aria-disabled=true] {
 
 .dark a[aria-disabled=true] {
     background-color: #000000;
+}
+
+/* specifics rules */
+
+#language-menu > *  {
+    margin: 0 0 0.25em 1em;
+}
+
+#navigation-menu > #home-nav {
+    order: 1;
 }

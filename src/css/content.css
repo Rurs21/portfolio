@@ -63,6 +63,11 @@
     margin-right: 1em;
 }
 
+#links > .icon > img {
+    width: 100px;
+    height: 100px;
+}
+
 #links > .square-icon {
     margin-right: 0.5em;
 }

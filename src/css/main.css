@@ -88,7 +88,7 @@ a:not([href]) {
     box-sizing: content-box;
 }
 
-.icon-button svg {
+.icon-button svg, .icon-button img {
     pointer-events: none;
 }
 
