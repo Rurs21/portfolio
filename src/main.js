@@ -1,5 +1,5 @@
 import Menu from "./js/menu.js"
-import { isCssLoaded } from "./js/utils/misc.js"
+import { isCssLoaded, onRemove } from "./js/utils/misc.js"
 import { checkUserLanguage, changeLanguage } from "./i18n/l10n.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { loadInlineSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
@@ -8,19 +8,20 @@ import { Router } from "./js/router.js"
 
 /**
  * TODO:
- * - fix greeting with language & route change
+ * - fix greeting with language change
  * - add transition animation with route
  */
-const app = {};
+const app = {}
 
 window.onload = async function () {
 	setupLanguage()
 	if (isCssLoaded(document)) {
+		drawRose()
+		app.router = setUpRouter()
 		app.menus = setupMenu()
+		setUpNavigation()
 		await loadIcons(document)
 		setupTheme()
-		app.router = setUpRouter()
-		drawRose()
 	} else {
 		enableNonCssFunctions()
 	}
@@ -92,7 +93,7 @@ function setupTheme() {
 }
 
 function setupMenu() {
-	const menus = {};
+	const menus = {}
 	// Sub menu language
 	const languageButton = document.getElementById("language-button")
 	const languageMenu = new Menu(
@@ -142,28 +143,61 @@ function setUpRouter() {
 	router.addTemplate("webgl", function () {
 		main()
 	})
-	router.addRoute("/","home")
-	router.addRoute("/webgl","webgl")
+	router.addRoute("/", "home")
+	router.addRoute("/webgl", "webgl")
 
+	if (window.location.pathname != "/") {
+		router.resolveRoute()
+	} else {
+		greeting()
+	}
+	return router
+}
+
+function setUpNavigation() {
 	for (const navlink of document.querySelectorAll("#navigation-menu a")) {
 		navlink.onclick = (event) => {
 			event = event || window.event
-			if (event) {
+			if (event.target.href) {
 				event.preventDefault()
 				if (event.target.href != window.location.href) {
-					window.history.pushState({}, "", event.target.href)
-					router.resolveRoute(window.location.pathname)
+					app.router.resolveRoute(event.target.href)
 					app.menus["main-menu"].close()
 				}
 			}
 		}
 	}
 
-	router.cacheRouteContent("/",document)
-	if(window.location.pathname != "/") {
-		router.resolveRoute()
+	var setActiveLink = () => {
+		const relativeLinks = 'a[href^="./"], a[href^="/"]'
+		const linksToCurrentPage = document.querySelectorAll(relativeLinks)
+		for (const link of linksToCurrentPage) {
+			if (link.href == window.location.href) {
+				link.setAttribute("aria-disabled", true)
+				link.removeAttribute("href")
+			} else {
+				link.setAttribute("aria-disabled", false)
+			}
+		}
 	}
-	return router
+
+	var href = window.location.href
+	const urlObserver = new MutationObserver((mutations) => {
+		// if location changed
+		if (href !== window.location.href) {
+			let url = new URL(href)
+			href = window.location.href
+			const placeHolderLink = "a:not([href])"
+			const previouslyActives = document.querySelectorAll(placeHolderLink)
+			for (const link of previouslyActives) {
+				link.href = url.pathname
+			}
+			setActiveLink()
+		}
+	})
+	urlObserver.observe(document.getElementById("content"), { childList: true })
+
+	setActiveLink()
 }
 
 async function loadIcons(element) {
@@ -172,13 +206,13 @@ async function loadIcons(element) {
 		for (const svgElem of svgElements) {
 			svgElem.removeAttribute("width")
 			svgElem.removeAttribute("height")
-			if (svgElem.parentElement.matches("#links a")) {
+			if (svgElem.matches("#links a svg")) {
 				const link = svgElem.parentElement
 				link.classList.remove("icon")
 				link.classList.add("square-icon")
 			}
 		}
-		return svgElements;
+		return svgElements
 	} catch (error) {
 		console.error(`Error while loading icons : ${error}`)
 	}
@@ -195,16 +229,28 @@ function greeting() {
 	titleElement.innerHTML = ""
 	titleElement.append(cursorElement)
 
+	var done = false
 	let currentIndex = 0
 	var typeOutTitle = function () {
+		if (done) {
+			return
+		}
 		if (currentIndex < title.length) {
 			titleElement.textContent += title[currentIndex]
 			currentIndex++
 			setTimeout(typeOutTitle, 50) // Typing speed: 50ms per character
 		} else {
+			done = true
 			setTimeout(() => cursorElement.remove(), 1500)
 		}
 	}
+
+	onRemove(document.body.querySelector("main"), () => {
+		if (!done) {
+			done = true
+			titleElement.innerText = title
+		}
+	})
 
 	setTimeout(typeOutTitle, 2100)
 }
