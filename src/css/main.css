@@ -81,7 +81,7 @@ a:not([href]) {
     text-align: center;
     text-decoration: none;
 
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s,  border-radius 0.5s;
 
     -moz-box-sizing: content-box;
     -webkit-box-sizing: content-box;

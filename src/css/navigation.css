@@ -68,3 +68,16 @@
     background: none;
     border-bottom: none;
 }
+
+/* Active page link */
+
+a[aria-disabled=true] {
+    border-radius: 0.75em;
+    border: 0.2em solid var(--text-color);;
+    background-color: #FFFFFF;
+    color: var(--text-color);
+}
+
+.dark a[aria-disabled=true] {
+    background-color: #000000;
+}
