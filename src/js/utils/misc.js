@@ -45,4 +45,25 @@ function onRemove(element, callback) {
 	return observer
 }
 
-export { isCssLoaded, onRemove }
+/**
+ * Attach a callback function to be executed when the "lang" attribute of the document's root element changes.
+ *
+ * This function uses a MutationObserver to detect changes in the "lang" attribute of the document's root element
+ * <html>. When a change is detected, the provided callback function is executed.
+ *
+ * @param {function} callback - The callback function to execute when the "lang" attribute changes.
+ * @returns {MutationObserver} Returns a MutationObserver instance for further interaction if needed.
+ */
+function onLanguageChange(callback) {
+	const observer = new MutationObserver((mutations) => {
+		for (const mutation of mutations) {
+			console.log(mutation)
+			callback()
+		}
+	})
+
+	observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] })
+	return observer
+}
+
+export { isCssLoaded, onRemove, onLanguageChange }
