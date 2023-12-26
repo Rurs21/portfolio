@@ -5,6 +5,9 @@ class Router {
 		this.routes = {}
 		this.templates = {}
 
+		this.addRoute("/", () => {})
+		this.cacheRouteContent("/", document)
+
 		window.onpopstate = () => {this.resolveRoute()}
 	}
 
@@ -23,23 +26,35 @@ class Router {
 	}
 
 	async resolveRoute(route) {
-		let url = route || window.location.pathname || "/"
+		if (route) {
+			try {
+				let url = new URL(route)
+				window.history.pushState({}, "", url.href)
+				route = url.pathname
+			} catch (e) {
+				throw new Error(`Given route '${route}' is not a valid URL`)
+			}
+		}
+
 		try {
-			if (this.routes[url] !== undefined) {
-				if (this.routes[url].content == null) {
-					const html = await this.fetchDocument(url)
-					this.cacheRouteContent(url, html)
+			route = window.location.pathname || "/"
+			if (this.routes[route] !== undefined) {
+				if (this.routes[route].content == null) {
+					const html = await this.fetchDocument(route)
+					this.cacheRouteContent(route, html)
 				}
-				this.render(url)
-				this.routes[url].template()
+				this.render(route)
+				this.routes[route].template()
+			} else {
+				throw new Error(`Route ${route} not found`)
 			}
 		} catch (e) {
-			console.log(e)
-			throw new Error(`Route ${url} not found`)
+			console.error(e)
 		}
 	}
 
 	async fetchDocument(location) {
+		// TODO handle errors
 		const response = await fetch("pages" + location + ".html")
 		const html = await response.text()
 
@@ -49,11 +64,13 @@ class Router {
 	}
 
 	cacheRouteContent(route, doc) {
+		const mainContent = doc.body.querySelector("main").cloneNode(true)
 		this.routes[route].content = {
 			title: doc.title,
 			description: doc.querySelector('meta[name="description"]').content,
-			main: doc.body.querySelector("main").cloneNode(true)
+			main: mainContent
 		}
+		return mainContent
 	}
 
 	render(path) {

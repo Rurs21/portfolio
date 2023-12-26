@@ -59,6 +59,10 @@ svg {
     max-width: 100%;
 }
 
+a:not([href]) {
+    pointer-events: none;
+}
+
 .icon-button {
     font-size: 1em;
     padding: 0.5em;
