@@ -17,9 +17,5 @@
 }
 
 .bolderish {
-    text-shadow: 0.33px 0 0 #333, 0 0px 0 #333, -0.33px 0 0 #333, 0 -0.33px 0 #333;
-}
-
-.dark .bolderish {
-    text-shadow: 0.33px 0 0 #FFF, 0 0px 0 #FFF, -0.33px 0 0 #FFF, 0 -0.33px 0 #FFF;
+    text-shadow: 0.33px 0 0 var(--text-color), 0 0px 0 var(--text-color), -0.33px 0 0 var(--text-color), 0 -0.33px 0 var(--text-color);
 }
