@@ -31,7 +31,7 @@ export default class Menu {
 			subButton.addEventListener("click", () => {
 				for (const otherSubMenu of this.subMenus) {
 					if (otherSubMenu !== subMenu && !otherSubMenu.isClosed()) {
-						otherSubMenu.close()
+						otherSubMenu.toggle()
 					}
 				}
 			})

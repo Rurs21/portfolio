@@ -34,6 +34,11 @@
 	padding-top: 7em;
 }
 
+.sub-menu {
+    z-index: 3;
+	padding-top: 7em;
+}
+
 .sub-sub-menu {
     z-index: 4;
 	padding-top: 7.5em;
@@ -65,7 +70,12 @@
     border-bottom: none;
 }
 
-/* Active page link */
+/* Active menu & page link */
+
+.horizontal-menu > button[aria-expanded="true"]:not(.square-button) {
+    border: 0.2em solid var(--rose-stroke);
+    background-color: var(--rose-fill);
+}
 
 a[aria-disabled=true] {
     border-radius: 0.75em;

@@ -42,12 +42,13 @@ function setupTheme() {
 	icons.dark = document.getElementById("dark-theme-icon")
 	icons.system = document.getElementById("system-theme-icon")
 
-	const themes = ['system','light','dark']
+	const themes = ['light','dark','system']
 	var idx = themes.indexOf(checkUserTheme())
 	// Cache references
 	const toggleTheme = function () {
 		changeTheme(themes[idx++])
-		if (idx >= themes.length) {
+		// just dark & light theme toggle
+		if (idx >= (themes.length - 1)) {
 			idx = 0;
 		}
 	}
