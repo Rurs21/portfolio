@@ -69,13 +69,9 @@
 
 a[aria-disabled=true] {
     border-radius: 0.75em;
-    border: 0.2em solid var(--text-color);;
-    background-color: #FFFFFF;
+    border: 0.2em solid var(--rose-stroke);
+    background-color: var(--rose-fill);
     color: var(--text-color);
-}
-
-.dark a[aria-disabled=true] {
-    background-color: #000000;
 }
 
 /* specifics rules */

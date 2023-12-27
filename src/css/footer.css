@@ -12,18 +12,11 @@
 	margin: 6em 0 0 0;
     font-size: xx-small;
     max-width: 135ch;
-    color: #676869
-}
-
-.dark .copyright {
-    color: #858585
+    color: var(--copyright-color)
 }
 
 .copyright a { color: currentColor; }
 .copyright a:visited { color: currentColor; }
-.copyright a:hover { color:black; }
-.copyright a:focus { color:black; }
-.copyright a:active { color:black }
-.dark .copyright a:hover { color:white; }
-.dark .copyright a:focus { color:white; }
-.dark .copyright a:active { color:white; }
+.copyright a:hover { color: var(--contrast-color); }
+.copyright a:focus { color: var(--contrast-color);}
+.copyright a:active { color: var(--contrast-color); }

@@ -16,16 +16,70 @@ body, html {
 }
 
 :root {
-    --text-color: #333;
-    --background-color: #E7E9EA; /* White Marble */
-    --secondary-color: #C0C0C0;
+    --light-contrast-color: #000000;
+    --light-text-color: #333333;
+    --light-background-color: #E7E9EA; /* White Marble */
+    --light-secondary-color: #C0C0C0;
+    --light-copyright-color: #676869;
+    --light-rose-stroke: #fbc4d0; /* #ffbac1; ##efa3aa; #fcdae4 #fdd7de #ff93a2 #f09bb1 #e86c82 faabbc ffcfcf*/
+    --light-rose-fill: #f7f0f2; /* #fde5ec; #f7f0f2; #fcdae4*/
+
+    --dark-contrast-color: #FFFFFF;
+    --dark-text-color: #EEEEEE;
+    --dark-background-color: #1C1E1E; /* Raven Black */
+    --dark-secondary-color: #41424C;
+    --dark-copyright-color: #858585;
+    --dark-rose-stroke: #E4345A;
+    --dark-rose-fill: #960018;
+
+    --contrast-color: var(--light-contrast-color);
+    --text-color: var(--light-text-color);
+    --background-color: var(--light-background-color);
+    --secondary-color: var(--light-secondary-color);
+    --copyright-color: var(--light-copyright-color);
+    --rose-stroke: var(--light-rose-stroke);
+    --rose-fill: var(--light-rose-fill);
+
     --system-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, system-ui;
 }
 
+.icon img[src$=".svg"], .icon img[src^="data:image/svg"] {
+    filter: invert(0.2);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --contrast-color: var(--dark-contrast-color);
+        --text-color: var(--dark-text-color);
+        --background-color: var(--dark-background-color);
+        --secondary-color: var(--dark-secondary-color);
+        --copyright-color: var(--dark-copyright-color);
+        --rose-stroke: var(--dark-rose-stroke);
+        --rose-fill: var(--dark-rose-fill);
+    }
+    .icon img[src$=".svg"], .icon img[src^="data:image/svg"] {
+        filter: invert(0.95);
+    }
+}
+
+body.light {
+    --contrast-color: var(--light-contrast-color);
+    --text-color: var(--light-text-color);
+    --background-color: var(--light-background-color);
+    --secondary-color: var(--light-secondary-color);
+    --copyright-color: var(--light-copyright-color);
+    --rose-stroke: var(--light-rose-stroke);
+    --rose-fill: var(--light-rose-fill);
+}
+
 body.dark {
-    --text-color: #fff;
-    --background-color: #1C1E1E; /* Raven Black */
-    --secondary-color: #41424C;
+    --contrast-color: var(--dark-contrast-color);
+    --text-color: var(--dark-text-color);
+    --background-color: var(--dark-background-color);
+    --secondary-color: var(--dark-secondary-color);
+    --copyright-color: var(--dark-copyright-color);
+    --rose-stroke: var(--dark-rose-stroke);
+    --rose-fill: var(--dark-rose-fill);
 }
 
 body {
@@ -122,6 +176,7 @@ a:not([href]) {
 }
 
 .square-icon {
+    color: var(--text-color);
     fill: var(--background-color);
     background: var(--text-color);
     height: 3.75em;

@@ -1,6 +1,7 @@
 import Menu from "./js/menu.js"
 import { isCssLoaded, onRemove } from "./js/utils/misc.js"
 import { checkUserLanguage, changeLanguage } from "./i18n/l10n.js"
+import { setupTheme } from "./js/theme.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { loadInlineSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
@@ -16,7 +17,7 @@ const app = {}
 window.onload = async function () {
 	setupLanguage()
 	app.router = setUpRouter()
-	setUpNavigation()
+	app.navigationLinks = setUpNavigation()
 	if (isCssLoaded(document)) {
 		drawRose()
 		app.menus = setupMenu()
@@ -37,59 +38,6 @@ function setupLanguage() {
 		changeLanguage(this.value)
 		app.menus["main-menu"].close()
 	})
-}
-
-function setupTheme() {
-	// Cache references
-	const body = document.body
-	const themeToggle = document.getElementById("theme-toggle")
-	const lightIcon = document.getElementById("light-theme-icon")
-	const darkIcon = document.getElementById("dark-theme-icon")
-
-	const changeTheme = function (theme) {
-		if (theme == "dark") {
-			body.classList.add("dark")
-			themeToggle.replaceChild(darkIcon, lightIcon)
-		} else {
-			body.classList.remove("dark")
-			themeToggle.replaceChild(lightIcon, darkIcon)
-		}
-
-		// Save the theme preference to localStorage
-		localStorage.setItem("theme", theme)
-	}
-
-	const toggleTheme = function () {
-		const isDark = body.classList.contains("dark")
-		isDark ? changeTheme("light") : changeTheme("dark")
-	}
-
-	const checkUserTheme = function () {
-		const prefersDarkMode = window.matchMedia(
-			"(prefers-color-scheme: dark)"
-		).matches
-		const savedTheme = localStorage.getItem("theme")
-
-		if (savedTheme != null) {
-			changeTheme(savedTheme)
-		} else if (prefersDarkMode) {
-			changeTheme("dark")
-		} else {
-			changeTheme("light")
-		}
-	}
-
-	// Add a click event listener to the theme-toggle button
-	themeToggle.addEventListener("click", toggleTheme)
-	// Add event listener is the prefers color scheme change
-	window
-		.matchMedia("(prefers-color-scheme: dark)")
-		.addEventListener("change", (event) => {
-			const newScheme = event.matches ? "dark" : "light"
-			changeTheme(newScheme)
-		})
-
-	checkUserTheme()
 }
 
 function setupMenu() {
