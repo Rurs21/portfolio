@@ -12,17 +12,25 @@ class Router {
 	}
 
 	addRoute(path, template) {
-		if (typeof template === "function") {
-			return (this.routes[path] = { content: null, template: template })
-		} else if (typeof template === "string") {
-			return (this.routes[path] = {content: null, template: this.templates[template] })
-		} else {
-			return
+		if (typeof template === "string") {
+			template = this.templates[template]
+		} else if (typeof template !== "function") {
+			throw new Error("bad template")
 		}
+		if (this.routes[path] == undefined) {
+			this.routes[path] = { content: null, template: template }
+		} else {
+			this.routes[path].template = template
+		}
+		return this.routes[path]
+
 	}
 
-	addTemplate(name, templateFunction) {
-		return (this.templates[name] = templateFunction)
+	addTemplate(name, template) {
+		if (typeof template !== "function") {
+			throw new Error("bad template")
+		}
+		return (this.templates[name] = template)
 	}
 
 	async resolveRoute(route) {
@@ -37,7 +45,7 @@ class Router {
 		}
 
 		try {
-			route = window.location.pathname || "/"
+			route = route || window.location.pathname || "/"
 			if (this.routes[route] !== undefined) {
 				if (this.routes[route].content == null) {
 					const html = await this.fetchDocument(route)
@@ -54,8 +62,11 @@ class Router {
 	}
 
 	async fetchDocument(location) {
-		// TODO handle errors
+		// TODO handle errors (better lol)
 		const response = await fetch("pages" + location + ".html")
+		if (!response.ok) {
+			throw new Error("Error fetching page")
+		}
 		const html = await response.text()
 
 		var doc = parser.parseFromString(html, "text/html")
