@@ -28,7 +28,7 @@ class Router {
 	async resolveRoute(route) {
 		if (route) {
 			try {
-				let url = new URL(route)
+				let url = new URL(route, document.baseURI)
 				window.history.pushState({}, "", url.href)
 				route = url.pathname
 			} catch (e) {
