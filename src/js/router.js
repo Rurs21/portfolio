@@ -1,60 +1,49 @@
 const parser = new DOMParser()
+const descriptionSelector = 'meta[name="description"]'
 
 class Router {
 	constructor() {
 		this.routes = {}
 		this.templates = {}
 
-		this.addRoute("/", () => {})
-		this.cacheRouteContent("/", document)
+		const indexRoute = this.addRoute("/", () => {})
+		indexRoute.cacheDocument(document)
 
 		window.onpopstate = () => {this.resolveRoute()}
 	}
 
-	addRoute(path, template) {
-		if (typeof template === "string") {
-			template = this.templates[template]
-		} else if (typeof template !== "function") {
-			throw new Error("bad template")
-		}
+	addRoute(path, callback) {
 		if (this.routes[path] == undefined) {
-			this.routes[path] = { content: null, template: template }
+			this.routes[path] = new Route(null, null, null, callback)
 		} else {
-			this.routes[path].template = template
+			this.routes[path].callback = callback
 		}
 		return this.routes[path]
-
 	}
 
-	addTemplate(name, template) {
-		if (typeof template !== "function") {
-			throw new Error("bad template")
-		}
-		return (this.templates[name] = template)
-	}
-
-	async resolveRoute(route) {
-		if (route) {
+	async resolveRoute(path) {
+		if (path) {
 			try {
-				let url = new URL(route, document.baseURI)
+				let url = new URL(path, document.baseURI)
 				window.history.pushState({}, "", url.href)
-				route = url.pathname
+				path = url.pathname
 			} catch (e) {
-				throw new Error(`Given route '${route}' is not a valid URL`)
+				throw new Error(`Given route '${path}' is not a valid URL`)
 			}
 		}
 
 		try {
-			route = route || window.location.pathname || "/"
-			if (this.routes[route] !== undefined) {
-				if (this.routes[route].content == null) {
-					const html = await this.fetchDocument(route)
-					this.cacheRouteContent(route, html)
+			path = path || window.location.pathname || "/"
+			const route = this.routes[path]
+			if (route !== undefined) {
+				if (route.content == null) {
+					const html = await this.fetchDocument(path)
+					route.cacheDocument(html)
 				}
-				this.render(route)
-				this.routes[route].template()
+				route.render()
+				route.callback()
 			} else {
-				throw new Error(`Route ${route} not found`)
+				throw new Error(`Route ${path} not found`)
 			}
 		} catch (e) {
 			console.error(e)
@@ -62,10 +51,13 @@ class Router {
 	}
 
 	async fetchDocument(location) {
+		location = "pages" + location + ".html"
 		// TODO handle errors (better lol)
-		const response = await fetch("pages" + location + ".html")
+		const response = await fetch(location)
 		if (!response.ok) {
-			throw new Error("Error fetching page")
+			throw new Error(`Error fetching page: ${response.status} ${response.statusText}` , {
+				cause: { code: response.status, location: location}
+			})
 		}
 		const html = await response.text()
 
@@ -73,24 +65,35 @@ class Router {
 
 		return doc
 	}
+}
 
-	cacheRouteContent(route, doc) {
-		const mainContent = doc.body.querySelector("main").cloneNode(true)
-		this.routes[route].content = {
-			title: doc.title,
-			description: doc.querySelector('meta[name="description"]').content,
-			main: mainContent
-		}
-		return mainContent
+class Route {
+	constructor(title, description, content, callback) {
+		this.title = title
+		this.description = description
+		this.content = content
+		this.callback = callback
 	}
 
-	render(path) {
-		const route = this.routes[path]
-		document.title = route.content.title
-		document
-			.querySelector('meta[name="description"]')
-			.setAttribute("content", route.content.description)
-		document.body.querySelector("main").replaceWith(route.content.main)
+	cacheDocument(doc) {
+		const content = doc.body.querySelector("main")
+		if (content == null) {
+			throw new Error(`No <main> content with given document : ${doc}`)
+		}
+		this.title = doc.title,
+		this.description = doc.querySelector(descriptionSelector).content
+		this.content = content.cloneNode(true)
+		return this
+	}
+
+	render() {
+		document.title = this.title
+		document.head
+			.querySelector(descriptionSelector)
+			.setAttribute("content", this.description)
+		document.body
+			.querySelector("main")
+			.replaceWith(this.content)
 	}
 }
 
