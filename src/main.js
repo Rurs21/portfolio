@@ -14,19 +14,21 @@ import { Router } from "./js/router.js"
  */
 const app = {}
 
-window.onload = async function () {
+document.addEventListener("DOMContentLoaded", async (event) => {
 	setupLanguage()
-	app.router = setUpRouter()
-	app.navigationLinks = setUpNavigation()
 	if (isCssLoaded(document)) {
 		drawRose()
 		app.menus = setupMenu()
 		await loadIcons(document)
 		setupTheme()
+
 	} else {
 		enableNonCssFeatures()
 	}
-}
+	app.router = setUpRouter()
+	app.navigationLinks = setUpNavigation()
+	document.body.removeAttribute("style")
+})
 
 function setupLanguage() {
 	const userLanguage = checkUserLanguage()
@@ -154,7 +156,7 @@ async function loadIcons(element) {
 		for (const svgElem of svgElements) {
 			svgElem.removeAttribute("width")
 			svgElem.removeAttribute("height")
-			if (svgElem.matches("#links a svg")) {
+			if (svgElem.matches("#contact-links a svg")) {
 				const link = svgElem.parentElement
 				link.classList.remove("icon")
 				link.classList.add("square-icon")
