@@ -21,6 +21,15 @@ export function main() {
 		return
 	}
 
+	canvas.onwebglcontextlost = (event) => {
+		console.log("webgl context lost")
+	}
+
+	canvas.onwebglcontextrestored = (event) => {
+		console.log("webgl context restore")
+	};
+
+
 	// Set clear color to black, fully opaque
 	gl.clearColor(0.0, 0.0, 0.0, 1.0)
 	// Clear the color buffer with specified clear color

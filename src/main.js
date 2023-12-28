@@ -85,14 +85,8 @@ function setupMenu() {
 
 function setUpRouter() {
 	const router = new Router()
-	router.addTemplate("home", function () {
-		greeting()
-	})
-	router.addTemplate("webgl", function () {
-		main()
-	})
-	router.addRoute("/", "home")
-	router.addRoute("/webgl", "webgl")
+	router.addRoute("/", greeting)
+	router.addRoute("/webgl", main)
 
 	if (window.location.pathname != "/") {
 		router.resolveRoute()
