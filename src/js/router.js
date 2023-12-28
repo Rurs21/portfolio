@@ -40,14 +40,23 @@ class Router {
 					const html = await this.fetchDocument(path)
 					route.cacheDocument(html)
 				}
-				route.render()
-				route.callback()
+				this.changeRoute(route)
 			} else {
 				throw new Error(`Route ${path} not found`)
 			}
 		} catch (e) {
 			console.error(e)
 		}
+	}
+
+	changeRoute(route) {
+		const current = document.body.querySelector("main")
+		current.classList.add("fade-out")
+		setTimeout(() => {
+			route.render()
+			route.callback()
+			current.classList.remove("fade-out")
+		}, 250)
 	}
 
 	async fetchDocument(location) {
