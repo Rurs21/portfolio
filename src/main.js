@@ -1,7 +1,7 @@
 import Menu from "./js/menu.js"
 import { isCssLoaded, onRemove } from "./js/utils/misc.js"
 import { checkUserLanguage, changeLanguage, changeContentLanguage } from "./i18n/l10n.js"
-import { setupTheme } from "./js/theme.js"
+import { Scheme } from "./js/theme.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { loadInlineSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
@@ -9,24 +9,26 @@ import { Router } from "./js/router.js"
 
 const app = {}
 
-document.addEventListener("DOMContentLoaded", async (event) => {
+document.addEventListener("DOMContentLoaded", init)
+
+async function init(event) {
 	document.querySelector("noscript").remove()
 
-	setupLanguage()
+	initLanguage()
 	if (isCssLoaded(document)) {
 		drawRose()
-		app.menus = setupMenu()
+		app.menus = initMenu()
 		await loadIcons(document)
-		setupTheme()
+		app.scheme = initScheme()
 	} else {
 		enableNonCssFeatures()
 	}
-	app.router = setUpRouter()
-	app.navigationLinks = setUpNavigation()
+	app.router = initRouter()
+	app.navigationLinks = initNavigation()
 	document.body.removeAttribute("style")
-})
+}
 
-function setupLanguage() {
+function initLanguage() {
 	const userLanguage = checkUserLanguage()
 	changeLanguage(userLanguage)
 
@@ -48,7 +50,18 @@ function setupLanguage() {
 	})
 }
 
-function setupMenu() {
+function initScheme() {
+	const schemeToggler = document.getElementById("scheme-toggle")
+	const icons = {
+		light: document.getElementById("light-scheme-icon"),
+		dark: document.getElementById("dark-scheme-icon"),
+		system: document.getElementById("system-scheme-icon")
+	}
+
+	return new Scheme(schemeToggler, icons)
+}
+
+function initMenu() {
 	const menus = {}
 
 	const menuIds = [
@@ -75,7 +88,7 @@ function setupMenu() {
 	return menus
 }
 
-function setUpRouter() {
+function initRouter() {
 	const router = new Router()
 	router.addRoute("/", greeting)
 	router.addRoute("/webgl", main)
@@ -85,10 +98,11 @@ function setUpRouter() {
 	} else {
 		greeting()
 	}
+
 	return router
 }
 
-function setUpNavigation() {
+function initNavigation() {
 	const navigationLinks = document.querySelectorAll("#navigation-menu a")
 
 	for (const navlink of navigationLinks) {

@@ -1,64 +1,56 @@
 const body = document.body
 
-var themeToggle = undefined
-const icons = {
-	light: undefined,
-	dark: undefined,
-	system: undefined
-}
+const schemes = ['light','dark','system']
 
-function changeTheme(theme) {
-	if (!["dark","light","system"].includes(theme)) {
-		throw new Error(`Theme '${theme}' is not a valid theme`)
+class Scheme {
+
+	constructor(schemeToggler, icons) {
+		this.toggler = schemeToggler
+		this.icons = icons
+
+		this.toggleScheme()
+		// Add a click event listener to the scheme-toggle button
+		this.toggler.addEventListener("click", () => {this.toggleScheme()})
 	}
 
-	if (theme == "dark" || theme == "light") {
-		body.classList.add(theme)
-		if (theme == "light") {
-			body.classList.remove("dark")
-			themeToggle.replaceChildren(icons.light)
-
-		} else if (theme == "dark") {
-			body.classList.remove("light")
-			themeToggle.replaceChildren(icons.dark)
-		}
-	} else {
-		body.classList.remove("light","dark")
-		themeToggle.replaceChildren(icons.system)
+	getUserScheme() {
+		const savedTheme = localStorage.getItem("scheme") || "system"
+		return savedTheme
 	}
-	// Save the theme preference to localStorage
-	localStorage.setItem("theme", theme)
 
-	const themeColor = getComputedStyle(document.body).getPropertyValue("--rose-fill")
-	document.head.querySelector('meta[name="theme-color"]').content = themeColor
-}
-
-function checkUserTheme() {
-	const savedTheme = localStorage.getItem("theme") || "system"
-	return savedTheme
-}
-
-function setupTheme() {
-	// TODO setup outside the module
-	themeToggle = document.getElementById("theme-toggle")
-	icons.light = document.getElementById("light-theme-icon")
-	icons.dark = document.getElementById("dark-theme-icon")
-	icons.system = document.getElementById("system-theme-icon")
-
-	const themes = ['light','dark','system']
-	var idx = themes.indexOf(checkUserTheme())
-	// Cache references
-	const toggleTheme = function () {
-		changeTheme(themes[idx++])
-		// just dark & light theme toggle
-		if (idx >= (themes.length - 1)) {
+	toggleScheme() {
+		var scheme = this.getUserScheme()
+		// cycle through next schemes
+		var idx = schemes.indexOf(scheme)
+		idx++
+		if (idx >= (schemes.length - 1)) {
 			idx = 0;
 		}
+		this.changeScheme(schemes[idx])
 	}
-	toggleTheme()
 
-	// Add a click event listener to the theme-toggle button
-	themeToggle.addEventListener("click", toggleTheme)
+	changeScheme(scheme) {
+		if (!schemes.includes(scheme)) {
+			throw new Error(`Scheme '${scheme}' is not a valid scheme`)
+		}
+
+		if (scheme == "dark" || scheme == "light") {
+			body.classList.add(scheme)
+			if (scheme == "light") {
+				body.classList.remove("dark")
+				this.toggler.replaceChildren(this.icons.light)
+
+			} else if (scheme == "dark") {
+				body.classList.remove("light")
+				this.toggler.replaceChildren(this.icons.dark)
+			}
+		} else {
+			body.classList.remove("light","dark")
+			this.toggler.replaceChildren(this.icons.system)
+		}
+		// Save the scheme preference to localStorage
+		localStorage.setItem("scheme", scheme)
+	}
 }
 
-export { setupTheme, checkUserTheme, changeTheme }
+export { Scheme }
