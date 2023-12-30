@@ -56,10 +56,8 @@ function onRemove(element, callback) {
  */
 function onLanguageChange(callback) {
 	const observer = new MutationObserver((mutations) => {
-		for (const mutation of mutations) {
-			console.log(mutation)
-			callback()
-		}
+		const lang = mutations[0].target.lang
+		callback(lang)
 	})
 
 	observer.observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] })
