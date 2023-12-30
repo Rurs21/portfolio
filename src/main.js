@@ -1,11 +1,11 @@
 import Menu from "./js/menu.js"
+import { Router } from "./js/router.js"
+import { Scheme } from "./js/theme.js"
+import rose from "./js/rose.js"
 import { isCssLoaded, onRemove } from "./js/utils/misc.js"
 import { checkUserLanguage, changeLanguage, changeContentLanguage } from "./i18n/l10n.js"
-import { Scheme } from "./js/theme.js"
-import { archimedeanFlower } from "./js/archimedeanFlower.js"
-import { loadInlineSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
+import { loadInlineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
-import { Router } from "./js/router.js"
 
 const app = {}
 
@@ -25,7 +25,6 @@ async function init(event) {
 	}
 	app.router = initRouter()
 	app.navigationLinks = initNavigation()
-	document.body.removeAttribute("style")
 }
 
 function initLanguage() {
@@ -210,27 +209,11 @@ function greeting() {
 }
 
 function drawRose() {
-	// Set up our constants to generate the spiral rose
-	const a = 0,
-		b = 4,
-		c = 0.17,
-		n = 5,
-		k = 0.0257
-	const thetaIncrmt = 0.17
-	const thetaMax = 9.9777 * Math.PI
-	//  rose coordinates
-	const rosePoints = archimedeanFlower(a, b, c, n, k, thetaIncrmt, thetaMax)
-
-	// svg properties
-	const svgElement = createCoordinatesSVG(rosePoints, "#E4345A", 2.7, "4.5s")
-	const svgId = "rose-svg",
-		svgTitle = "Archimedean's Rose",
-		svgDesc = "Rose drawn with the Archimedean spiral equation"
-	defineSVG(svgElement, svgId, svgTitle, svgDesc)
+	const svgRose = rose("#E4345A", 2.7, "4.5s")
 
 	const roseElement = document.getElementById("rose")
 	roseElement.classList.add("start", "unfilled")
-	roseElement.appendChild(svgElement)
+	roseElement.appendChild(svgRose)
 	setTimeout(() => roseElement.classList.remove("unfilled"), 3750)
 	setTimeout(() => roseElement.classList.remove("start"), 6000)
 }
