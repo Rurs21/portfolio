@@ -33,8 +33,18 @@ function setupLanguage() {
 	const languageSelect = document.getElementById("language-select")
 	languageSelect.value = userLanguage
 	languageSelect.addEventListener("change", function () {
-		changeLanguage(this.value)
-		app.menus["main-menu"].close()
+		try {
+			changeLanguage(this.value)
+			app.menus["main-menu"].close()
+			const routes = app.router.routes
+			for (const path in routes) {
+				if(routes[path].content != null) {
+					changeContentLanguage(this.value, routes[path])
+				}
+			}
+		} catch (error) {
+			console.error(`Error while changing language: ${error}`)
+		}
 	})
 }
 

@@ -20,11 +20,11 @@ function checkUserLanguage() {
  * @param {string} lang - ISO 639-1 Language Code
  * @param {HTMLElement} element - The root element to search for elements with data-translate
  */
-function changeContentLanguage(lang, element) {
-	element.querySelectorAll("[data-translate]").forEach((el) => {
-		const key = el.getAttribute("data-translate")
-		el.textContent = translations[lang][key] || key
-	})
+function changeContentLanguage(lang, rootElement) {
+	for (const element of rootElement.querySelectorAll("[data-translate]")) {
+		const key = element.getAttribute("data-translate")
+		element.textContent = translations[lang][key] || key
+	}
 }
 
 /**
