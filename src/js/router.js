@@ -106,4 +106,4 @@ class Route {
 	}
 }
 
-export { Router }
+export default Router

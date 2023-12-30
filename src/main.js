@@ -1,6 +1,6 @@
 import Menu from "./js/menu.js"
-import { Router } from "./js/router.js"
-import { Scheme } from "./js/theme.js"
+import Router from "./js/router.js"
+import Scheme from "./js/theme.js"
 import rose from "./js/rose.js"
 import { isCssLoaded, onRemove } from "./js/utils/misc.js"
 import { checkUserLanguage, changeLanguage, changeContentLanguage } from "./i18n/l10n.js"

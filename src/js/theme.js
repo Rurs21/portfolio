@@ -53,4 +53,4 @@ class Scheme {
 	}
 }
 
-export { Scheme }
+export default Scheme
