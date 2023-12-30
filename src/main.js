@@ -50,44 +50,28 @@ function setupLanguage() {
 
 function setupMenu() {
 	const menus = {}
-	// Sub menu language
-	const languageButton = document.getElementById("language-button")
-	const languageMenu = new Menu(
-		document.getElementById("language-menu"),
-		languageButton
-	)
-	// Sub menu settings
-	const settingsButton = document.getElementById("settings-button")
-	const settingsMenu = new Menu(
-		document.getElementById("settings-menu"),
-		settingsButton
-	)
-	// Sub menu navigation
-	const navigationButton = document.getElementById("navigation-button")
-	const navigationMenu = new Menu(
-		document.getElementById("navigation-menu"),
-		navigationButton
-	)
-	// Main menu
-	const menuButton = document.getElementById("menu-button")
-	const closeButton = document.getElementById("close-menu-button")
-	const mainMenu = new Menu(
-		document.getElementById("main-menu"),
-		menuButton,
-		closeButton
-	)
-	mainMenu.addSubMenu(settingsMenu)
-	mainMenu.addSubMenu(navigationMenu)
-	settingsMenu.addSubMenu(languageMenu)
+
+	const menuIds = [
+		"main-menu",
+		"language-menu",
+		"settings-menu",
+		"navigation-menu"
+	]
+	for (const id of menuIds) {
+		menus[id] = new Menu(
+			document.getElementById(id),
+			...document.querySelectorAll(`button[aria-controls="${id}"]`)
+		)
+	}
+	// set sub menus
+	menus["main-menu"].addSubMenu(menus["settings-menu"])
+	menus["main-menu"].addSubMenu(menus["navigation-menu"])
+	menus["settings-menu"].addSubMenu(menus["language-menu"])
 
 	// Reveal overlay & navbar when menu all setup
 	document.getElementById("top-overlay").removeAttribute("hidden")
 	document.getElementById("navbar").removeAttribute("hidden")
 
-	menus[mainMenu.getId()] = mainMenu
-	menus[settingsMenu.getId()] = settingsMenu
-	menus[navigationMenu.getId()] = navigationMenu
-	menus[languageMenu.getId()] = languageMenu
 	return menus
 }
 
