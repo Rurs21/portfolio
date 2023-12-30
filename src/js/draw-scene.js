@@ -4,7 +4,9 @@ import * as mat4 from "gl-matrix/mat4"
 function drawScene(gl, programInfo, buffers, cubeRotation) {
 	// https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 	// make the drawingbuffer match whatever size the browser has stretched the canvas
-	resizeCanvasToDisplaySize(gl.canvas)
+	if (document.styleSheets.length > 0) {
+		resizeCanvasToDisplaySize(gl.canvas)
+	}
 	// adapt viewport to newSize
 	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
 

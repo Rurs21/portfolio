@@ -50,7 +50,7 @@ class Router {
 	}
 
 	changeRoute(route) {
-		const current = document.body.querySelector("main")
+		const current = document.querySelector("main")
 		current.classList.add("fade-out")
 		setTimeout(() => {
 			route.render()
@@ -89,7 +89,7 @@ class Route {
 		if (content == null) {
 			throw new Error(`No <main> content with given document : ${doc}`)
 		}
-		this.title = doc.title,
+		this.title = doc.title
 		this.description = doc.querySelector(descriptionSelector).content
 		this.content = content.cloneNode(true)
 		return this
