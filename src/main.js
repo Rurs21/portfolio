@@ -38,8 +38,8 @@ function setupLanguage() {
 			app.menus["main-menu"].close()
 			const routes = app.router.routes
 			for (const path in routes) {
-				if(routes[path].content != null) {
-					changeContentLanguage(this.value, routes[path])
+				if (routes[path].content != null) {
+					changeContentLanguage(this.value, routes[path].content)
 				}
 			}
 		} catch (error) {
