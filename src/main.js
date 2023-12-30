@@ -1,27 +1,23 @@
 import Menu from "./js/menu.js"
 import { isCssLoaded, onRemove } from "./js/utils/misc.js"
-import { checkUserLanguage, changeLanguage } from "./i18n/l10n.js"
+import { checkUserLanguage, changeLanguage, changeContentLanguage } from "./i18n/l10n.js"
 import { setupTheme } from "./js/theme.js"
 import { archimedeanFlower } from "./js/archimedeanFlower.js"
 import { loadInlineSVG, createCoordinatesSVG, defineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
 import { Router } from "./js/router.js"
 
-/**
- * TODO:
- * - fix greeting with language change
- * - add transition animation with route
- */
 const app = {}
 
 document.addEventListener("DOMContentLoaded", async (event) => {
+	document.querySelector("noscript").remove()
+
 	setupLanguage()
 	if (isCssLoaded(document)) {
 		drawRose()
 		app.menus = setupMenu()
 		await loadIcons(document)
 		setupTheme()
-
 	} else {
 		enableNonCssFeatures()
 	}
@@ -104,7 +100,7 @@ function setUpNavigation() {
 	for (const navlink of navigationLinks) {
 		navlink.onclick = (event) => {
 			event = event || window.event
-			// handle event target is the child <img> or <svg> instead of the <button> or <a>
+			// handle event target is the child <img> or <svg> instead of the <a>
 			let href = event.target.href || event.target.parentElement.href
 			if (href) {
 				event.preventDefault()
@@ -195,7 +191,7 @@ function greeting() {
 		}
 	}
 
-	onRemove(document.body.querySelector("main"), () => {
+	onRemove(document.querySelector("main"), () => {
 		if (!done) {
 			done = true
 			titleElement.innerText = title

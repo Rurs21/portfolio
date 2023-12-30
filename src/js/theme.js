@@ -28,6 +28,9 @@ function changeTheme(theme) {
 	}
 	// Save the theme preference to localStorage
 	localStorage.setItem("theme", theme)
+
+	const themeColor = getComputedStyle(document.body).getPropertyValue("--rose-fill")
+	document.head.querySelector('meta[name="theme-color"]').content = themeColor
 }
 
 function checkUserTheme() {
