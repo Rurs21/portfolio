@@ -1,55 +1,41 @@
+import App from "./js/app.js"
 import Menu from "./js/menu.js"
 import Router from "./js/router.js"
-import Scheme from "./js/theme.js"
 import rose from "./js/rose.js"
 import { isCssLoaded, onRemove } from "./js/utils/misc.js"
-import { checkUserLanguage, changeLanguage, changeContentLanguage } from "./i18n/l10n.js"
 import { loadInlineSVG } from "./js/utils/svg.js"
 import { main } from "./js/graphic.js"
 
-const app = {}
+var app
 
 document.addEventListener("DOMContentLoaded", init)
 
 async function init(event) {
 	document.querySelector("noscript").remove()
 
-	initLanguage()
+	app = new App()
+	app.router = initRouter()
 	if (isCssLoaded(document)) {
 		drawRose()
 		app.menus = initMenu()
 		await loadIcons(document)
-		app.scheme = initScheme()
+		initButtons()
 	} else {
 		enableNonCssFeatures()
 	}
-	app.router = initRouter()
+
 	app.navigationLinks = initNavigation()
 }
 
-function initLanguage() {
-	const userLanguage = checkUserLanguage()
-	changeLanguage(userLanguage)
-
+function initButtons() {
 	const languageSelect = document.getElementById("language-select")
-	languageSelect.value = userLanguage
+	languageSelect.value = app.language
 	languageSelect.addEventListener("change", function () {
-		try {
-			changeLanguage(this.value)
-			app.menus["main-menu"].close()
-			const routes = app.router.routes
-			for (const path in routes) {
-				if (routes[path].content != null) {
-					changeContentLanguage(this.value, routes[path].content)
-				}
-			}
-		} catch (error) {
-			console.error(`Error while changing language: ${error}`)
-		}
+		app.language = this.value
+		app.closeMainMenu()
 	})
-}
 
-function initScheme() {
+	// Scheme Toggler with icons
 	const schemeToggler = document.getElementById("scheme-toggle")
 	const icons = {
 		light: document.getElementById("light-scheme-icon"),
@@ -57,23 +43,23 @@ function initScheme() {
 		system: document.getElementById("system-scheme-icon")
 	}
 
-	return new Scheme(schemeToggler, icons)
+	schemeToggler.replaceChildren(icons[app.scheme.value])
+	schemeToggler.addEventListener("click", () => {
+		const nextScheme = app.scheme.toggleScheme()
+		schemeToggler.replaceChildren(icons[nextScheme])
+	})
 }
 
 function initMenu() {
 	const menus = {}
 
-	const menuIds = [
-		"main-menu",
-		"language-menu",
-		"settings-menu",
-		"navigation-menu"
-	]
-	for (const id of menuIds) {
-		menus[id] = new Menu(
-			document.getElementById(id),
-			...document.querySelectorAll(`button[aria-controls="${id}"]`)
+	// instantiate each menu
+	const menuElements = document.querySelectorAll('[id$="-menu"]')
+	for (const element of menuElements) {
+		const menuButtons = document.querySelectorAll(
+			`button[aria-controls="${element.id}"]`
 		)
+		menus[element.id] = new Menu(element, ...menuButtons)
 	}
 	// set sub menus
 	menus["main-menu"].addSubMenu(menus["settings-menu"])
@@ -92,18 +78,12 @@ function initRouter() {
 	router.addRoute("/", greeting)
 	router.addRoute("/webgl", main)
 
-	if (window.location.pathname != "/") {
-		router.resolveRoute()
-	} else {
-		greeting()
-	}
-
+	router.resolveRoute()
 	return router
 }
 
 function initNavigation() {
 	const navigationLinks = document.querySelectorAll("#navigation-menu a")
-
 	for (const navlink of navigationLinks) {
 		navlink.onclick = (event) => {
 			event = event || window.event
@@ -113,16 +93,15 @@ function initNavigation() {
 				event.preventDefault()
 				if (href != window.location.href) {
 					app.router.resolveRoute(href)
-					app.menus["main-menu"].close()
+					app.closeMainMenu()
 				}
 			}
 		}
 	}
 
-	var setActiveLink = () => {
+	const setActiveLink = () => {
 		const relativeLinks = 'a[href^="./"], a[href^="/"]'
-		const linksToCurrentPage = document.querySelectorAll(relativeLinks)
-		for (const link of linksToCurrentPage) {
+		for (const link of document.querySelectorAll(relativeLinks)) {
 			if (link.href == window.location.href) {
 				link.setAttribute("aria-disabled", true)
 				link.removeAttribute("href")
@@ -134,8 +113,8 @@ function initNavigation() {
 
 	var href = window.location.href
 	const urlObserver = new MutationObserver((mutations) => {
-		// if location changed
 		if (href !== window.location.href) {
+			console.log("locaiton changed")
 			let url = new URL(href)
 			href = window.location.href
 			const placeHolderLink = "a:not([href])"
@@ -209,13 +188,13 @@ function greeting() {
 }
 
 function drawRose() {
-	const svgRose = rose("#E4345A", 2.7, "4.5s")
+	const svgRose = rose("#E4345A", 2.7, "3.5s")
 
 	const roseElement = document.getElementById("rose")
 	roseElement.classList.add("start", "unfilled")
 	roseElement.appendChild(svgRose)
-	setTimeout(() => roseElement.classList.remove("unfilled"), 3750)
-	setTimeout(() => roseElement.classList.remove("start"), 6000)
+	setTimeout(() => roseElement.classList.remove("unfilled"), 2750)
+	setTimeout(() => roseElement.classList.remove("start"), 5000)
 }
 
 function enableNonCssFeatures() {

@@ -77,7 +77,7 @@
     background-color: var(--rose-fill);
 }
 
-a[aria-disabled=true] {
+a.round-button[aria-disabled=true] {
     border-radius: 0.75em;
     border: 0.2em solid var(--rose-stroke);
     background-color: var(--rose-fill);
