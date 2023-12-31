@@ -51,12 +51,17 @@ class Router {
 
 	changeRoute(route) {
 		const current = document.querySelector("main")
-		current.classList.add("fade-out")
-		setTimeout(() => {
-			route.render()
+		if (current !== route.content) {
+			console.log("new content")
+			current.classList.add("fade-out")
+			setTimeout(() => {
+				route.render()
+				route.callback()
+				current.classList.remove("fade-out")
+			}, 250)
+		} else {
 			route.callback()
-			current.classList.remove("fade-out")
-		}, 250)
+		}
 	}
 
 	async fetchDocument(location) {
@@ -91,7 +96,7 @@ class Route {
 		}
 		this.title = doc.title
 		this.description = doc.querySelector(descriptionSelector).content
-		this.content = content.cloneNode(true)
+		this.content = content
 		return this
 	}
 
