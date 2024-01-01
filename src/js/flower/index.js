@@ -1,5 +1,5 @@
 import { archimedeanFlower } from "./archimedeanFlower.js"
-import { createCoordinatesSVG, defineSVG } from "./utils/svg.js"
+import { createCoordinatesSVG, defineSVG } from "../utils/svg.js"
 
 function rose(strokeColor = "#E4345A", strokeWidth = 1, drawingDuration, id = "rose-svg") {
 	// Set up our constants to generate the spiral rose
@@ -23,4 +23,4 @@ function rose(strokeColor = "#E4345A", strokeWidth = 1, drawingDuration, id = "r
 	return svgElement
 }
 
-export default rose
+export { rose }

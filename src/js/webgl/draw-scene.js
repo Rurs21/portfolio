@@ -1,4 +1,4 @@
-import { resizeCanvasToDisplaySize } from "./utils/canvas.js"
+import { resizeCanvasToDisplaySize } from "../utils/canvas.js"
 import * as mat4 from "gl-matrix/mat4"
 
 function drawScene(gl, programInfo, buffers, cubeRotation) {
