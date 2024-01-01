@@ -1,8 +1,8 @@
-import vertexShaderSource from "../shaders/shader.vert?raw"
-import fragmentShaderSource from "../shaders/shader.frag?raw"
+import vertexShaderSource from "./shaders/shader.vert?raw"
+import fragmentShaderSource from "./shaders/shader.frag?raw"
 import { initBuffers } from "./init-buffers.js"
 import { drawScene } from "./draw-scene.js"
-import { observeCanvasResize } from "./utils/canvas.js"
+import { observeCanvasResize } from "../utils/canvas.js"
 
 let cubeRotation = 0.0
 let deltaTime = 0

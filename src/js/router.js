@@ -5,6 +5,7 @@ class Router {
 	constructor() {
 		this.routes = {}
 		this.templates = {}
+		this.onresolveroute = undefined
 
 		const indexRoute = this.addRoute("/", () => {})
 		indexRoute.cacheDocument(document)
@@ -44,6 +45,9 @@ class Router {
 			} else {
 				throw new Error(`Route ${path} not found`)
 			}
+			if (this.onresolveroute) {
+				this.onresolveroute()
+			}
 		} catch (e) {
 			console.error(e)
 		}
@@ -52,7 +56,6 @@ class Router {
 	changeRoute(route) {
 		const current = document.querySelector("main")
 		if (current !== route.content) {
-			console.log("new content")
 			current.classList.add("fade-out")
 			setTimeout(() => {
 				route.render()

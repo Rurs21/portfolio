@@ -64,4 +64,26 @@ function onLanguageChange(callback) {
 	return observer
 }
 
-export { isCssLoaded, onRemove, onLanguageChange }
+/**
+ * Registers a callback function to be executed when a link is clicked.
+ * This function prevent the default link action and handle cases where the event target is a child element (like <img> or <svg>) of an <a> tag.
+ *
+ * @param {Function} callback - The callback function that will be executed when a link is clicked.
+ *                              This function receives the href of the clicked link as its argument.
+ * @returns {Function} A function that can be used as an event listener.
+ *                     This returned function takes an event object, extracts the href from the event target
+ *                     (or its parent if the target is a child element of an <a> tag), prevents the default link
+ *                     behavior, and then calls the provided callback function with the href as its argument.
+ */
+function onLinkClick(callback) {
+	return (event) => {
+		// handle event target is the child <img> or <svg> instead of the <a>
+		let href = event.target.href || event.target.parentElement.href
+		if (href) {
+			event.preventDefault()
+			callback(href)
+		}
+	}
+}
+
+export { isCssLoaded, onRemove, onLanguageChange, onLinkClick }
