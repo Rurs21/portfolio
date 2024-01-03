@@ -7,15 +7,12 @@ class Router {
 		this.templates = {}
 		this.onresolveroute = undefined
 
-		const indexRoute = this.addRoute("/", () => {})
-		indexRoute.cacheDocument(document)
-
 		window.onpopstate = () => {this.resolveRoute()}
 	}
 
 	addRoute(path, callback) {
 		if (this.routes[path] == undefined) {
-			this.routes[path] = new Route(null, null, null, callback)
+			this.routes[path] = new Route(callback)
 		} else {
 			this.routes[path].callback = callback
 		}
@@ -85,7 +82,7 @@ class Router {
 }
 
 class Route {
-	constructor(title, description, content, callback) {
+	constructor(callback, title, description, content) {
 		this.title = title
 		this.description = description
 		this.content = content

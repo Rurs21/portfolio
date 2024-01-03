@@ -82,6 +82,10 @@ body.dark {
     --rose-fill: var(--dark-rose-fill);
 }
 
+.dark .icon img[src$=".svg"], .dark .icon img[src^="data:image/svg"] {
+    filter: invert(0.95);
+}
+
 body {
     font-size: 1em;
     font-family: var(--system-ui);
