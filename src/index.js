@@ -1,4 +1,4 @@
-import { onRemove } from "../utils/misc.js"
+import { onRemove } from "@/utils/misc"
 
 function greeting() {
 	const titleElement = document.getElementById("job-title")

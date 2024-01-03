@@ -65,7 +65,7 @@ class Router {
 	}
 
 	async fetchDocument(location) {
-		location = "pages" + location + ".html"
+		location = location + "/index.html"
 		// TODO handle errors (better lol)
 		const response = await fetch(location)
 		if (!response.ok) {

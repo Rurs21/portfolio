@@ -82,6 +82,10 @@ body.dark {
     --rose-fill: var(--dark-rose-fill);
 }
 
+.light .icon img[src$=".svg"], .light .icon img[src^="data:image/svg"] {
+    filter: invert(0.2);
+}
+
 .dark .icon img[src$=".svg"], .dark .icon img[src^="data:image/svg"] {
     filter: invert(0.95);
 }
