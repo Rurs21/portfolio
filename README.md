@@ -1,7 +1,12 @@
 # シャルル の 名刺
 
 My portfolio website,<br/>
-titled シャルル の 名刺 (Charles' Business Card)
+titled Charles' Business Card&ensp;
+<ruby>
+  シャルル  <rp>(</rp><rt>Sharuru</rt><rp>)</rp>
+  の <rp>(</rp><rt>no</rt><rp>)</rp>
+  名刺 <rp>(</rp><rt>meishi</rt><rp>)</rp>
+</ruby>
 
 ## Design choice
 
@@ -30,9 +35,19 @@ None
 
 ## TODO
 
+### Features
+
 - accessibility
-	- prefers-contract
+	- prefers-contrast
 	- prefers-reduces-motion
 	- left handed menu/control ?
-- better error handling
+- user theme-color
+
+### Fix
+
 - clean css
+- better error handling
+- dark color scheme without css (fix black icon/svg)
+- language change
+	- greeting
+	- router
