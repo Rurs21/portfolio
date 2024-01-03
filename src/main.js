@@ -1,11 +1,11 @@
-import App from "./js/app.js"
-import Router from "./js/router.js"
+import App from "./lib/app.js"
+import Router from "./lib/router.js"
 
-import { greeting } from "./js/index/"
-import { main } from "./js/webgl/"
+import { greeting } from "./index.js"
+import { main } from "./webgl/"
 
-import initialize from "./js/initialize.js"
-import { isCssLoaded } from "./js/utils/misc.js"
+import initialize from "./initialize.js"
+import { isCssLoaded } from "./utils/misc.js"
 
 var app
 

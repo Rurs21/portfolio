@@ -1,7 +1,7 @@
-import Menu from "./menu.js"
-import { rose } from "./flower/index.js"
-import { loadInlineSVG } from "./utils/svg.js"
-import { onLinkClick } from "./utils/misc.js"
+import Menu from "@/lib/menu.js"
+import { rose } from "@/lib/flower"
+import { loadInlineSVG } from "@/utils/svg.js"
+import { onLinkClick } from "@/utils/misc.js"
 
 export default function initialize(app) {
 
