@@ -78,7 +78,7 @@ function onLanguageChange(callback) {
 function onLinkClick(callback) {
 	return (event) => {
 		// handle event target is the child <img> or <svg> instead of the <a>
-		let href = event.target.href || event.target.parentElement.href
+		let href = event.target.href || event.target.closest('a').href
 		if (href) {
 			event.preventDefault()
 			callback(href)
