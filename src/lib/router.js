@@ -1,3 +1,4 @@
+import page404 from "@/404/index.html"
 const parser = new DOMParser()
 const descriptionSelector = 'meta[name="description"]'
 
@@ -6,6 +7,9 @@ class Router {
 		this.routes = {}
 		this.templates = {}
 		this.onresolveroute = undefined
+
+		var doc404 = parser.parseFromString(page404, "text/html")
+		this.routes[404] = new Route().cacheDocument(doc404)
 
 		window.onpopstate = () => {this.resolveRoute()}
 	}
@@ -40,7 +44,8 @@ class Router {
 				}
 				this.changeRoute(route)
 			} else {
-				throw new Error(`Route ${path} not found`)
+				this.routes[404].render()
+				console.error(`Route ${path} not found`)
 			}
 			if (this.onresolveroute) {
 				this.onresolveroute()
