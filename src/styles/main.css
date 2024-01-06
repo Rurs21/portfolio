@@ -118,6 +118,8 @@ body > * {
 /* elements */
 
 svg {
+    width: 100%;
+    height: auto;
     max-width: 100%;
 }
 
@@ -185,7 +187,6 @@ a:not([href]) {
 
 .square-icon {
     color: var(--text-color);
-    fill: var(--background-color);
     background: var(--text-color);
     height: 3.75em;
     width: 3.75em;
@@ -193,6 +194,10 @@ a:not([href]) {
     border-radius: 1em;
 
     transition: background-color 0.3s, fill 0.3s, stroke 0.3s;
+}
+
+.square-icon svg {
+    fill: var(--background-color);
 }
 
 .glyphe {
