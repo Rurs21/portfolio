@@ -56,10 +56,14 @@ export default function htmlSvgInline(options = {}) {
 		const svgImgSelector = 'img[src$=".svg"], img[src^="data:image/svg"]'
 		const images = document.querySelectorAll(svgImgSelector)
 		for (const img of images) {
-			var svgContent = await retrieveSVG(img.src, fileLocation)
-			const svg = JSDOM.fragment(svgContent).firstChild
-			svgUtils.transferAttributes(img, svg)
-			img.replaceWith(svg)
+			try {
+				var svgContent = await retrieveSVG(img.src, fileLocation)
+				const svg = JSDOM.fragment(svgContent).firstChild
+				svgUtils.transferAttributes(img, svg)
+				img.replaceWith(svg)
+			} catch (error) {
+				console.error(`error trying to replace ${img.outerHTML}:\n${error}`)
+			}
 		}
 
 		return dom.serialize()
