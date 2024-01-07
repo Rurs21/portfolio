@@ -5,6 +5,10 @@ import { onLinkClick } from "@/utils/misc.js"
 
 export default function initialize(app) {
 
+	if (app == null) {
+		throw new ReferenceError("app is undefined")
+	}
+
 	document.querySelector("noscript").remove()
 
 	function initializer() {
@@ -103,13 +107,12 @@ function setSchemeToggler(app, elementId = "scheme-toggle") {
 
 function initNavigation(app) {
 
-	if (app.router == undefined) {
-		throw new ReferenceError("Navigation initialization error: App router is undefined")
-	}
 
 	setNavigationLinks("#navigation-menu a")
 	setActiveLink()
-	app.router.onresolveroute = setActiveLink
+	window.addEventListener('locationchange', function () {
+		setActiveLink()
+	});
 
 	function setNavigationLinks(selector) {
 		const navigationLinks = document.querySelectorAll(selector)

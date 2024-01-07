@@ -86,4 +86,48 @@ function onLinkClick(callback) {
 	}
 }
 
-export { isCssLoaded, onRemove, onLanguageChange, onLinkClick }
+/**
+ * Executes a given callback function once the document is in an 'interactive' or 'complete' state.
+ * This function checks the document's readiness at a very short interval (every 2 milliseconds) and executes the callback as soon as the ready state is 'interactive' or 'complete'. Once the callback is executed, the interval is cleared.
+ *
+ * @param {Function} callback - The callback function to be executed when the document is ready.
+ */
+function onInterative(callback) {
+	const id = setInterval(function() {
+		switch (document.readyState) {
+			case "interactive":
+			case "complete":
+				callback(new Event("documentinteractive"))
+				clearInterval(id)
+			break;
+		}
+	}, 2);
+}
+
+/**
+ * Add event 'locationchange' to detect if URL has changed
+ * https://stackoverflow.com/a/52809105
+ */
+(() => {
+    let oldPushState = history.pushState;
+    history.pushState = function pushState() {
+        let ret = oldPushState.apply(this, arguments);
+        window.dispatchEvent(new Event('pushstate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    };
+
+    let oldReplaceState = history.replaceState;
+    history.replaceState = function replaceState() {
+        let ret = oldReplaceState.apply(this, arguments);
+        window.dispatchEvent(new Event('replacestate'));
+        window.dispatchEvent(new Event('locationchange'));
+        return ret;
+    };
+
+    window.addEventListener('popstate', () => {
+        window.dispatchEvent(new Event('locationchange'));
+    });
+})();
+
+export { isCssLoaded, onRemove, onLanguageChange, onLinkClick, onInterative }
