@@ -1,4 +1,3 @@
-import page404 from "@/404/index.html"
 const parser = new DOMParser()
 const descriptionSelector = 'meta[name="description"]'
 
@@ -8,17 +7,20 @@ class Router {
 		this.templates = {}
 		this.onresolveroute = undefined
 
-		var doc404 = parser.parseFromString(page404, "text/html")
-		this.routes[404] = new Route().cacheDocument(doc404)
+		//var doc404 = parser.parseFromString(page404, "text/html")
+		//this.routes[404] = new Route().cacheDocument(doc404)
 
 		window.onpopstate = () => {this.resolveRoute()}
 	}
 
-	addRoute(path, callback) {
+	addRoute(path, callback, document) {
 		if (this.routes[path] == undefined) {
 			this.routes[path] = new Route(callback)
 		} else {
 			this.routes[path].callback = callback
+		}
+		if (document) {
+			this.routes[path].cacheDocument(document)
 		}
 		return this.routes[path]
 	}
@@ -95,9 +97,13 @@ class Route {
 	}
 
 	cacheDocument(doc) {
+		if (!(doc instanceof Document)) {
+			doc = parser.parseFromString(doc, "text/html")
+		}
+
 		const content = doc.body.querySelector("main")
 		if (content == null) {
-			throw new Error(`No <main> content with given document : ${doc}`)
+			throw new Error(`No <main> content with given document`)
 		}
 		this.title = doc.title
 		this.description = doc.querySelector(descriptionSelector).content
