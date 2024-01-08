@@ -1,0 +1,46 @@
+/* index content */
+
+#index > * {
+    margin-top: 4em;
+}
+
+#greeting h2 {
+    font-weight: 400;
+    height: 1.4em;
+}
+
+#link-up h2 {
+    margin-block-end: .5em;
+}
+
+#contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#contact-links > * {
+    flex: 0 0 auto;
+    margin: 0.25em;
+}
+
+#contact-links > .icon {
+    width: 5em;
+    height: 5em;
+    padding: 0.5em;
+    margin-right: 1em;
+}
+
+#contact-links > .icon > img {
+    width: 100px;
+    height: 100px;
+}
+
+#about {
+    margin-top: 4em;
+    line-height: 1.75em;
+    font-size: 1.25em;
+    max-width: 50ch;
+}

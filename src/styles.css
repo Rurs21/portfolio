@@ -4,6 +4,11 @@
 @import url(styles/content.css);
 @import url(styles/animation.css);
 @import url(styles/misc.css);
+/* main content view styles */
+@import url(styles/content/index.css);
+@import url(styles/content/error.css);
+@import url(styles/content/webgl.css);
+
 
 /* Responsive stuff */
 

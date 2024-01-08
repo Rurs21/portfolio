@@ -2,13 +2,14 @@ import App from "./lib/app.js"
 import Router from "./lib/router.js"
 
 import { greeting } from "./index.js"
-import { main } from "./webgl/"
+
 
 import initialize from "./initialize.js"
 import { isCssLoaded } from "./utils/misc.js"
 
-import page404 from "/404/index.html"
-import pageWebgl from "/webgl/index.html"
+import page404 from "@/pages/error/404.html"
+import pageWebgl from "@/pages/webgl/index.html"
+import { webgl } from "@/pages/webgl"
 
 var app = undefined
 
@@ -44,7 +45,7 @@ function initRouter() {
 	const router = new Router()
 	router.addRoute("/", greeting, document)
 	router.addRoute(404, undefined, page404)
-	router.addRoute("/webgl", main, pageWebgl)
+	router.addRoute("/webgl", webgl, pageWebgl)
 	router.resolveRoute()
 	return router
 }
