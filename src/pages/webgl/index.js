@@ -7,7 +7,7 @@ import { observeCanvasResize } from "@/utils/canvas.js"
 let cubeRotation = 0.0
 let deltaTime = 0
 
-export function main() {
+export function webgl() {
 	const canvas = document.querySelector("#glcanvas")
 	// reset to auto after route change
 	canvas.setAttribute("height", "auto")

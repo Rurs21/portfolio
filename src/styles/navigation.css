@@ -1,22 +1,22 @@
 /* Navigation Related Styling */
 
 .horizontal-menu {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 
-    box-sizing: border-box;
-    padding: 1em 0.85em 1em 0.85em;
+	box-sizing: border-box;
+	padding: 1em 0.85em 1em 0.85em;
 
-    background: var(--background-color);
-    border-bottom: 0.15em solid var(--text-color);
+	background: var(--background-color);
+	border-bottom: 0.15em solid var(--text-color);
 
-    touch-action: manipulation;
+	touch-action: manipulation;
 }
 
 .horizontal-menu > * {
-    flex: 0 0 auto;
-    margin: 0 0 0 1.5em;
+	flex: 0 0 auto;
+	margin: 0 0 0 1.5em;
 }
 
 #navbar {
@@ -30,66 +30,66 @@
 }
 
 .sub-menu {
-    z-index: 3;
+	z-index: 3;
 	padding-top: 7em;
 }
 
 .sub-menu {
-    z-index: 3;
+	z-index: 3;
 	padding-top: 7em;
 }
 
 .sub-sub-menu {
-    z-index: 4;
+	z-index: 4;
 	padding-top: 8em;
 }
 
 .top-menu {
-    position: fixed;
-    top: 0;
-    width: inherit;
-    transition: top 0.25s;
+	position: fixed;
+	top: 0;
+	width: inherit;
+	transition: top 0.25s;
 }
 
 /* closed menu position */
 /* Hide the navbar above the viewport */
 
 #main-menu.close {
-    top: -6em;
+	top: -6em;
 }
 
 .horizontal-menu.close {
-    top: -12em;
+	top: -12em;
 }
 
 .overlay {
-    position: fixed;
-    top: 0;
-    z-index: 2;
-    background: none;
-    border-bottom: none;
+	position: fixed;
+	top: 0;
+	z-index: 2;
+	background: none;
+	border-bottom: none;
 }
 
 /* Active menu & page link */
 
 .horizontal-menu > button[aria-expanded="true"]:not(.square-button) {
-    border: 0.2em solid var(--rose-stroke);
-    background-color: var(--rose-fill);
+	border: 0.2em solid var(--rose-stroke);
+	background-color: var(--rose-fill);
 }
 
-a.round-button[aria-disabled=true] {
-    border-radius: 0.75em;
-    border: 0.2em solid var(--rose-stroke);
-    background-color: var(--rose-fill);
-    color: var(--text-color);
+a.round-button[aria-disabled="true"] {
+	border-radius: 0.75em;
+	border: 0.2em solid var(--rose-stroke);
+	background-color: var(--rose-fill);
+	color: var(--text-color);
 }
 
 /* specifics rules */
 
-#language-menu > *  {
-    margin: 0 0 0.25em 1em;
+#language-menu > * {
+	margin: 0 0 0.25em 1em;
 }
 
 #navigation-menu > #home-nav {
-    order: 1;
+	order: 1;
 }

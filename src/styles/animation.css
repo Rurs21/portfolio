@@ -1,58 +1,62 @@
 /* Animation Related Styling */
 
 .fade-in {
-    opacity: 0;
-    animation: fadeIn 2s ease-in-out forwards;
+	opacity: 0;
+	animation: fadeIn 2s ease-in-out forwards;
 }
 
 .fade-out {
-    opacity: 1;
-    animation: fadeOut 0.25s ease-in-out forwards !important;
+	opacity: 1;
+	animation: fadeOut 0.25s ease-in-out forwards !important;
 }
 
 #content > * {
-    opacity: 0;
-    animation: fadeIn 0.75s ease-in-out forwards;
+	opacity: 0;
+	animation: fadeIn 0.75s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
 
 @keyframes fadeOut {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(1em);
-    }
+	0% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(1em);
+	}
 }
 
 @keyframes blink {
-    0%, 49% {
-        opacity: 1;
-    }
-    50%, 100% {
-        opacity: 0;
-    }
+	0%,
+	49% {
+		opacity: 1;
+	}
+	50%,
+	100% {
+		opacity: 0;
+	}
 }
 
 /* elements related to animation */
 .cursor {
-    width: 0.6em;
-    height: 1.3em;
-    position: absolute;
-    background-color: var(--text-color);
+	width: 0.6em;
+	height: 1.3em;
+	position: absolute;
+	background-color: var(--text-color);
 }
 
-#rose.unfilled path { fill: transparent; }
+#rose.unfilled path {
+	fill: transparent;
+}
 #rose.start path {
-    transition: fill 2.75s;
+	transition: fill 2.75s;
 }

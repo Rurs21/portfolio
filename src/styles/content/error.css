@@ -1,0 +1,12 @@
+.status-code {
+
+}
+
+.error {
+	font-family: var(--monospace);
+	text-align: center;
+}
+
+.error h1 {
+	font-style: italic;
+}
