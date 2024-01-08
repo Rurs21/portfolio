@@ -1,29 +1,46 @@
 import { onRemove } from "@/utils/misc"
 
 function greeting() {
-	const titleElement = document.getElementById("job-title")
-	const title = titleElement.innerText
+	typeOutTitle()
+}
 
+function typeOutTitle() {
+	const titleElement = document.getElementById("job-title")
+	titleElement.style.visibility = "hidden"
+
+	const textElement = document.createElement("span")
 	const cursorElement = document.createElement("span")
 	cursorElement.classList.add("cursor")
-	cursorElement.style.animation = "blink 1s infinite"
 
-	titleElement.innerHTML = ""
-	titleElement.append(cursorElement)
+	var title
+
+	setTimeout(() => {
+		title = titleElement.textContent
+		titleElement.innerHTML = ""
+		titleElement.removeAttribute("style")
+		addCursor()
+		setTimeout(typeOut, 1500)
+	}, 300)
+
+	function addCursor () {
+		titleElement.append(textElement)
+		titleElement.append(cursorElement)
+	}
 
 	var done = false
 	let currentIndex = 0
-	var typeOutTitle = function () {
+	function typeOut () {
 		if (done) {
 			return
 		}
 		if (currentIndex < title.length) {
-			titleElement.textContent += title[currentIndex]
+			textElement.textContent += title[currentIndex]
 			currentIndex++
-			setTimeout(typeOutTitle, 50) // Typing speed: 50ms per character
+			setTimeout(typeOut, 50) // Typing speed: 50ms per character
 		} else {
 			done = true
-			setTimeout(() => cursorElement.remove(), 1500)
+			textElement.replaceWith(textElement.textContent)
+			setTimeout(() => cursorElement.remove(), 1750)
 		}
 	}
 
@@ -33,8 +50,6 @@ function greeting() {
 			titleElement.innerText = title
 		}
 	})
-
-	setTimeout(typeOutTitle, 2100)
 }
 
 export { greeting }

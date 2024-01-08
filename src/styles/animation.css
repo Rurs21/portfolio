@@ -52,6 +52,7 @@
 	height: 1.3em;
 	position: absolute;
 	background-color: var(--text-color);
+	animation: blink 1s infinite;
 }
 
 #rose.unfilled path {
