@@ -10,9 +10,9 @@ titled Charles' Business Card&ensp;
 
 ## Design choice
 
-tl;dr: Portfolio uses  vanilla JS and the main content is still accessible without JS and CSS.
+tl;dr: Portfolio uses vanilla JS and the main content is still accessible without JS and CSS.
 
-In creating this portfolio website, I drew inspiration from the Japanese business card, 名刺 (Meishi), renowned for its simplicity, elegance, and pivotal role in professional interactions. I opted for vanilla JavaScript and engineered a site that remains functional without JS and CSS. This approach ensures broad compatibility and rapid load times, with a focus on efficiently and elegantly delivering content. It's a design choice that embraces the business card's philosophy of being simple, direct, and universally accessible, while also demonstrating a commitment to creating user-friendly, accessible web experiences.
+In creating this portfolio website, I drew inspiration from the Japanese business card, 名刺 (Meishi), which is known for its simplicity, elegance, and pivotal role in professional interactions. I opted for vanilla JavaScript and engineered a site that remains functional without JS and CSS. This approach ensures broad compatibility and rapid load times, with a focus on efficiently and elegantly delivering content. It's a design choice that embraces the business card's philosophy of being simple, direct, and universally accessible, while also demonstrating a commitment to creating user-friendly, accessible web experiences.
 
 ## dependencies
 
