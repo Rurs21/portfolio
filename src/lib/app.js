@@ -1,5 +1,5 @@
 import * as scheme from "./theme"
-import * as language from "../i18n/l10n"
+import * as language from "@/i18n/l10n"
 
 class App {
 	menus

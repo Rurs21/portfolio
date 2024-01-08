@@ -1,7 +1,7 @@
 
 const canvasToDisplaySizeMap = new Map();
 
-export function resizeCanvasToDisplaySize(canvas) {
+function resizeCanvasToDisplaySize(canvas) {
 	var displayWidth = canvas.clientWidth,
 		displayHeight = canvas.clientHeight
 	if (canvasToDisplaySizeMap.has(canvas)) {
@@ -28,7 +28,7 @@ export function resizeCanvasToDisplaySize(canvas) {
 	return needResize
 }
 
-export function observeCanvasResize(canvas) {
+function observeCanvasResize(canvas) {
 	// init with the default canvas size
 	const resizeObserver = new ResizeObserver(onResize)
 	try {
@@ -69,3 +69,5 @@ export function observeCanvasResize(canvas) {
 		}
 	}
 }
+
+export { resizeCanvasToDisplaySize, observeCanvasResize }
