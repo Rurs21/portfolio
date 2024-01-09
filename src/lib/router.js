@@ -4,11 +4,7 @@ const descriptionSelector = 'meta[name="description"]'
 class Router {
 	constructor() {
 		this.routes = {}
-		this.templates = {}
-		this.onresolveroute = undefined
-
-		//var doc404 = parser.parseFromString(page404, "text/html")
-		//this.routes[404] = new Route().cacheDocument(doc404)
+		this.firstResolve = false
 
 		window.onpopstate = () => {this.resolveRoute()}
 	}
@@ -25,49 +21,58 @@ class Router {
 		return this.routes[path]
 	}
 
-	async resolveRoute(path) {
+	async resolve(path) {
 		if (path) {
+			path = historyPush(path)
+		}
+
+		const route = this.#resolveRoute(path)
+
+		try {
+			if (route.content == null) {
+				const html = await this.fetchDocument(path)
+				route.cacheDocument(html)
+			}
+			this.#changeRoute(route)
+		} catch (e) {
+			console.error(e)
+		}
+
+		function historyPush(path) {
 			try {
 				let url = new URL(path, document.baseURI)
 				window.history.pushState({}, "", url.href)
-				path = url.pathname
+				return url.pathname
 			} catch (e) {
 				throw new Error(`Given route '${path}' is not a valid URL`)
 			}
 		}
-
-		try {
-			path = path || window.location.pathname || "/"
-			const route = this.routes[path]
-			if (route !== undefined) {
-				if (route.content == null) {
-					const html = await this.fetchDocument(path)
-					route.cacheDocument(html)
-				}
-				this.changeRoute(route)
-			} else {
-				this.routes[404].render()
-				console.error(`Route ${path} not found`)
-			}
-			if (this.onresolveroute) {
-				this.onresolveroute()
-			}
-		} catch (e) {
-			console.error(e)
-		}
 	}
 
-	changeRoute(route) {
+	#resolveRoute(path) {
+		path = path || window.location.pathname || "/"
+		const route = this.routes[path]
+		if (route == undefined) {
+			return this.routes[404]
+		}
+		return route
+	}
+
+	#changeRoute(route) {
 		const current = document.querySelector("main")
-		if (current !== route.content) {
+		if (current === route.content) {
+			route.callback()
+		} else if (!this.firstResolve) {
+			this.firstResolve = true
+			route.render()
+			route.callback()
+		} else {
 			current.classList.add("fade-out")
 			setTimeout(() => {
 				route.render()
 				route.callback()
 				current.classList.remove("fade-out")
 			}, 250)
-		} else {
-			route.callback()
 		}
 	}
 
@@ -81,9 +86,7 @@ class Router {
 			})
 		}
 		const html = await response.text()
-
-		var doc = parser.parseFromString(html, "text/html")
-
+		const doc = parser.parseFromString(html, "text/html")
 		return doc
 	}
 }
