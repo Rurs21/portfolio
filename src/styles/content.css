@@ -1,5 +1,9 @@
 /* Content specific Stling */
 
+@import url(content/index.css);
+@import url(content/error.css);
+@import url(content/webgl.css);
+
 #content {
 	display: flex;
 	flex-direction: column;

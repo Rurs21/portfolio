@@ -1,15 +1,14 @@
-import App from "./lib/app.js"
-import Router from "./lib/router.js"
-
-import { greeting } from "./index.js"
+import App from "@/app.js"
+import Router from "@/lib/router.js"
 
 
 import initialize from "./initialize.js"
 import { isCssLoaded } from "./utils/misc.js"
 
-import page404 from "@/pages/error/404.html"
+import { greeting } from "./greeting.js"
 import pageWebgl from "@/pages/webgl/index.html"
 import { webgl } from "@/pages/webgl"
+import page404 from "@/pages/error/404.html"
 
 var app = undefined
 
