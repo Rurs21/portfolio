@@ -1,4 +1,4 @@
-import * as scheme from "./theme"
+import * as scheme from "@/lib/theme"
 import * as language from "@/i18n/l10n"
 
 class App {
