@@ -17,8 +17,13 @@ document.addEventListener("DOMContentLoaded", init)
 window.addEventListener("load", initComponents)
 
 function init(event) {
-	app = new App()
-	app.router = initRouter()
+	const router = new Router()
+	router.addRoute("/", greeting, document)
+	router.addRoute(404, undefined, page404)
+	router.addRoute("/webgl", webgl, pageWebgl)
+	router.resolve()
+
+	app = new App(router)
 }
 
 function initComponents(event) {
@@ -39,13 +44,4 @@ function initComponents(event) {
 	} catch (error) {
 		console.error(`Error while initiliazing app \n${error}`)
 	}
-}
-
-function initRouter() {
-	const router = new Router()
-	router.addRoute("/", greeting, document)
-	router.addRoute(404, undefined, page404)
-	router.addRoute("/webgl", webgl, pageWebgl)
-	router.resolveRoute()
-	return router
 }

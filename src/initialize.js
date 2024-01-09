@@ -119,7 +119,7 @@ function initNavigation(app) {
 		for (const navlink of navigationLinks) {
 			navlink.onclick = onLinkClick((href) => {
 				if (href != window.location.href) {
-					app.router.resolveRoute(href)
+					app.router.resolve(href)
 					app.closeMainMenu()
 				}
 			})

@@ -2,9 +2,9 @@ import * as scheme from "./theme"
 import * as language from "@/i18n/l10n"
 
 class App {
-	menus
 
-	constructor() {
+	constructor(router) {
+		this.router = router
 		this.language = language.getUserLanguage()
 		this.scheme = scheme.getUserScheme()
 	}
@@ -16,13 +16,11 @@ class App {
 	set language(lang) {
 		language.changeLanguage(lang)
 		// change cached route
-		if (this.router) {
-			const routes = this.router.routes
-			for (const path in routes) {
-				const current = window.location.pathname
-				if (path != current && routes[path].content != null) {
-					language.changeContentLanguage(lang, routes[path].content)
-				}
+		const routes = this.router.routes
+		for (const path in routes) {
+			const current = window.location.pathname
+			if (path != current && routes[path].content != null) {
+				language.changeContentLanguage(lang, routes[path].content)
 			}
 		}
 	}
@@ -36,7 +34,7 @@ class App {
 	}
 
 	closeMainMenu() {
-		if (this.menus) {
+		if (this.menus && this.menus["main-menu"]) {
 			this.menus["main-menu"].close()
 		}
 	}
