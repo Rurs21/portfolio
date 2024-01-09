@@ -5,7 +5,9 @@
 		"job-title": "Software Developer",
 		"my-summary": "I'm all about resolving problems and creating cool stuff",
 		"about-me": "Seeing a project come to life and really make a difference is what gets me going. I love learning new things, collaborating with others, and building robust software.",
-		"contact-me": "Link up"
+		"contact-me": "Link up",
+		"wip": "Work in progress...",
+		"sorry": "Sorry nothing to see here"
 	},
 	"fr": {
 		"language": "Langage",
@@ -13,6 +15,8 @@
 		"job-title": "Développeur logiciel ",
 		"my-summary": "Je veux résoudre des problèmes & créer de quoi d'unique",
 		"about-me": "Voir un projet prendre vie et faire une différence, c'est ce qui me motive. J'aime apprendre, collaborer avec les autres et construire des logiciels robustes.",
-		"contact-me": "Faites-moi signe"
+		"contact-me": "Faites-moi signe",
+		"wip": "Travail en cours...",
+		"sorry": "Désolé, rien à voir ici"
 	}
 }
