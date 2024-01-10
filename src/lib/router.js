@@ -6,7 +6,7 @@ class Router {
 		this.routes = {}
 		this.firstResolve = false
 
-		window.onpopstate = () => {this.resolveRoute()}
+		window.onpopstate = () => {this.resolve()}
 	}
 
 	addRoute(path, callback, document) {
@@ -16,7 +16,11 @@ class Router {
 			this.routes[path].callback = callback
 		}
 		if (document) {
-			this.routes[path].cacheDocument(document)
+			if(path == "/") {
+				this.routes[path].cacheIndexDocument(document)
+			} else {
+				this.routes[path].cacheDocument(document)
+			}
 		}
 		return this.routes[path]
 	}
@@ -60,7 +64,7 @@ class Router {
 
 	#changeRoute(route) {
 		const current = document.querySelector("main")
-		if (current === route.content) {
+		if (current.childNodes === route.content.childNodes) {
 			route.callback()
 		} else if (!this.firstResolve) {
 			this.firstResolve = true
@@ -103,11 +107,20 @@ class Route {
 		if (!(doc instanceof Document)) {
 			doc = parser.parseFromString(doc, "text/html")
 		}
-
-		const content = doc.body.querySelector("main")
-		if (content == null) {
-			throw new Error(`No <main> content with given document`)
+		if (doc.body == null) {
+			throw new Error(`No <body> content with given document`)
 		}
+
+		this.title = doc.title
+		this.description = doc.querySelector(descriptionSelector).content
+		this.content = document.createElement("main")
+		this.content.append(...doc.body.childNodes)
+		return this
+	}
+
+	cacheIndexDocument(doc) {
+		const content = doc.querySelector("#index")
+
 		this.title = doc.title
 		this.description = doc.querySelector(descriptionSelector).content
 		this.content = content
@@ -115,6 +128,7 @@ class Route {
 	}
 
 	render() {
+		console.log("render?")
 		document.title = this.title
 		document.head
 			.querySelector(descriptionSelector)
