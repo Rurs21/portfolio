@@ -17,9 +17,10 @@ window.addEventListener("load", initComponents)
 
 function init(event) {
 	const router = new Router()
-	router.addRoute("/", greeting, document)
-	router.addRoute(404, undefined, page404)
-	router.addRoute("/webgl", webgl, pageWebgl)
+
+	router.addRoute("/", document, greeting)
+	router.addRoute(404, page404, function () {})
+	router.addRoute("/webgl", pageWebgl, webgl)
 	router.resolve()
 
 	app = new App(router)
