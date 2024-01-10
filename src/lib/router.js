@@ -1,3 +1,5 @@
+import RouterView from "./routerview"
+
 const parser = new DOMParser()
 const descriptionSelector = 'meta[name="description"]'
 
@@ -9,19 +11,8 @@ class Router {
 		window.onpopstate = () => {this.resolve()}
 	}
 
-	addRoute(path, callback, document) {
-		if (this.routes[path] == undefined) {
-			this.routes[path] = new Route(callback)
-		} else {
-			this.routes[path].callback = callback
-		}
-		if (document) {
-			if(path == "/") {
-				this.routes[path].cacheIndexDocument(document)
-			} else {
-				this.routes[path].cacheDocument(document)
-			}
-		}
+	addRoute(path, doc, callback) {
+		this.routes[path] = new Route(doc, callback)
 		return this.routes[path]
 	}
 
@@ -33,10 +24,6 @@ class Router {
 		const route = this.#resolveRoute(path)
 
 		try {
-			if (route.content == null) {
-				const html = await this.fetchDocument(path)
-				route.cacheDocument(html)
-			}
 			this.#changeRoute(route)
 		} catch (e) {
 			console.error(e)
@@ -63,79 +50,52 @@ class Router {
 	}
 
 	#changeRoute(route) {
-		const current = document.querySelector("main")
-		if (current.childNodes === route.content.childNodes) {
-			route.callback()
-		} else if (!this.firstResolve) {
-			this.firstResolve = true
-			route.render()
-			route.callback()
-		} else {
-			current.classList.add("fade-out")
-			setTimeout(() => {
-				route.render()
-				route.callback()
-				current.classList.remove("fade-out")
-			}, 250)
+		const current = document.querySelector("router-view")
+		if (current !== route.content) {
+			if (!this.firstResolve) {
+				this.firstResolve = true
+				current.replaceWith(route.content)
+			} else {
+				current.classList.add("fade-out")
+				setTimeout(() => {
+					current.replaceWith(route.content)
+					current.classList.remove("fade-out")
+				}, 250)
+			}
 		}
-	}
-
-	async fetchDocument(location) {
-		location = location + "/index.html"
-		// TODO handle errors (better lol)
-		const response = await fetch(location)
-		if (!response.ok) {
-			throw new Error(`Error fetching page: ${response.status} ${response.statusText}` , {
-				cause: { code: response.status, location: location}
-			})
-		}
-		const html = await response.text()
-		const doc = parser.parseFromString(html, "text/html")
-		return doc
 	}
 }
 
 class Route {
-	constructor(callback, title, description, content) {
-		this.title = title
-		this.description = description
-		this.content = content
-		this.callback = callback
+	constructor(html, callback) {
+		var doc = html
+		if (!(html instanceof Document)) {
+			doc = this.#parseHtml(html)
+		}
+		this.title = doc.title
+		this.description = doc.querySelector(descriptionSelector).content
+		this.content = new RouterView(this, callback)
+
+		if (html instanceof Document && html === document) {
+			const mainContent = document.querySelector("main")
+			doc = html
+			this.content.append(...mainContent.childNodes)
+			mainContent.appendChild(this.content)
+		} else {
+			this.content.append(...doc.body.childNodes)
+		}
+
+
 	}
 
-	cacheDocument(doc) {
-		if (!(doc instanceof Document)) {
-			doc = parser.parseFromString(doc, "text/html")
+	#parseHtml(html) {
+		if (!(html instanceof Document)) {
+			html = parser.parseFromString(html, "text/html")
 		}
-		if (doc.body == null) {
+		if (html.body == null) {
 			throw new Error(`No <body> content with given document`)
 		}
-
-		this.title = doc.title
-		this.description = doc.querySelector(descriptionSelector).content
-		this.content = document.createElement("main")
-		this.content.append(...doc.body.childNodes)
-		return this
-	}
-
-	cacheIndexDocument(doc) {
-		const content = doc.querySelector("#index")
-
-		this.title = doc.title
-		this.description = doc.querySelector(descriptionSelector).content
-		this.content = content
-		return this
-	}
-
-	render() {
-		console.log("render?")
-		document.title = this.title
-		document.head
-			.querySelector(descriptionSelector)
-			.setAttribute("content", this.description)
-		document.body
-			.querySelector("main")
-			.replaceWith(this.content)
+		return html
 	}
 }
 

@@ -44,7 +44,7 @@ function typeOutTitle() {
 		}
 	}
 
-	onRemove(document.querySelector("main"), () => {
+	onRemove(document.querySelector("router-view"), () => {
 		if (!done) {
 			done = true
 			titleElement.innerText = title
