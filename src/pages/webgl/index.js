@@ -4,10 +4,15 @@ import { initBuffers } from "./init-buffers.js"
 import { drawScene } from "./draw-scene.js"
 import { observeCanvasResize } from "@/utils/canvas.js"
 
+import { View } from "@/lib/view";
+import pageWebgl from "./index.html"
+
+const webglView = new View(pageWebgl, webgl)
+
 let cubeRotation = 0.0
 let deltaTime = 0
 
-export function webgl() {
+function webgl() {
 	const canvas = document.querySelector("#glcanvas")
 	// reset to auto after route change
 	canvas.setAttribute("height", "auto")
@@ -123,3 +128,5 @@ function loadShader(gl, type, source) {
 
 	return shader
 }
+
+export default webglView

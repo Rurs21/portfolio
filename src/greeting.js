@@ -1,4 +1,8 @@
+import { RouteView, View } from "@/lib/view"
 import { onRemove } from "@/utils/misc"
+
+const greetingView = new View(document, greeting)
+greetingView.content = document.querySelector("main").childNodes
 
 function greeting() {
 	typeOutTitle()
@@ -18,14 +22,10 @@ function typeOutTitle() {
 		title = titleElement.textContent
 		titleElement.innerHTML = ""
 		titleElement.removeAttribute("style")
-		addCursor()
-		setTimeout(typeOut, 1500)
-	}, 300)
-
-	function addCursor () {
 		titleElement.append(textElement)
 		titleElement.append(cursorElement)
-	}
+		setTimeout(typeOut, 1500)
+	}, 300)
 
 	var done = false
 	let currentIndex = 0
@@ -44,12 +44,13 @@ function typeOutTitle() {
 		}
 	}
 
-	onRemove(document.querySelector("router-view"), () => {
+	onRemove(document.querySelector(RouteView.tagNameValue), () => {
 		if (!done) {
 			done = true
 			titleElement.innerText = title
 		}
 	})
+
 }
 
-export { greeting }
+export default greetingView
