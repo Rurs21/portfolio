@@ -11,6 +11,7 @@ export default {
 		}
 	},
 	build: {
+		emptyOutDir: true,
 		outDir: path.resolve(__dirname, "dist"),
 	}
 }
