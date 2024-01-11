@@ -10,6 +10,7 @@ export default function initialize(app) {
 	}
 
 	document.querySelector("noscript").remove()
+	document.querySelector("main").removeAttribute("id")
 
 	function initializer() {
 		this.menu = () => {

@@ -2,14 +2,13 @@ import App from "@/app.js"
 import Router from "@/lib/router.js"
 
 
+
 import initialize from "./initialize.js"
 import { isCssLoaded } from "./utils/misc.js"
 
-import { greeting } from "./greeting.js"
-import pageWebgl from "@/pages/webgl/index.html"
-import { webgl } from "@/pages/webgl"
-import page404 from "@/pages/error/404.html"
-
+import indexView from "./greeting.js"
+import webglView from "@/pages/webgl"
+import eror404View from "@/pages/error/404"
 var app = undefined
 
 document.addEventListener("DOMContentLoaded", init)
@@ -17,10 +16,9 @@ window.addEventListener("load", initComponents)
 
 function init(event) {
 	const router = new Router()
-
-	router.addRoute("/", document, greeting)
-	router.addRoute(404, page404, function () {})
-	router.addRoute("/webgl", pageWebgl, webgl)
+	router.addRoute("/", indexView)
+	router.addRoute(404, eror404View)
+	router.addRoute("/webgl", webglView)
 	router.resolve()
 
 	app = new App(router)

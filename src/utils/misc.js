@@ -14,6 +14,24 @@ function isCssLoaded(doc) {
 }
 
 /**
+ * Converts a given string to a valid HTML element ID.
+ *
+ * - removes leading and trailing characters that are not letters.
+ * - replaces any character that is not a letter or a digit with a dash ('-')
+ * - converts the string to lowercase
+ *
+ * @param {String} str - The string to be converted into a valid ID
+ * @returns {String} A valid HTML element ID derived from the input string.
+ */
+function toValidId(str) {
+	return str
+		.replace(/^[^a-zA-Z]+/, "")
+		.replace(/[^a-zA-Z]+$/, "")
+		.replace(/[^a-zA-Z0-9-]/g, "-")
+		.toLowerCase()
+}
+
+/**
  * Attach a callback function to be executed when the specified element is removed from the DOM.
  *
  * This function uses a MutationObserver to detect when the element is removed from its parent node.
@@ -93,15 +111,15 @@ function onLinkClick(callback) {
  * @param {Function} callback - The callback function to be executed when the document is ready.
  */
 function onInterative(callback) {
-	const id = setInterval(function() {
+	const id = setInterval(function () {
 		switch (document.readyState) {
 			case "interactive":
 			case "complete":
 				callback(new Event("documentinteractive"))
 				clearInterval(id)
-			break;
+				break
 		}
-	}, 2);
+	}, 2)
 }
 
 /**
@@ -109,25 +127,25 @@ function onInterative(callback) {
  * https://stackoverflow.com/a/52809105
  */
 (() => {
-    let oldPushState = history.pushState;
+    let oldPushState = history.pushState
     history.pushState = function pushState() {
-        let ret = oldPushState.apply(this, arguments);
-        window.dispatchEvent(new Event('pushstate'));
-        window.dispatchEvent(new Event('locationchange'));
-        return ret;
-    };
+		let ret = oldPushState.apply(this, arguments)
+		window.dispatchEvent(new Event("pushstate"))
+		window.dispatchEvent(new Event("locationchange"))
+		return ret
+	}
 
-    let oldReplaceState = history.replaceState;
-    history.replaceState = function replaceState() {
-        let ret = oldReplaceState.apply(this, arguments);
-        window.dispatchEvent(new Event('replacestate'));
-        window.dispatchEvent(new Event('locationchange'));
-        return ret;
-    };
+	let oldReplaceState = history.replaceState
+	history.replaceState = function replaceState() {
+        let ret = oldReplaceState.apply(this, arguments)
+        window.dispatchEvent(new Event('replacestate'))
+        window.dispatchEvent(new Event('locationchange'))
+        return ret
+    }
 
     window.addEventListener('popstate', () => {
-        window.dispatchEvent(new Event('locationchange'));
-    });
-})();
+        window.dispatchEvent(new Event('locationchange'))
+    })
+})()
 
-export { isCssLoaded, onRemove, onLanguageChange, onLinkClick, onInterative }
+export { isCssLoaded, toValidId, onRemove, onLanguageChange, onLinkClick, onInterative }

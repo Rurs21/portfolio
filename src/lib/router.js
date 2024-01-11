@@ -1,19 +1,26 @@
-import RouterView from "./routerview"
-
-const parser = new DOMParser()
-const descriptionSelector = 'meta[name="description"]'
+import { RouteView } from "./view"
 
 class Router {
 	constructor() {
 		this.routes = {}
 		this.firstResolve = false
-
 		window.onpopstate = () => {this.resolve()}
 	}
 
-	addRoute(path, doc, callback) {
-		this.routes[path] = new Route(doc, callback)
-		return this.routes[path]
+	addRoute(path, view) {
+		if (this.routes[path] != undefined) {
+			throw new Error(`Route "${path}" is already defined`)
+		}
+
+		const routeview = new RouteView(view)
+		this.routes[path] = routeview
+
+		if (path === "/") {
+			const content = document.querySelector("main")
+			content.prepend(routeview)
+		}
+
+		return routeview
 	}
 
 	async resolve(path) {
@@ -50,52 +57,20 @@ class Router {
 	}
 
 	#changeRoute(route) {
-		const current = document.querySelector("router-view")
-		if (current !== route.content) {
+		const current = document.querySelector(RouteView.tagNameValue)
+
+		if (current !== route) {
 			if (!this.firstResolve) {
 				this.firstResolve = true
-				current.replaceWith(route.content)
+				current.replaceWith(route)
 			} else {
 				current.classList.add("fade-out")
 				setTimeout(() => {
-					current.replaceWith(route.content)
+					current.replaceWith(route)
 					current.classList.remove("fade-out")
 				}, 250)
 			}
 		}
-	}
-}
-
-class Route {
-	constructor(html, callback) {
-		var doc = html
-		if (!(html instanceof Document)) {
-			doc = this.#parseHtml(html)
-		}
-		this.title = doc.title
-		this.description = doc.querySelector(descriptionSelector).content
-		this.content = new RouterView(this, callback)
-
-		if (html instanceof Document && html === document) {
-			const mainContent = document.querySelector("main")
-			doc = html
-			this.content.append(...mainContent.childNodes)
-			mainContent.appendChild(this.content)
-		} else {
-			this.content.append(...doc.body.childNodes)
-		}
-
-
-	}
-
-	#parseHtml(html) {
-		if (!(html instanceof Document)) {
-			html = parser.parseFromString(html, "text/html")
-		}
-		if (html.body == null) {
-			throw new Error(`No <body> content with given document`)
-		}
-		return html
 	}
 }
 
