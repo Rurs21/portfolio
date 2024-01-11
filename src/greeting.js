@@ -1,5 +1,5 @@
 import { RouteView, View } from "@/lib/view"
-import { onRemove } from "@/utils/misc"
+import { onRemove } from "@/utils/events"
 
 const greetingView = new View(document, greeting)
 greetingView.content = document.querySelector("main").childNodes
