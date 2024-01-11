@@ -19,8 +19,8 @@ class App {
 		const routes = this.router.routes
 		for (const path in routes) {
 			const current = window.location.pathname
-			if (path != current && routes[path].content != null) {
-				language.changeContentLanguage(lang, routes[path].content)
+			if (path != current && routes[path] != null) {
+				language.changeContentLanguage(lang, routes[path])
 			}
 		}
 	}
