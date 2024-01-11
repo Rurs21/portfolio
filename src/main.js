@@ -1,14 +1,13 @@
 import App from "@/app.js"
 import Router from "@/lib/router.js"
 
-
-
 import initialize from "./initialize.js"
 import { isCssLoaded } from "./utils/misc.js"
 
-import indexView from "./greeting.js"
-import webglView from "@/pages/webgl"
-import eror404View from "@/pages/error/404"
+import indexView from "@/views/greeting"
+import webglView from "@/views/webgl"
+import eror404View from "@/views/error/404"
+
 var app = undefined
 
 document.addEventListener("DOMContentLoaded", init)
