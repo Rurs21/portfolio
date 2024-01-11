@@ -45,9 +45,5 @@ None
 
 ### Fix
 
-- clean css
 - better error handling
-- dark color scheme without css (fix black icon/svg)
-- language change
-	- greeting
-	- router
+- maybe minify html
