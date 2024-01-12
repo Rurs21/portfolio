@@ -14,7 +14,7 @@ My portfolio website
 tl;dr: Portfolio uses vanilla JS and the main content is still accessible without JS and CSS.
 
 In creating this portfolio website, I drew inspiration from the Japanese business card, 名刺 (Meishi), which is known for its simplicity, elegance, and pivotal role in professional interactions.
-I opted for vanilla JavaScript to keep it simple and engineered a site that remains functional without JS and CSS. This approach ensures broad compatibility and rapid load times, with a focus on efficiently and elegantly delivering content.
+I opted for vanilla JavaScript to keep it simple and engineered a site that remains functional without CSS and presentable  without JS. This approach ensures broad compatibility and rapid load times, with a focus on efficiently and elegantly delivering content.
 
 ## dependencies
 
