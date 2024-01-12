@@ -30,18 +30,13 @@
 }
 
 .sub-menu {
-	z-index: 3;
-	padding-top: 7em;
-}
-
-.sub-menu {
-	z-index: 3;
+	z-index: 4;
 	padding-top: 7em;
 }
 
 .sub-sub-menu {
-	z-index: 4;
-	padding-top: 8em;
+	z-index: 3;
+	padding-top: 13.5em;
 }
 
 .top-menu {
@@ -86,8 +81,17 @@ a.round-button[aria-disabled="true"] {
 
 /* specifics rules */
 
+#language-menu {
+	padding-top: 7.7em;
+}
+
+#language-menu label {
+	font-size: x-large;
+	font-weight: 150;
+}
+
 #language-menu > * {
-	margin: 0 0 0.25em 1em;
+	margin: 0 0 0.32em 1em;
 }
 
 #navigation-menu > #home-nav {
