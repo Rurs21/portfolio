@@ -7,6 +7,12 @@
 
 /* Responsive stuff */
 
+@media (max-width: 340px) {
+	.horizontal-menu > * {
+		margin: 0 0 0 0.75em;
+	}
+}
+
 @media (min-width: 768px) {
 	:root {
 		font-size: 1.125em; /* 18px (1.125 * 16px) */

@@ -10,7 +10,7 @@
 	animation: fadeOut 0.25s ease-in-out forwards !important;
 }
 
-#content > * {
+#content route-view {
 	opacity: 0;
 	animation: fadeIn 0.75s ease-in-out forwards;
 }

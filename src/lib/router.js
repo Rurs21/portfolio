@@ -61,7 +61,6 @@ class Router {
 
 		if (current !== route) {
 			if (!this.firstResolve) {
-				this.firstResolve = true
 				current.replaceWith(route)
 			} else {
 				current.classList.add("fade-out")
@@ -71,6 +70,8 @@ class Router {
 				}, 250)
 			}
 		}
+
+		this.firstResolve = true
 	}
 }
 
