@@ -17,17 +17,19 @@ function typeOutTitle() {
 	cursorElement.classList.add("cursor")
 
 	var title = titleElement.textContent
+	var done = false
 
 	setTimeout(() => {
-		title = titleElement.textContent
-		titleElement.innerHTML = ""
-		titleElement.removeAttribute("style")
-		titleElement.append(textElement)
-		titleElement.append(cursorElement)
-		setTimeout(typeOut, 1500)
+		if (!done) {
+			title = titleElement.textContent
+			titleElement.innerHTML = ""
+			titleElement.removeAttribute("style")
+			titleElement.append(textElement)
+			titleElement.append(cursorElement)
+			setTimeout(typeOut, 1500)
+		}
 	}, 100)
 
-	var done = false
 	let currentIndex = 0
 	function typeOut () {
 		if (done) {
