@@ -5,93 +5,92 @@
 @import url(styles/animation.css);
 @import url(styles/misc.css);
 
-
 /* Responsive stuff */
 
 @media (min-width: 768px) {
-    :root {
-        font-size: 1.125em; /* 18px (1.125 * 16px) */
-    }
-    h1 {
-        font-size: 2.5em;
-    }
-    h2 {
-        font-size: 2em;
-    }
-    #main-menu {
-        padding-top: 1.25em;
-    }
-    .horizontal-menu {
-        padding-right: 1em;
-        padding-left: 1em;
-    }
-    #rose {
-        width: 70%;
-    }
-    .square-icon {
-        height: 4.25em;
-        width: 4.25em;
-    }
-    #contact-links > .square-icon {
-        margin-right: 1em;
-    }
+	:root {
+		font-size: 1.125em; /* 18px (1.125 * 16px) */
+	}
+	h1 {
+		font-size: 2.5em;
+	}
+	h2 {
+		font-size: 2em;
+	}
+	#main-menu {
+		padding-top: 1.25em;
+	}
+	.horizontal-menu {
+		padding-right: 1em;
+		padding-left: 1em;
+	}
+	#rose {
+		width: 70%;
+	}
+	.square-icon {
+		height: 4.25em;
+		width: 4.25em;
+	}
+	#contact-links > .square-icon {
+		margin-right: 1em;
+	}
 }
 
 @media (min-width: 1024px) {
-    :root {
-        font-size: 1.25em; /* 20px (1.25 * 16px) */
-    }
-    body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh; /* Ensure full viewport height */
-    }
-    h1 {
-        font-size: 3em;
-    }
-    h2 {
-        font-size: 2.5em;
-    }
-    body > * {
-        width: 75%;
-    }
-    #rose {
-        position: absolute;
-        top: 5%;
-        right: 12.75%;
-        width: 25em;
-    }
+	:root {
+		font-size: 1.25em; /* 20px (1.25 * 16px) */
+	}
+	body {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-height: 100vh; /* Ensure full viewport height */
+	}
+	h1 {
+		font-size: 3em;
+	}
+	h2 {
+		font-size: 2.5em;
+	}
+	body > * {
+		width: 75%;
+	}
+	#rose {
+		position: absolute;
+		top: 5%;
+		right: 12.75%;
+		width: 25em;
+	}
 }
 
 @media (min-width: 1440px) {
-    :root {
-        font-size: 1.375em; /* 22px (1.375 * 16px) */
-    }
-    body > * {
-        width: 60%;
-    }
-    #rose {
-        right: 20.5%;
-        width: 30.5em;
-    }
+	:root {
+		font-size: 1.375em; /* 22px (1.375 * 16px) */
+	}
+	body > * {
+		width: 60%;
+	}
+	#rose {
+		right: 20.5%;
+		width: 30.5em;
+	}
 }
 
 @media (min-width: 3840px) {
-    :root {
-        font-size: 2em; /* 32px (2 * 16px) */
-    }
-    h1 {
-        font-size: 4em;
-    }
-    h2 {
-        font-size: 3em;
-    }
-    body > * {
-        width: 40%;
-    }
-    #rose {
-        right: 31%;
-        width: 40em;
-    }
+	:root {
+		font-size: 2em; /* 32px (2 * 16px) */
+	}
+	h1 {
+		font-size: 4em;
+	}
+	h2 {
+		font-size: 3em;
+	}
+	body > * {
+		width: 40%;
+	}
+	#rose {
+		right: 31%;
+		width: 40em;
+	}
 }

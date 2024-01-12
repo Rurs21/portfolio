@@ -16,7 +16,7 @@ function typeOutTitle() {
 	const cursorElement = document.createElement("span")
 	cursorElement.classList.add("cursor")
 
-	var title
+	var title = titleElement.textContent
 
 	setTimeout(() => {
 		title = titleElement.textContent
@@ -25,7 +25,7 @@ function typeOutTitle() {
 		titleElement.append(textElement)
 		titleElement.append(cursorElement)
 		setTimeout(typeOut, 1500)
-	}, 300)
+	}, 100)
 
 	var done = false
 	let currentIndex = 0

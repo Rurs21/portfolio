@@ -108,7 +108,6 @@ function setSchemeToggler(app, elementId = "scheme-toggle") {
 
 function initNavigation(app) {
 
-
 	setNavigationLinks("#navigation-menu a")
 	setActiveLink()
 	window.addEventListener('locationchange', function () {

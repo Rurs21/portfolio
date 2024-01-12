@@ -5,6 +5,9 @@ import * as svgUtils from "./svg-utils.js"
 import { optimize } from "svgo"
 import svgoConfig from "./svgo.config.js"
 
+/**
+ * Plugins that replace the img with referenced svg with the actual svg inline inside html files
+ */
 export default function htmlSvgInline(options = {}) {
 
 	const postfix = "?html-import"
