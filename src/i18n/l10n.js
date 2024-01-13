@@ -34,13 +34,27 @@ function changeLanguage(lang) {
  * based on the provided language.
  *
  * @param {string} lang - ISO 639-1 Language Code
- * @param {HTMLElement} element - The root element to search for elements with data-translate
+ * @param {HTMLElement | HTMLCollection} content - HTML element or collection to be translate
  */
-function changeContentLanguage(lang, rootElement) {
-	for (const element of rootElement.querySelectorAll("[data-translate]")) {
-		const key = element.getAttribute("data-translate")
-		element.textContent = translations[lang][key] || key
+function changeContentLanguage(lang, content) {
+	if (!content) {
+		throw new ReferenceError(`Content is undefined`)
 	}
+	if (typeof content[Symbol.iterator] === 'function') {
+		for (const element of content) {
+			translateContent(element)
+		}
+	} else {
+		translateContent(content)
+	}
+
+	function translateContent(rootElement) {
+		for (const element of rootElement.querySelectorAll("[data-translate]")) {
+			const key = element.getAttribute("data-translate")
+			element.textContent = translations[lang][key] || key
+		}
+	}
+
 }
 
 export { getUserLanguage, changeContentLanguage, changeLanguage }

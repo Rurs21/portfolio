@@ -6,15 +6,20 @@ const descriptionSelector = 'meta[name="description"]'
 class View {
 	constructor(html, connectedCallback, disconnectedCallback) {
 		var doc = html
-		if (!(html instanceof Document)) {
+		var template
+
+		if (!(html instanceof Document) && typeof html === "string") {
 			doc = parser.parseFromString(html, "text/html")
+			template = doc.body.querySelector("template")
+		} else if (html instanceof HTMLTemplateElement) {
+			doc = document
+			template = html
 		}
-		if (doc.body == null) {
-			throw new Error(`No <body> content with given document`)
-		}
+
 		this.title = doc.title
 		this.description = doc.querySelector(descriptionSelector).content
-		this.content = doc.body.childNodes
+		this.template = template
+		//this.content = template.content.children
 		this.connectedCallback = connectedCallback
 	}
 
@@ -26,32 +31,37 @@ class View {
 	}
 }
 
-const tagName = "route-view"
+const tagName = "content-view"
 
-class RouteView extends HTMLElement {
+class ContentView extends HTMLElement {
 	static tagNameValue = tagName
 
 	constructor(view) {
 		super()
-		this.view = view
-		this.id = toValidId(this.view.title)
-		this.append(...view.content)
+		if (view) {
+			this.view = view
+			this.id = view.template.id || toValidId(view.title)
+			this.classList = view.template.classList
+			this.append(...view.template.content.children)
+		}
 	}
 
 	connectedCallback() {
-		this.view.setPageInfo()
-		if (this.view.connectedCallback) {
+		if (this.view) {
+			this.view.setPageInfo
+		}
+		if (this.view && this.view.connectedCallback) {
 			this.view.connectedCallback()
 		}
 	}
 
 	disconnectedCallback() {
-		if (this.view.disconnectedCallback) {
+		if (this.view && this.view.disconnectedCallback) {
 			this.view.disconnectedCallback()
 		}
 	}
 }
 
-customElements.define(tagName, RouteView)
+customElements.define(tagName, ContentView)
 
-export { View, RouteView }
+export { View, ContentView }
