@@ -1,10 +1,11 @@
-import { RouteView } from "./view"
+import { ContentView } from "./view"
 
 class Router {
 	constructor() {
 		this.routes = {}
-		this.firstResolve = false
 		window.onpopstate = () => {this.resolve()}
+
+		this.appView = document.getElementById('app-view')
 	}
 
 	addRoute(path, view) {
@@ -12,15 +13,7 @@ class Router {
 			throw new Error(`Route "${path}" is already defined`)
 		}
 
-		const routeview = new RouteView(view)
-		this.routes[path] = routeview
-
-		if (path === "/") {
-			const content = document.querySelector("main")
-			content.prepend(routeview)
-		}
-
-		return routeview
+		this.routes[path] = new ContentView(view)
 	}
 
 	async resolve(path) {
@@ -28,9 +21,8 @@ class Router {
 			path = historyPush(path)
 		}
 
-		const route = this.#resolveRoute(path)
-
 		try {
+			const route = this.#resolveRoute(path)
 			this.#changeRoute(route)
 		} catch (e) {
 			console.error(e)
@@ -57,21 +49,18 @@ class Router {
 	}
 
 	#changeRoute(route) {
-		const current = document.querySelector(RouteView.tagNameValue)
+		const current = this.appView.firstElementChild
 
-		if (current !== route) {
-			if (!this.firstResolve) {
+		if (!current || !(current instanceof ContentView)) {
+			this.appView.append(route)
+		} else if (current !== route) {
+			current.classList.add("fade-out")
+			setTimeout(() => {
 				current.replaceWith(route)
-			} else {
-				current.classList.add("fade-out")
-				setTimeout(() => {
-					current.replaceWith(route)
-					current.classList.remove("fade-out")
-				}, 250)
-			}
+				current.classList.remove("fade-out")
+			}, 325)
 		}
 
-		this.firstResolve = true
 	}
 }
 

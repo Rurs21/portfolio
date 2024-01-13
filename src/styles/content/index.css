@@ -1,6 +1,6 @@
 /* index content */
 
-#hello-world > * {
+.hello-world > * {
 	margin-top: 4em;
 }
 

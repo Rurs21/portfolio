@@ -1,11 +1,18 @@
-import { RouteView, View } from "@/lib/view"
+import { ContentView, View } from "@/lib/view"
 import { onRemove } from "@/utils/events"
 
-const greetingView = new View(document, greeting)
-greetingView.content = document.querySelector("main").childNodes
+const indexContent = document.createElement("template")
+indexContent.classList.add("hello-world")
+indexContent.content.append(...document.querySelector("main").children)
+
+const greetingView = new View(indexContent, greeting)
 
 function greeting() {
-	typeOutTitle()
+	try {
+		typeOutTitle()
+	} catch (error) {
+		console.error(`Greeting error:\n${error}`)
+	}
 }
 
 function typeOutTitle() {
@@ -46,7 +53,7 @@ function typeOutTitle() {
 		}
 	}
 
-	onRemove(document.querySelector(RouteView.tagNameValue), () => {
+	onRemove(document.querySelector(ContentView.tagNameValue), () => {
 		if (!done) {
 			done = true
 			titleElement.innerText = title

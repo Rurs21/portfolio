@@ -2,7 +2,6 @@ import * as scheme from "@/lib/theme"
 import * as language from "@/i18n/l10n"
 
 class App {
-
 	constructor(router) {
 		this.router = router
 		this.language = language.getUserLanguage()
@@ -14,14 +13,20 @@ class App {
 	}
 
 	set language(lang) {
-		language.changeLanguage(lang)
-		// change cached route
-		const routes = this.router.routes
-		for (const path in routes) {
-			const current = window.location.pathname
-			if (path != current && routes[path] != null) {
-				language.changeContentLanguage(lang, routes[path])
+		try {
+			// change document language
+			language.changeLanguage(lang)
+			// change cached route content
+			const routes = this.router.routes
+			for (const path in routes) {
+				const current = window.location.pathname
+				const content = routes[path]
+				if (path != current && content != undefined) {
+					language.changeContentLanguage(lang, content)
+				}
 			}
+		} catch (error) {
+			console.error(`language change error\n${error}`)
 		}
 	}
 
