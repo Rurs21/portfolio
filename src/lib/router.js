@@ -54,11 +54,11 @@ class Router {
 		if (!current || !(current instanceof ContentView)) {
 			this.appView.append(route)
 		} else if (current !== route) {
-			current.classList.add("fade-out")
+			this.appView.classList.add("fade-out")
 			setTimeout(() => {
 				current.replaceWith(route)
-				current.classList.remove("fade-out")
-			}, 325)
+				this.appView.classList.remove("fade-out")
+			}, 475)
 		}
 
 	}
