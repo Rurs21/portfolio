@@ -72,7 +72,7 @@ async function loadIcons(element) {
 }
 
 function drawRose() {
-	const svgRose = rose("#E4345A", 2.7, "3.5s")
+	const svgRose = rose("#E4345A", 7, "3.5s")
 
 	const roseElement = document.getElementById("rose")
 	roseElement.classList.add("start", "unfilled")

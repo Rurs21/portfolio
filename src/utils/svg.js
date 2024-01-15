@@ -31,6 +31,7 @@ export function createCoordinatesSVG(
 ) {
 	const svgElement = document.createElementNS(svgNS, "svg")
 	const group = document.createElementNS(svgNS, "g")
+	svgElement.setAttribute("xmlns", svgNS)
 
 	var pathElement = createPathElement(coordinates, color, strokeWidth)
 	if (drawingDuration != null) {
