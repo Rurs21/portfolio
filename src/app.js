@@ -1,3 +1,4 @@
+import '@/lib/blackmagic';
 import * as scheme from "@/lib/theme"
 import * as language from "@/i18n/l10n"
 
