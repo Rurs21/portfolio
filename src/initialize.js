@@ -2,6 +2,7 @@ import Menu from "@/lib/menu"
 import { rose } from "@/lib/flower"
 import { loadInlineSVG } from "@/utils/svg"
 import { onLinkClick } from "@/utils/events"
+import { randomizeTextChar } from "./lib/glitchText"
 
 export default function initialize(app) {
 
@@ -9,6 +10,7 @@ export default function initialize(app) {
 		throw new ReferenceError("app is undefined")
 	}
 
+	document.body.classList.remove("no-js")
 	document.querySelector("noscript").remove()
 	document.querySelector("main").removeAttribute("class")
 
@@ -119,7 +121,7 @@ function initNavigation(app) {
 		for (const navlink of navigationLinks) {
 			navlink.onclick = onLinkClick((href) => {
 				if (href != window.location.href) {
-					app.router.resolve(href)
+					app.resolveRoute(href)
 					app.closeMainMenu()
 				}
 			})

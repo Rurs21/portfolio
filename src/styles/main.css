@@ -21,8 +21,11 @@ body, html {
 	--light-background-color: #e7e9ea; /* White Marble */
 	--light-secondary-color: #c0c0c0;
 	--light-copyright-color: #676869;
-	--light-rose-stroke: #fbc4d0; /* #ffbac1; ##efa3aa; #fcdae4 #fdd7de #ff93a2 #f09bb1 #e86c82 faabbc ffcfcf*/
-	--light-rose-fill: #f7f0f2; /* #fde5ec; #f7f0f2; #fcdae4*/
+	--light-rose-stroke: #fbc4d0;
+	--light-rose-fill: #f7f0f2;
+	--light-glitch-text-color1: #ff0051;
+	--light-glitch-text-color2: #00ff00;
+	--light-glitch-text-color3:  #0000ff;
 
 	--dark-contrast-color: #ffffff;
 	--dark-text-color: #eeeeee;
@@ -31,6 +34,10 @@ body, html {
 	--dark-copyright-color: #858585;
 	--dark-rose-stroke: #e4345a;
 	--dark-rose-fill: #960018;
+	--dark-glitch-text-color1: #00ffff;
+	--dark-glitch-text-color2: #ff00ff;
+	--dark-glitch-text-color3: #ffff00;
+
 
 	--contrast-color: var(--light-contrast-color);
 	--text-color: var(--light-text-color);
@@ -39,6 +46,9 @@ body, html {
 	--copyright-color: var(--light-copyright-color);
 	--rose-stroke: var(--light-rose-stroke);
 	--rose-fill: var(--light-rose-fill);
+	--glitch-text-color1: var(--light-glitch-text-color1);
+	--glitch-text-color2: var(--light-glitch-text-color2);
+	--glitch-text-color3: var(--light-glitch-text-color3);
 
 	--system-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 		Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, system-ui;
@@ -61,6 +71,9 @@ body, html {
 		--copyright-color: var(--dark-copyright-color);
 		--rose-stroke: var(--dark-rose-stroke);
 		--rose-fill: var(--dark-rose-fill);
+		--glitch-text-color1: var(--dark-glitch-text-color1);
+		--glitch-text-color2: var(--dark-glitch-text-color2);
+		--glitch-text-color3: var(--dark-glitch-text-color3);
 	}
 	.icon img[src$=".svg"],
 	.icon img[src^="data:image/svg"] {
@@ -76,6 +89,9 @@ body.light {
 	--copyright-color: var(--light-copyright-color);
 	--rose-stroke: var(--light-rose-stroke);
 	--rose-fill: var(--light-rose-fill);
+	--glitch-text-color1: var(--light-glitch-text-color1);
+	--glitch-text-color2: var(--light-glitch-text-color2);
+	--glitch-text-color3: var(--light-glitch-text-color3);
 }
 
 body.dark {
@@ -86,6 +102,9 @@ body.dark {
 	--copyright-color: var(--dark-copyright-color);
 	--rose-stroke: var(--dark-rose-stroke);
 	--rose-fill: var(--dark-rose-fill);
+	--glitch-text-color1: var(--dark-glitch-text-color1);
+	--glitch-text-color2: var(--dark-glitch-text-color2);
+	--glitch-text-color3: var(--dark-glitch-text-color3);
 }
 
 .light .icon img[src$=".svg"],

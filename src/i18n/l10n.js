@@ -1,6 +1,7 @@
 import translations from "./translations.json"
 
 const languages = ["en", "fr"]
+const translateAttr = "data-translate"
 
 /**
  * Return language saved in local storage or the navigator default language
@@ -40,7 +41,7 @@ function changeContentLanguage(lang, content) {
 	if (!content) {
 		throw new ReferenceError(`Content is undefined`)
 	}
-	if (typeof content[Symbol.iterator] === 'function') {
+	if (typeof content[Symbol.iterator] === "function") {
 		for (const element of content) {
 			translateContent(element)
 		}
@@ -49,12 +50,21 @@ function changeContentLanguage(lang, content) {
 	}
 
 	function translateContent(rootElement) {
-		for (const element of rootElement.querySelectorAll("[data-translate]")) {
-			const key = element.getAttribute("data-translate")
+		for (const element of queryTranslateElem(rootElement)) {
+			const key = element.getAttribute(translateAttr)
 			element.textContent = translations[lang][key] || key
 		}
 	}
-
 }
 
-export { getUserLanguage, changeContentLanguage, changeLanguage }
+/**
+ * Queries and returns all elements within a given root element that have the specified translate attribute.
+ *
+ * @param {Element} rootElement - The root DOM element to begin the search from.
+ * @returns {NodeList} NodeList of elements that have the specified translate attribute.
+ */
+function queryTranslateElem(rootElement) {
+	return rootElement.querySelectorAll(`[${translateAttr}]`)
+}
+
+export { getUserLanguage, changeLanguage, changeContentLanguage, queryTranslateElem }

@@ -21,6 +21,7 @@ class View {
 		this.template = template
 		//this.content = template.content.children
 		this.connectedCallback = connectedCallback
+		this.disconnectedCallback = disconnectedCallback
 	}
 
 	setPageInfo() {

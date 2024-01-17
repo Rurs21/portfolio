@@ -1,5 +1,3 @@
-/* Content specific Stling */
-
 @import url(content/index.css);
 @import url(content/error.css);
 @import url(content/webgl.css);
@@ -38,4 +36,11 @@
 	transition: fill 0.5s, stroke 0.5s;
 	stroke: var(--rose-stroke);
 	fill: var(--rose-fill);
+}
+
+#rose.unfilled path {
+	fill: transparent;
+}
+#rose.start path {
+	transition: fill 2.75s;
 }
