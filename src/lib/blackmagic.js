@@ -37,11 +37,10 @@ function wrapPropertySetter(obj, prop, callbackFn) {
 }
 
 // The function is added as a method to the Object & Object Prototype.
-const wrapSetterFn = wrapPropertySetter
-Object[wrapSetterFn.name] = wrapSetterFn
-Object.defineProperty(Object.prototype, wrapSetterFn.name, {
+Object.wrapPropertySetter = wrapPropertySetter
+Object.defineProperty(Object.prototype, "wrapPropertySetter", {
 	value: function (prop, callbackFn) {
-		return wrapSetterFn(this, prop, callbackFn)
+		return wrapPropertySetter(this, prop, callbackFn)
 	},
 	enumerable: false,
 	configurable: true,
