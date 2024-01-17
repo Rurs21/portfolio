@@ -1,5 +1,4 @@
-import { ContentView, View } from "@/lib/view"
-import { onRemove } from "@/utils/events"
+import { View } from "@/lib/view"
 
 const indexContent = document.createElement("template")
 indexContent.classList.add("hello-world")
@@ -17,6 +16,10 @@ function greeting() {
 
 function typeOutTitle() {
 	const titleElement = document.getElementById("job-title")
+	if (titleElement.querySelector(".cursor") != undefined) {
+		return
+	}
+
 	titleElement.style.visibility = "hidden"
 
 	const textElement = document.createElement("span")
@@ -24,42 +27,27 @@ function typeOutTitle() {
 	cursorElement.classList.add("cursor")
 
 	var title = titleElement.textContent
-	var done = false
 
 	setTimeout(() => {
-		if (!done) {
-			title = titleElement.textContent
-			titleElement.innerHTML = ""
-			titleElement.removeAttribute("style")
-			titleElement.append(textElement)
-			titleElement.append(cursorElement)
-			setTimeout(typeOut, 1500)
-		}
+		title = titleElement.textContent
+		titleElement.innerHTML = ""
+		titleElement.removeAttribute("style")
+		titleElement.append(textElement)
+		titleElement.append(cursorElement)
+		setTimeout(typeOut, 1500)
 	}, 100)
 
 	let currentIndex = 0
-	function typeOut () {
-		if (done) {
-			return
-		}
+	function typeOut() {
 		if (currentIndex < title.length) {
 			textElement.textContent += title[currentIndex]
 			currentIndex++
 			setTimeout(typeOut, 50) // Typing speed: 50ms per character
 		} else {
-			done = true
 			textElement.replaceWith(textElement.textContent)
 			setTimeout(() => cursorElement.remove(), 1750)
 		}
 	}
-
-	onRemove(document.querySelector(ContentView.tagNameValue), () => {
-		if (!done) {
-			done = true
-			titleElement.innerText = title
-		}
-	})
-
 }
 
 export default greetingView
