@@ -1,7 +1,7 @@
 import { randomizeTextChar } from "./glitchText";
 
 function fadeInAndOut(element, callbackFn) {
-	const animationDur = 475
+	const animationDur = 375
 	element.classList.add("fade-out")
 	setTimeout(() => {
 		callbackFn()
@@ -13,9 +13,9 @@ function fadeInAndOut(element, callbackFn) {
 
 
 function glitchText(elements, callbackFn) {
-	const animationDur = 1500
+	const animationDur = 1450
 	for(const elem of elements) {
-		randomizeTextChar(elem, animationDur, 150)
+		randomizeTextChar(elem, animationDur, 50)
 	}
 	setTimeout(() => {
 		callbackFn()

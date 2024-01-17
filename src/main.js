@@ -32,13 +32,14 @@ function initComponents(event) {
 				.navigation()
 				.controls.language()
 				.controls.scheme()
+
+			app.initialized = true
 		} else {
 			initialize(app)
 				.nonCssFeatures()
 				.navigation()
 				.controls.language()
 		}
-		app.initialized = true
 	} catch (error) {
 		console.error(`Error while initiliazing app \n${error}`)
 	}
