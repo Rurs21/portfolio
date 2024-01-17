@@ -5,38 +5,48 @@
  * @module blackmagic
  */
 
-
 /**
  * Wraps the setter of a specified property on an object with additional custom logic provided by a callback function.
  * The original setter of the property, if it exists, is called within the provided callback function.
  *
- * @this {Object} The object whose property setter is to be wrapped. This method is added to Object.
+ * @this {Object} The object whose property setter is to be wrapped.
  * @param {Object} obj - The target object whose property setter is to be wrapped.
  * @param {string} prop - The property name whose setter is to be wrapped.
  * @param {Function} callbackFn - The callback function to be executed when the property's setter is invoked.
  *                                The function receives two arguments: the original setter function and the value being set.
  *                                The original setter function can be called within the callback function to maintain original setter behavior.
+ * @returns {Object} The object that was passed to the function, with the specified setter modified.
  */
-Object.wrapPropertySetter = function(obj, prop, callbackFn) {
+function wrapPropertySetter(obj, prop, callbackFn) {
 	const prototype = Object.getPrototypeOf(obj)
 	const descriptor = Object.getOwnPropertyDescriptor(prototype, prop)
-	const setter = descriptor.set
-	descriptor.set = (value) => {
-		callbackFn(setter, value)
+
+	if (!descriptor) {
+		throw new Error(`Property descriptor for '${prop}' not found.`)
+	}
+	if (typeof descriptor.set !== "function") {
+		throw new Error(`Setter for property '${prop}' not defined.`)
+	}
+
+	const originalSetter = descriptor.set
+	descriptor.set = function (value) {
+		callbackFn.call(obj, originalSetter, value)
 	}
 	Object.defineProperty(obj, prop, descriptor)
+	return obj
 }
-/*
-Object.prototype.wrapPropertySetter = function(obj, prop, callbackFn) {
-	const prototype = Object.getPrototypeOf(obj)
-	const descriptor = Object.getOwnPropertyDescriptor(prototype, prop)
-	const setter = descriptor.set
-	descriptor.set = (value) => {
-		callbackFn(setter, value)
-	}
-	Object.defineProperty(obj, prop, descriptor)
-}
-*/
+
+// The function is added as a method to the Object & Object Prototype.
+const wrapSetterFn = wrapPropertySetter
+Object[wrapSetterFn.name] = wrapSetterFn
+Object.defineProperty(Object.prototype, wrapSetterFn.name, {
+	value: function (prop, callbackFn) {
+		return wrapSetterFn(this, prop, callbackFn)
+	},
+	enumerable: false,
+	configurable: true,
+	writable: true
+})
 
 /**
  * Creates a clone of the current function. The cloned function will have the same behavior and properties
@@ -68,25 +78,20 @@ Function.prototype.clone = function () {
  * Add event 'locationchange' to detect if URL has changed
  * https://stackoverflow.com/a/52809105
  */
-;(() => {
-	let oldPushState = history.pushState
-	history.pushState = function pushState() {
-		let ret = oldPushState.apply(this, arguments)
-		window.dispatchEvent(new Event("pushstate"))
-		window.dispatchEvent(new Event("locationchange"))
-		return ret
-	}
-
-	let oldReplaceState = history.replaceState
-	history.replaceState = function replaceState() {
-		let ret = oldReplaceState.apply(this, arguments)
-		window.dispatchEvent(new Event("replacestate"))
-		window.dispatchEvent(new Event("locationchange"))
-		return ret
-	}
-
-	window.addEventListener("popstate", () => {
-		window.dispatchEvent(new Event("locationchange"))
-	})
-})()
-
+let oldPushState = history.pushState
+history.pushState = function pushState() {
+	let ret = oldPushState.apply(this, arguments)
+	window.dispatchEvent(new Event("pushstate"))
+	window.dispatchEvent(new Event("locationchange"))
+	return ret
+}
+let oldReplaceState = history.replaceState
+history.replaceState = function replaceState() {
+	let ret = oldReplaceState.apply(this, arguments)
+	window.dispatchEvent(new Event("replacestate"))
+	window.dispatchEvent(new Event("locationchange"))
+	return ret
+}
+window.addEventListener("popstate", () => {
+	window.dispatchEvent(new Event("locationchange"))
+})
