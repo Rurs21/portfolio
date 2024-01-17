@@ -3,9 +3,13 @@ import { ContentView } from "./view"
 class Router {
 	constructor() {
 		this.routes = {}
-		window.onpopstate = () => {this.resolve()}
-
 		this.appView = document.getElementById('app-view')
+
+		window.onpopstate = () => {this.resolve()}
+	}
+
+	get currentPath() {
+		return window.location.pathname
 	}
 
 	addRoute(path, view) {
@@ -13,7 +17,7 @@ class Router {
 			throw new Error(`Route "${path}" is already defined`)
 		}
 
-		this.routes[path] = new ContentView(view)
+		this.routes[path] = new Route(view)
 	}
 
 	async resolve(path) {
@@ -24,6 +28,7 @@ class Router {
 		try {
 			const route = this.#resolveRoute(path)
 			this.#changeRoute(route)
+			return route
 		} catch (e) {
 			console.error(e)
 		}
@@ -52,16 +57,20 @@ class Router {
 		const current = this.appView.firstElementChild
 
 		if (!current || !(current instanceof ContentView)) {
-			this.appView.append(route)
+			this.appView.append(route.contentView)
 		} else if (current !== route) {
-			this.appView.classList.add("fade-out")
-			setTimeout(() => {
-				current.replaceWith(route)
-				this.appView.classList.remove("fade-out")
-			}, 475)
+			current.replaceWith(route.contentView)
 		}
 
 	}
 }
+
+class Route {
+	constructor(view) {
+		this.contentView = new ContentView(view)
+	}
+}
+
+export { Router, Route }
 
 export default Router

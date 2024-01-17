@@ -38,6 +38,7 @@ function initComponents(event) {
 				.navigation()
 				.controls.language()
 		}
+		app.initialized = true
 	} catch (error) {
 		console.error(`Error while initiliazing app \n${error}`)
 	}

@@ -1,6 +1,7 @@
 import '@/lib/blackmagic';
 import * as scheme from "@/lib/theme"
 import * as language from "@/i18n/l10n"
+import * as animation from "@/lib/animation"
 
 class App {
 	constructor(router) {
@@ -18,11 +19,11 @@ class App {
 			// change document language
 			language.changeLanguage(lang)
 			// change cached route content
+			const current = window.location.pathname
 			const routes = this.router.routes
 			for (const path in routes) {
-				const current = window.location.pathname
-				const content = routes[path]
-				if (path != current && content != undefined) {
+				const content = routes[path].contentView
+				if (path != current && routes[path] != undefined) {
 					language.changeContentLanguage(lang, content)
 				}
 			}
@@ -39,9 +40,27 @@ class App {
 		scheme.changeScheme(value)
 	}
 
+	async resolveRoute(path) {
+		const route = await this.router.resolve(path)
+	}
+
 	closeMainMenu() {
 		if (this.menus && this.menus["main-menu"]) {
 			this.menus["main-menu"].close()
+		}
+	}
+
+	set initialized(value) {
+
+		this.wrapPropertySetter("language", (setter, lang) => {
+			animation.glitchText(language.queryTranslateElem(document), () =>
+				setter.call(this, lang)
+			)
+		})
+
+		var resolveRouteFn = this.resolveRoute.clone()
+		this.resolveRoute = (path) => {
+			animation.fadeInAndOut(this.router.appView, () => resolveRouteFn.call(this,path))
 		}
 	}
 }
