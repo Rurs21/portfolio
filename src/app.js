@@ -1,4 +1,4 @@
-import '@/lib/blackmagic';
+import "@/lib/blackmagic"
 import * as scheme from "@/lib/theme"
 import * as language from "@/i18n/l10n"
 import * as animation from "@/lib/animation"
@@ -50,17 +50,24 @@ class App {
 		}
 	}
 
-	set initialized(value) {
-
-		this.wrapPropertySetter("language", (setter, lang) => {
-			animation.glitchText(language.queryTranslateElem(document), () =>
-				setter.call(this, lang)
-			)
-		})
-
-		var resolveRouteFn = this.resolveRoute.clone()
-		this.resolveRoute = (path) => {
-			animation.fadeInAndOut(this.router.appView, () => resolveRouteFn.call(this,path))
+	set initialized(isCssLoaded) {
+		// Add animations
+		if (isCssLoaded) {
+			// FadeIn FadeOut on Route Change
+			const resolveRouteFn = this.resolveRoute.clone()
+			this.resolveRoute = (path) => {
+				animation.fadeInAndOut(this.router.appView,
+					() => resolveRouteFn.call(this, path)
+				)
+			}
+			// Glitch Text on Language Change
+			this.wrapPropertySetter("language", (setter, lang) => {
+				const translateElems = language.queryTranslateElem(document)
+				animation.glitchText(
+					translateElems,
+					() => setter.call(this, lang)
+				)
+			})
 		}
 	}
 }
