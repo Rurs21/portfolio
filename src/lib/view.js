@@ -49,7 +49,7 @@ class ContentView extends HTMLElement {
 
 	connectedCallback() {
 		if (this.view) {
-			this.view.setPageInfo
+			this.view.setPageInfo()
 		}
 		if (this.view && this.view.connectedCallback) {
 			this.view.connectedCallback()
