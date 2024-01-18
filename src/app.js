@@ -1,13 +1,15 @@
 import "@/lib/blackmagic"
 import * as scheme from "@/lib/theme"
+import * as motion from "@/lib/motion"
 import * as language from "@/i18n/l10n"
-import * as animation from "@/lib/animation"
+import animation from "@/lib/animation"
 
 class App {
 	constructor(router) {
 		this.router = router
 		this.language = language.getUserLanguage()
 		this.scheme = scheme.getUserScheme()
+		this.motion = motion.getUserMotionPref()
 	}
 
 	get language() {
@@ -23,7 +25,7 @@ class App {
 			const routes = this.router.routes
 			for (const path in routes) {
 				const content = routes[path].contentView
-				if (path != current && routes[path] != undefined) {
+				if (path != current && content != undefined) {
 					language.changeContentLanguage(lang, content)
 				}
 			}
@@ -38,6 +40,19 @@ class App {
 
 	set scheme(value) {
 		scheme.changeScheme(value)
+	}
+
+	get motion() {
+		return motion.getUserMotionPref()
+	}
+
+	set motion(value) {
+		motion.changeMotionPref(value)
+		if (value == "reduce") {
+			animation.reducedMotion = true
+		} else {
+			animation.reducedMotion = false
+		}
 	}
 
 	async resolveRoute(path) {
