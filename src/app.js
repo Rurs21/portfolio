@@ -64,12 +64,12 @@ class App {
 	}
 }
 
+// changing the language for each route except the current one.
 function changeRoutesLang(lang, router) {
-	const current = router.currentPath
 	const routes = router.routes
 	for (const path in routes) {
 		const content = routes[path].contentView
-		if (path != current && content != undefined) {
+		if (path != router.currentPath && content != undefined) {
 			language.changeContentLanguage(lang, content)
 		}
 	}

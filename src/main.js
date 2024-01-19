@@ -1,7 +1,7 @@
 import App from "@/app.js"
 import Router from "@/lib/router.js"
 
-import initialize from "./initialize.js"
+import initialize from "./app-ui.js"
 import { isCssLoaded } from "./utils/misc.js"
 
 import indexView from "@/views/greeting"

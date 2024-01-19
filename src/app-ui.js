@@ -4,7 +4,6 @@ import { onLinkClick } from "@/utils/events"
 import animation from "@/lib/animation"
 
 export default function initialize(app) {
-
 	if (app == null) {
 		throw new ReferenceError("app is undefined")
 	}
@@ -13,11 +12,14 @@ export default function initialize(app) {
 	document.querySelector("noscript").remove()
 	document.querySelector("main").removeAttribute("class")
 
-	function initializer() {
+	function UI() {
+
 		this.menu = () => {
 			app.menus = setNavbar()
 			return this
 		}
+
+		this.actionDialog = setActionDialog()
 
 		this.controls = {
 			language: () => {
@@ -50,7 +52,9 @@ export default function initialize(app) {
 		}
 	}
 
-	return new initializer()
+	app.ui = new UI()
+
+	return app.ui
 }
 
 function drawRose(motion) {
@@ -93,9 +97,10 @@ function setSchemeToggler(app, elementId = "scheme-toggle") {
 	}
 	schemeToggler.replaceChildren(icons[app.scheme])
 	schemeToggler.onclick = function () {
-		const nextScheme = app.scheme == "dark" ? "light" : "dark"
-		schemeToggler.replaceChildren(icons[nextScheme])
-		app.scheme = nextScheme
+		const scheme = app.scheme == "dark" ? "light" : "dark"
+		schemeToggler.replaceChildren(icons[scheme])
+		app.scheme = scheme
+		app.ui.actionDialog.flash(`${scheme} Scheme`)
 	}
 }
 
@@ -104,13 +109,16 @@ function setMotionToggler(app, elementId = "motion-toggle") {
 	const motionToggler = document.getElementById(elementId)
 	const icons = {
 		"no-preference": document.getElementById("enabled-motion-icon"),
-		"reduce": document.getElementById("disabled-motion-icon")
+		reduce: document.getElementById("disabled-motion-icon")
 	}
 	motionToggler.replaceChildren(icons[app.motion])
 
 	motionToggler.onclick = function () {
-		app.motion = app.motion == "reduce" ? "no-preference" : "reduce"
-		motionToggler.replaceChildren(icons[app.motion])
+		const motion = app.motion == "reduce" ? "no-preference" : "reduce"
+		motionToggler.replaceChildren(icons[motion])
+		app.motion = motion
+		const isMotionEnable = motion == "reduce" ? "Disable" : "Enable"
+		app.ui.actionDialog.flash(`Reduced Motion ${isMotionEnable}`)
 	}
 }
 
@@ -126,9 +134,9 @@ function initNavigation(app) {
 		for (const navlink of navigationLinks) {
 			navlink.onclick = onLinkClick((href) => {
 				if (href != window.location.href) {
+					app.closeMainMenu()
 					animation.fadeInAndOut(app.router.appView, () => {
 						app.resolveRoute(href)
-						app.closeMainMenu()
 					})
 				}
 			})
@@ -177,6 +185,34 @@ function setNavbar() {
 	document.getElementById("navbar").removeAttribute("hidden")
 
 	return menus
+}
+
+function setActionDialog() {
+	const dialog = document.getElementById("action-dialog")
+	const dialogText = document.getElementById("action-dialog-text")
+	// Override show method
+	const showFn = dialog.show
+	dialog.show = function (text) {
+		dialogText.textContent = text.charAt(0).toUpperCase() + text.slice(1)
+		showFn.call(this)
+		this.classList.add("dialog-scale")
+	}
+	// Override close method
+	const closeFn = dialog.close
+	dialog.close = function () {
+		this.classList.remove("dialog-scale")
+		setTimeout(() => closeFn.call(this), 250)
+	}
+	// add flash method
+	dialog.flash = function (text) {
+		this.show(text)
+		if (this.timeout) {
+			clearTimeout(this.timeout)
+		}
+		this.timeout = setTimeout(() => this.close(), 2000)
+	}
+
+	return dialog
 }
 
 function enableNonCssFeatures() {
