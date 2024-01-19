@@ -117,7 +117,7 @@ function setMotionToggler(app, elementId = "motion-toggle") {
 		const motion = app.motion == "reduce" ? "no-preference" : "reduce"
 		motionToggler.replaceChildren(icons[motion])
 		app.motion = motion
-		const isMotionEnable = motion == "reduce" ? "Disable" : "Enable"
+		const isMotionEnable = motion == "reduce" ? "Enabled" : "Disabled"
 		app.ui.actionDialog.flash(`Reduced Motion ${isMotionEnable}`)
 	}
 }
@@ -209,7 +209,7 @@ function setActionDialog() {
 		if (this.timeout) {
 			clearTimeout(this.timeout)
 		}
-		this.timeout = setTimeout(() => this.close(), 2000)
+		this.timeout = setTimeout(() => this.close(), 1700)
 	}
 
 	return dialog
