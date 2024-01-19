@@ -119,7 +119,14 @@
 
 /* Reduced motion */
 
-@media screen and (prefers-reduced-motion: reduce) {
+@media screen and (prefers-reduced-motion: reduce)
+{
+	.glitch-text {
+		text-shadow: none;
+		animation: none;
+	}
+}
+.reduced-motion {
 	.glitch-text {
 		text-shadow: none;
 		animation: none;

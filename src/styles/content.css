@@ -44,3 +44,41 @@
 #rose.start path {
 	transition: fill 2.75s;
 }
+
+#action-dialog {
+	width: fit-content;
+	height: fit-content;
+	margin: 0;
+	padding: 0.5em;
+
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(0.01);
+
+	opacity: 0.97;
+	color: var(--text-color);
+	background: var(--background-color);
+	border: none;
+	outline: none;
+
+	transition: transform 250ms, width 1550ms, height 1500ms;
+
+	#action-dialog-text {
+		height: 100%;
+		padding: 1em;
+		box-sizing: border-box;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+
+		font-size: xx-large;
+		border: 0.2em solid var(--secondary-color);
+		transition: width 1550ms, height 1500ms;
+	}
+}
+#action-dialog.dialog-scale {
+	transform: scale(1) translate(-50%, -50%);
+}

@@ -22,9 +22,9 @@ function changeMotionPref(motion) {
 	}
 
 	if (motion == "reduce") {
-		document.body.classList.add("reduce-motion")
+		document.body.classList.add("reduced-motion")
 	} else {
-		document.body.classList.remove("reduce-motion")
+		document.body.classList.remove("reduced-motion")
 	}
 
 	// Save the scheme preference to localStorage

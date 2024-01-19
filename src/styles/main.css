@@ -153,6 +153,10 @@ a:not([href]) {
 	pointer-events: none;
 }
 
+dialog {
+	font-family: var(--monospace);
+}
+
 .icon-button {
 	font-size: 1em;
 	padding: 0.5em;
