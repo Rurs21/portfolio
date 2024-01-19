@@ -82,6 +82,29 @@
 	}
 }
 
+@keyframes big-glitch-text {
+	0% {
+		text-shadow: 0.220em 0 0 var(--glitch-text-color1),
+			-0.120em -0.160em 0 var(--glitch-text-color2),
+			0.100em 0.160em 0 var(--glitch-text-color3);
+	}
+	25% {
+		text-shadow: -0.220em -0.100em 0 var(--glitch-text-color1),
+			0.100em 0.035em 0 var(--glitch-text-color2),
+			-0.220em -0.220em 0 var(--glitch-text-color3);
+	}
+	50% {
+		text-shadow: 0.220em 0.035em 0 var(--glitch-text-color1),
+			0.120em 0 0 var(--glitch-text-color2),
+			0 -0.160em 0 var(--glitch-text-color3);
+	}
+	75% {
+		text-shadow: -0.220em 0 0 var(--glitch-text-color1),
+			-0.100em -0.160em 0 var(--glitch-text-color2),
+			-0.160em -0.100em 0 var(--glitch-text-color3);
+	}
+}
+
 /* Content Specific Animation */
 
 .no-js {
@@ -92,4 +115,13 @@
 
 #app-view.fade-in * > * {
 	animation: fadeIn 0.375s ease-in-out forwards;
+}
+
+/* Reduced motion */
+
+@media screen and (prefers-reduced-motion: reduce) {
+	.glitch-text {
+		text-shadow: none;
+		animation: none;
+	}
 }

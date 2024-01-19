@@ -32,8 +32,7 @@ function initComponents(event) {
 				.navigation()
 				.controls.language()
 				.controls.scheme()
-
-			app.initialized = true
+				.controls.motion()
 		} else {
 			initialize(app)
 				.nonCssFeatures()

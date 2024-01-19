@@ -25,7 +25,7 @@ body, html {
 	--light-rose-fill: #f7f0f2;
 	--light-glitch-text-color1: #ff0051;
 	--light-glitch-text-color2: #00ff00;
-	--light-glitch-text-color3:  #0000ff;
+	--light-glitch-text-color3: #0000ff;
 
 	--dark-contrast-color: #ffffff;
 	--dark-text-color: #eeeeee;
@@ -37,7 +37,6 @@ body, html {
 	--dark-glitch-text-color1: #00ffff;
 	--dark-glitch-text-color2: #ff00ff;
 	--dark-glitch-text-color3: #ffff00;
-
 
 	--contrast-color: var(--light-contrast-color);
 	--text-color: var(--light-text-color);
@@ -289,6 +288,21 @@ select {
 .select > select {
 	width: 100%;
 	padding: 0.55em 0.75em;
+}
+
+.cross:before,
+.cross:after {
+	position: absolute;
+	content: " ";
+	height: 3.8em;
+	width: 0.2em;
+	background-color: var(--text-color);
+}
+.cross:before {
+	transform: translateX(0.45em) rotate(45deg) translateY(-1em);
+}
+.cross:after {
+	transform: translateX(-0.55em) rotate(-45deg) translateY(-1em);
 }
 
 noscript {

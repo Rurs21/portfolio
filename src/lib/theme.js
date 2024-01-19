@@ -1,5 +1,3 @@
-const body = document.body
-
 const schemes = ["light", "dark", "system"]
 
 function getUserScheme() {
@@ -12,9 +10,9 @@ function changeScheme(scheme) {
 		throw new Error(`Scheme '${scheme}' is not a valid scheme`)
 	}
 
-	body.classList.remove("light", "dark")
+	document.body.classList.remove("light", "dark")
 	if (scheme != "system") {
-		body.classList.add(scheme)
+		document.body.classList.add(scheme)
 	}
 	// Save the scheme preference to localStorage
 	localStorage.setItem("scheme", scheme)

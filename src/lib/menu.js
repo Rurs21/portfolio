@@ -6,7 +6,7 @@ export default class Menu {
 		this.buttons = controlButtons
 		this.subMenus = []
 
-		this.buttons.forEach((button) => {
+		for (const button of this.buttons) {
 			button.setAttribute("aria-controls", menuElement.id)
 			button.setAttribute("aria-expanded", !this.isClosed())
 			button.addEventListener("click", () => {
@@ -17,7 +17,7 @@ export default class Menu {
 				)
 				this.toggle()
 			})
-		})
+		}
 	}
 
 	getId() {
@@ -64,11 +64,17 @@ export default class Menu {
 	}
 
 	closeSubMenus() {
-		this.subMenus.forEach((subMenu) => {
+		for (const subMenu of this.subMenus) {
 			if (!subMenu.isClosed()) {
 				subMenu.toggle()
 				subMenu.closeSubMenus()
 			}
-		})
+		}
+	}
+
+	enableControls(value = true) {
+		for (const button of this.buttons) {
+			button.disabled = !value
+		}
 	}
 }

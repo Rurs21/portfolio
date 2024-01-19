@@ -4,7 +4,9 @@
 @import url(styles/content.css);
 @import url(styles/animation.css);
 @import url(styles/misc.css);
-
+/*
+@import url(styles/no-js.css);
+*/
 /* Responsive stuff */
 
 @media (max-width: 340px) {
