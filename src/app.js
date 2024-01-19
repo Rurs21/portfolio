@@ -18,17 +18,9 @@ class App {
 
 	set language(lang) {
 		try {
-			// change document language
 			language.changeLanguage(lang)
 			// change cached route content
-			const current = window.location.pathname
-			const routes = this.router.routes
-			for (const path in routes) {
-				const content = routes[path].contentView
-				if (path != current && content != undefined) {
-					language.changeContentLanguage(lang, content)
-				}
-			}
+			changeRoutesLang(lang, this.router)
 		} catch (error) {
 			console.error(`language change error\n${error}`)
 		}
@@ -65,24 +57,20 @@ class App {
 		}
 	}
 
-	set initialized(isCssLoaded) {
-		// Add animations
-		if (isCssLoaded) {
-			// FadeIn FadeOut on Route Change
-			const resolveRouteFn = this.resolveRoute.clone()
-			this.resolveRoute = (path) => {
-				animation.fadeInAndOut(this.router.appView,
-					() => resolveRouteFn.call(this, path)
-				)
-			}
-			// Glitch Text on Language Change
-			this.wrapPropertySetter("language", (setter, lang) => {
-				const translateElems = language.queryTranslateElem(document)
-				animation.glitchText(
-					translateElems,
-					() => setter.call(this, lang)
-				)
-			})
+	enableMainMenu(value = true) {
+		if (this.menus && this.menus["main-menu"]) {
+			this.menus["main-menu"].enableControls(value)
+		}
+	}
+}
+
+function changeRoutesLang(lang, router) {
+	const current = router.currentPath
+	const routes = router.routes
+	for (const path in routes) {
+		const content = routes[path].contentView
+		if (path != current && content != undefined) {
+			language.changeContentLanguage(lang, content)
 		}
 	}
 }

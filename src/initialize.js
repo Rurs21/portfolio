@@ -1,8 +1,7 @@
 import Menu from "@/lib/menu"
 import { rose } from "@/lib/flower"
-import { loadInlineSVG } from "@/utils/svg"
 import { onLinkClick } from "@/utils/events"
-import { randomizeTextChar } from "./lib/glitchText"
+import animation from "@/lib/animation"
 
 export default function initialize(app) {
 
@@ -28,6 +27,10 @@ export default function initialize(app) {
 			scheme: () => {
 				setSchemeToggler(app)
 				return this
+			},
+			motion: () => {
+				setMotionToggler(app)
+				return this
 			}
 		}
 
@@ -36,13 +39,8 @@ export default function initialize(app) {
 			return this
 		}
 
-		this.icons = async () => {
-			await loadIcons(document)
-			return this
-		}
-
 		this.visual = () => {
-			drawRose()
+			drawRose(app.motion)
 			return this
 		}
 
@@ -55,28 +53,16 @@ export default function initialize(app) {
 	return new initializer()
 }
 
-async function loadIcons(element) {
-	try {
-		const svgElements = await loadInlineSVG(element)
-		for (const svgElem of svgElements) {
-			svgElem.removeAttribute("width")
-			svgElem.removeAttribute("height")
-			if (svgElem.matches("#contact-links a svg")) {
-				const link = svgElem.parentElement
-				link.classList.remove("icon")
-				link.classList.add("square-icon")
-			}
-		}
-		return svgElements
-	} catch (error) {
-		console.error(`Error while loading icons : ${error}`)
+function drawRose(motion) {
+	var drawingDur = "5s"
+	if (motion == "no-preference") {
+		drawingDur = "3.5s"
 	}
-}
 
-function drawRose() {
-	const svgRose = rose("#E4345A", 7, "3.5s")
+	const svgRose = rose("#E4345A", 7, drawingDur)
 
 	const roseElement = document.getElementById("rose")
+	roseElement.innerHTML = ""
 	roseElement.classList.add("start", "unfilled")
 	roseElement.appendChild(svgRose)
 	setTimeout(() => roseElement.classList.remove("unfilled"), 2750)
@@ -87,8 +73,13 @@ function setLanguageSelect(app, elementId = "language-select") {
 	const languageSelect = document.getElementById(elementId)
 	languageSelect.value = app.language
 	languageSelect.onchange = function () {
-		app.language = this.value
+		app.enableMainMenu(false)
 		app.closeMainMenu()
+		const translateElems = document.querySelectorAll("[data-translate]")
+		animation.glitchText(translateElems, () => {
+			app.language = this.value
+			app.enableMainMenu()
+		})
 	}
 }
 
@@ -108,21 +99,37 @@ function setSchemeToggler(app, elementId = "scheme-toggle") {
 	}
 }
 
-function initNavigation(app) {
+function setMotionToggler(app, elementId = "motion-toggle") {
+	// Motion Toggler with icons
+	const motionToggler = document.getElementById(elementId)
+	const icons = {
+		"no-preference": document.getElementById("enabled-motion-icon"),
+		"reduce": document.getElementById("disabled-motion-icon")
+	}
+	motionToggler.replaceChildren(icons[app.motion])
 
+	motionToggler.onclick = function () {
+		app.motion = app.motion == "reduce" ? "no-preference" : "reduce"
+		motionToggler.replaceChildren(icons[app.motion])
+	}
+}
+
+function initNavigation(app) {
 	setNavigationLinks("#navigation-menu a")
 	setActiveLink()
-	window.addEventListener('locationchange', function () {
+	window.addEventListener("locationchange", function () {
 		setActiveLink()
-	});
+	})
 
 	function setNavigationLinks(selector) {
 		const navigationLinks = document.querySelectorAll(selector)
 		for (const navlink of navigationLinks) {
 			navlink.onclick = onLinkClick((href) => {
 				if (href != window.location.href) {
-					app.resolveRoute(href)
-					app.closeMainMenu()
+					animation.fadeInAndOut(app.router.appView, () => {
+						app.resolveRoute(href)
+						app.closeMainMenu()
+					})
 				}
 			})
 		}
