@@ -1,5 +1,17 @@
 /* Navigation Related Styling */
 
+#navbar {
+	width: 100%;
+}
+
+.horizontal-menu {
+	width: 100%;
+}
+
+#navbar > * {
+	max-width: inherit;
+}
+
 .horizontal-menu {
 	display: flex;
 	justify-content: flex-end;
@@ -42,7 +54,6 @@
 .top-menu {
 	position: fixed;
 	top: 0;
-	width: inherit;
 	transition: top 0.25s;
 }
 
