@@ -24,7 +24,7 @@ const animation = new function() {
 		if (this.reducedMotion || !isCssLoaded(document)) {
 			callbackFn()
 		} else {
-			const animationDur = 900
+			const animationDur = 1250
 			for(const elem of elements) {
 				randomizeTextChar(elem, animationDur, 50)
 			}

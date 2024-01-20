@@ -14,12 +14,12 @@ export default function initialize(app) {
 
 	function UI() {
 
+		this.actionDialog = setActionDialog()
+
 		this.menu = () => {
 			app.menus = setNavbar()
 			return this
 		}
-
-		this.actionDialog = setActionDialog()
 
 		this.controls = {
 			language: () => {
@@ -85,6 +85,7 @@ function setLanguageSelect(app, elementId = "language-select") {
 			app.enableMainMenu()
 		})
 	}
+	return languageSelect
 }
 
 function setSchemeToggler(app, elementId = "scheme-toggle") {
@@ -100,8 +101,9 @@ function setSchemeToggler(app, elementId = "scheme-toggle") {
 		const scheme = app.scheme == "dark" ? "light" : "dark"
 		schemeToggler.replaceChildren(icons[scheme])
 		app.scheme = scheme
-		app.ui.actionDialog.flash(`${scheme} Scheme`)
+		//app.ui.actionDialog.flash(`${scheme.capitalizeFirstLetter()} Scheme`)
 	}
+	return schemeToggler
 }
 
 function setMotionToggler(app, elementId = "motion-toggle") {
@@ -120,6 +122,7 @@ function setMotionToggler(app, elementId = "motion-toggle") {
 		const isMotionEnable = motion == "reduce" ? "Enabled" : "Disabled"
 		app.ui.actionDialog.flash(`Reduced Motion ${isMotionEnable}`)
 	}
+	return setMotionToggler
 }
 
 function initNavigation(app) {
@@ -193,7 +196,7 @@ function setActionDialog() {
 	// Override show method
 	const showFn = dialog.show
 	dialog.show = function (text) {
-		dialogText.textContent = text.charAt(0).toUpperCase() + text.slice(1)
+		dialogText.textContent = text
 		showFn.call(this)
 		this.classList.add("dialog-scale")
 	}
