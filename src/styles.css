@@ -4,9 +4,8 @@
 @import url(styles/content.css);
 @import url(styles/animation.css);
 @import url(styles/misc.css);
-/*
 @import url(styles/no-js.css);
-*/
+
 /* Responsive stuff */
 
 @media (max-width: 340px) {
@@ -55,7 +54,7 @@
 		min-height: 100vh; /* Ensure full viewport height */
 	}
 	body > * {
-		width: 75%;
+		max-width: 75%;
 	}
 	dialog {
 		max-width: 70%;
@@ -79,7 +78,7 @@
 		font-size: 1.375em; /* 22px (1.375 * 16px) */
 	}
 	body > * {
-		width: 60%;
+		max-width: 60%;
 	}
 	dialog {
 		max-width: 55%;
@@ -95,7 +94,7 @@
 		font-size: 2em; /* 32px (2 * 16px) */
 	}
 	body > * {
-		width: 40%;
+		max-width: 40%;
 	}
 	dialog {
 		max-width: 35%;

@@ -50,7 +50,10 @@ export default class Menu {
 	close() {
 		this.closeSubMenus()
 		this.menu.classList.add("close")
-		setTimeout(() => this.menu.classList.add("hidden"),this.#animationDuration)
+		setTimeout(
+			() => this.menu.classList.add("hidden"),
+			this.#animationDuration
+		)
 	}
 
 	toggle() {
