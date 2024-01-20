@@ -9,6 +9,10 @@
 	color: var(--copyright-color);
 }
 
+.copyright details[open] > summary {
+	color: var(--text-color);
+}
+
 .copyright a { color: currentColor; }
 .copyright a:visited { color: currentColor; }
 .copyright a:hover { color: var(--contrast-color); }
