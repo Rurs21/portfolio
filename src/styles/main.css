@@ -154,6 +154,7 @@ a:not([href]) {
 }
 
 dialog {
+	max-width: 85%;
 	font-family: var(--monospace);
 }
 

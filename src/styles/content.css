@@ -48,13 +48,12 @@
 #action-dialog {
 	z-index: 10;
 	height: auto;
-	width: 24em;
-	max-width: 85%;
+	width: fit-content;
 	margin: 0;
 	padding: 0.5em;
 
 	position: fixed;
-	top: 20em;
+	top: clamp(15.25em, 50%, 25em);
 	left: 50%;
 	transform: translate(-50%, -50%) scale(0.01);
 
@@ -64,11 +63,9 @@
 	border: none;
 	outline: none;
 
-	transition: transform 250ms, width 1550ms, height 1500ms;
+	transition: transform 250ms;
 
 	#action-dialog-text {
-		height: 100%;
-		width: 100%;
 		padding: 1em;
 		box-sizing: border-box;
 
@@ -77,9 +74,10 @@
 		align-items: center;
 		text-align: center;
 
-		font-size: 2em;
+		overflow-wrap: break-word;
+
+		font-size: clamp(1.15em, 3vh, 1.75em);
 		border: 0.2em solid var(--secondary-color);
-		transition: width 1550ms, height 1500ms;
 	}
 }
 #action-dialog.dialog-scale {

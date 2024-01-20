@@ -1,6 +1,6 @@
 /**
- * This module contains a collection of JavaScript "quirks and hacks" that extend
- * standard functionalities in unconventional ways.
+ * This module contains a collection of "quirks and hacks" that extend/add
+ * javascript and webAPI functionalities in unconventional ways.
  *
  * @module blackmagic
  */
@@ -94,3 +94,11 @@ history.replaceState = function replaceState() {
 window.addEventListener("popstate", () => {
 	window.dispatchEvent(new Event("locationchange"))
 })
+
+/**
+ * Capitalize first letter
+ * @returns string with first letter capitalized
+ */
+String.prototype.capitalizeFirstLetter = function() {
+	return this.charAt(0).toUpperCase() + this.slice(1)
+}
