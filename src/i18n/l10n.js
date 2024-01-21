@@ -67,4 +67,4 @@ function queryTranslateElem(rootElement) {
 	return rootElement.querySelectorAll(`[${translateAttr}]`)
 }
 
-export { getUserLanguage, changeLanguage, changeContentLanguage, queryTranslateElem }
+export { translations, getUserLanguage, changeLanguage, changeContentLanguage, queryTranslateElem }

@@ -1,7 +1,9 @@
 import Menu from "@/lib/menu"
+import animation from "@/lib/animation"
+import * as language from "@/i18n/l10n"
+import { schemeToggle } from "@/lib/theme"
 import { rose } from "@/lib/flower"
 import { onLinkClick } from "@/utils/events"
-import animation from "@/lib/animation"
 
 export default function initialize(app) {
 	if (app == null) {
@@ -79,7 +81,7 @@ function setLanguageSelect(app, elementId = "language-select") {
 	languageSelect.onchange = function () {
 		app.enableMainMenu(false)
 		app.closeMainMenu()
-		const translateElems = document.querySelectorAll("[data-translate]")
+		const translateElems = language.queryTranslateElem(document)
 		animation.glitchText(translateElems, () => {
 			app.language = this.value
 			app.enableMainMenu()
@@ -98,10 +100,11 @@ function setSchemeToggler(app, elementId = "scheme-toggle") {
 	}
 	schemeToggler.replaceChildren(icons[app.scheme])
 	schemeToggler.onclick = function () {
-		const scheme = app.scheme == "dark" ? "light" : "dark"
+		const scheme = schemeToggle(app.scheme)
 		schemeToggler.replaceChildren(icons[scheme])
 		app.scheme = scheme
-		//app.ui.actionDialog.flash(`${scheme.capitalizeFirstLetter()} Scheme`)
+		app.ui.actionDialog.flash(`
+			${language.translations[app.language][scheme]}`)
 	}
 	return schemeToggler
 }
@@ -119,8 +122,10 @@ function setMotionToggler(app, elementId = "motion-toggle") {
 		const motion = app.motion == "reduce" ? "no-preference" : "reduce"
 		motionToggler.replaceChildren(icons[motion])
 		app.motion = motion
-		const isMotionEnable = motion == "reduce" ? "Enabled" : "Disabled"
-		app.ui.actionDialog.flash(`Reduced Motion ${isMotionEnable}`)
+		const isMotionEnable = motion == "reduce" ? "enabled" : "disabled"
+		app.ui.actionDialog.flash(`
+			${language.translations[app.language]["reduced-motion"]}
+			${language.translations[app.language][isMotionEnable]}`)
 	}
 	return setMotionToggler
 }

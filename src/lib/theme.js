@@ -18,4 +18,18 @@ function changeScheme(scheme) {
 	localStorage.setItem("scheme", scheme)
 }
 
-export { getUserScheme, changeScheme }
+function schemeToggle(scheme) {
+
+	var idx = schemes.indexOf(scheme)
+	if (idx === -1) {
+		throw new Error(`Scheme '${scheme}' is not a valid scheme`)
+	}
+	idx++
+	if (idx >= schemes.length) {
+		idx = 0;
+	}
+
+	return schemes[idx]
+}
+
+export { getUserScheme, changeScheme, schemeToggle }
