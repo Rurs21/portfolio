@@ -1,7 +1,6 @@
 import path from "path"
+import fs from "fs"
 import fsp from "fs/promises"
-import { JSDOM } from "jsdom"
-import * as svgUtils from "./svg-utils.js"
 import { optimize } from "svgo"
 import svgoConfig from "./svgo.config.js"
 
@@ -9,7 +8,6 @@ import svgoConfig from "./svgo.config.js"
  * Plugins that replace the img with referenced svg with the actual svg inline inside html files
  */
 export default function htmlSvgInline(options = {}) {
-
 	const postfix = "?html-import"
 
 	return {
@@ -18,7 +16,7 @@ export default function htmlSvgInline(options = {}) {
 
 		async transformIndexHtml(html, ctx) {
 			let fileLocation = path.dirname(ctx.filename)
-			html = await replaceImageSVG(html, fileLocation)
+			html = replaceImgWithInlineSVG(html, fileLocation)
 			return html
 		},
 
@@ -44,46 +42,11 @@ export default function htmlSvgInline(options = {}) {
 
 			id = cleanUrl(id)
 			let fileLocation = path.dirname(id)
-			let htmlContent = await fsp.readFile(id)
-			htmlContent = await replaceImageSVG(htmlContent, fileLocation)
+			let htmlContent = await fsp.readFile(id, "utf-8")
+			htmlContent = replaceImgWithInlineSVG(htmlContent, fileLocation)
 
 			return `export default ${JSON.stringify(htmlContent)}`
 		}
-	}
-
-	async function replaceImageSVG(html, fileLocation) {
-		// parse html & initiate DOM
-		const dom = new JSDOM(html)
-		const document = dom.window.document
-
-		const svgImgSelector = 'img[src$=".svg"], img[src^="data:image/svg"]'
-		const images = document.querySelectorAll(svgImgSelector)
-		for (const img of images) {
-			try {
-				var svgContent = await retrieveSVG(img.src, fileLocation)
-				const svg = JSDOM.fragment(svgContent).firstChild
-				svgUtils.transferAttributes(img, svg)
-				img.replaceWith(svg)
-			} catch (error) {
-				console.error(`error trying to replace ${img.outerHTML}:\n${error}`)
-			}
-		}
-
-		return dom.serialize()
-	}
-
-	async function retrieveSVG(src, from) {
-		var svgString = undefined
-		if (src.endsWith(".svg")) {
-			src = src.startsWith("/") ? "." + src : src // vite quirk fix
-			const svgPath = path.resolve(from, src)
-			svgString = await fsp.readFile(svgPath, "utf-8")
-		} else if (src.startsWith("data:image/svg")) {
-			const base64svg = src.slice(src.indexOf(",") + 1)
-			svgString = decodeURIComponent(base64svg)
-		}
-
-		return optimize(svgString, svgoConfig).data
 	}
 }
 
@@ -93,4 +56,104 @@ function cleanUrl(url) {
 		url = url.slice(0, queryIndex)
 	}
 	return url
+}
+
+function replaceImgWithInlineSVG(html, fileLocation) {
+	// Regular expression to find img and image tags with SVG sources and capture attributes
+	const imgRegex =
+		/<(img|image) ([^>]*src="([^"]+\.svg|data:image\/svg\+xml[^"]+)"[^>]*)>/g
+
+	const replacer = (match, tag, attributes, src) => {
+		try {
+			// Read the SVG file content
+			let svgContent = retrieveSVG(src, fileLocation)
+
+			// Capture common attributes
+			const capturedAttributes = captureAttriubtes(attributes)
+
+			// Add <title> and <description> with "aria-labelledby"
+			if (capturedAttributes["alt"]) {
+				svgContent = setAriaAttributes(svgContent, capturedAttributes)
+			}
+
+			// Append the attributes to <svg>
+			svgContent = svgContent.replace(
+				/<svg([^>]*)>/,
+				`<svg$1${capturedAttributes.toString()}>`
+			)
+
+			// return optimize svg
+			return optimize(svgContent, svgoConfig).data
+		} catch (error) {
+			console.error(`Error reading SVG file: ${src}`, error)
+			return match // return the original <image>
+		}
+	}
+
+	html = html.replace(imgRegex, replacer)
+
+	return html
+}
+
+function captureAttriubtes(attributes) {
+	const obj = {}
+	obj.toString = propertiesToString
+
+	const attrRegex =
+		/(class|id|style|height|width|alt|aria-\w+|data-\w+)="([^"]*)"/g
+	let attrMatch
+	while ((attrMatch = attrRegex.exec(attributes)) !== null) {
+		obj[attrMatch[1]] = attrMatch[2]
+	}
+
+	return obj
+
+	function propertiesToString() {
+		let str = ""
+		for (var key in this) {
+			if (typeof obj[key] == "string") {
+				str += ` ${key}="${obj[key]}" `
+			}
+		}
+		return str
+	}
+}
+
+function setAriaAttributes(svgString, capturedAttributes) {
+	if (!capturedAttributes["id"]) {
+		capturedAttributes["id"] = capturedAttributes["alt"]
+			.replace(/^[^a-zA-Z]+/, "")
+			.replace(/[^a-zA-Z]+$/, "")
+			.replace(/[^a-zA-Z0-9-]/g, "-")
+			.toLowerCase()
+	}
+	const alt = capturedAttributes["alt"]
+	const id = capturedAttributes["id"]
+
+	const titleId = id + "-title"
+	const descId = id + "-desc"
+
+	svgString = svgString.replace(
+		/<svg([^>]*)>/,
+		`<svg$1><title id="${titleId}">${alt}</title><desc id="${descId}">${alt}</desc>`
+	)
+
+	capturedAttributes["aria-labelledby"] = `${titleId} ${descId}`
+	delete capturedAttributes["alt"]
+
+	return svgString
+}
+
+function retrieveSVG(src, from) {
+	var svgString = undefined
+	if (src.endsWith(".svg")) {
+		src = src.startsWith("/") ? "." + src : src // vite quirk fix
+		const svgPath = path.resolve(from, src)
+		svgString = fs.readFileSync(svgPath, "utf-8")
+	} else if (src.startsWith("data:image/svg")) {
+		const base64svg = src.slice(src.indexOf(",") + 1)
+		svgString = decodeURIComponent(base64svg)
+	}
+
+	return svgString
 }
