@@ -6,7 +6,9 @@ export default {
 				overrides: {
 					removeComments: {
 						preservePatterns: false
-					}
+					},
+					removeTitle: false,
+					cleanupIds: false
 				}
 			}
 		}
