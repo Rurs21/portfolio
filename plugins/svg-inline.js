@@ -61,9 +61,9 @@ function cleanUrl(url) {
 function replaceImgWithInlineSVG(html, fileLocation) {
 	// Regular expression to find img and image tags with SVG sources and capture attributes
 	const imgRegex =
-		/<(img|image) ([^>]*src="([^"]+\.svg|data:image\/svg\+xml[^"]+)"[^>]*)>/g
+		/<img ([^>]*src="([^"]+\.svg|data:image\/svg\+xml[^"]+)"[^>]*)>/g
 
-	const replacer = (match, tag, attributes, src) => {
+	const replacer = (match, attributes, src) => {
 		try {
 			// Read the SVG file content
 			let svgContent = retrieveSVG(src, fileLocation)
