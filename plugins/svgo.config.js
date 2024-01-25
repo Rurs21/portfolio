@@ -8,7 +8,10 @@ export default {
 						preservePatterns: false
 					},
 					removeTitle: false,
-					cleanupIds: false
+					cleanupIds: {
+						remove: false
+					},
+					inlineStyles: false
 				}
 			}
 		}
