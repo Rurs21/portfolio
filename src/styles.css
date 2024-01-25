@@ -2,6 +2,7 @@
 @import url(styles/navigation.css);
 @import url(styles/footer.css);
 @import url(styles/content.css);
+@import url(styles/visual.css);
 @import url(styles/animation.css);
 @import url(styles/misc.css);
 @import url(styles/no-js.css);
@@ -31,7 +32,7 @@
 		padding-right: 1em;
 		padding-left: 1em;
 	}
-	#rose {
+	#visual {
 		width: 70%;
 	}
 	.square-icon {
@@ -65,7 +66,7 @@
 	h2 {
 		font-size: 2.5em;
 	}
-	#rose {
+	#visual {
 		position: absolute;
 		top: 5%;
 		right: 12.75%;
@@ -83,7 +84,7 @@
 	dialog {
 		max-width: 55%;
 	}
-	#rose {
+	#visual {
 		right: 20.5%;
 		width: 30.5em;
 	}
@@ -105,7 +106,7 @@
 	h2 {
 		font-size: 3em;
 	}
-	#rose {
+	#visual {
 		right: 31%;
 		width: 40em;
 	}

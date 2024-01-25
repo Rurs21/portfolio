@@ -1,5 +1,5 @@
 .no-js  {
-	#app-navigation, #rose, dialog {
+	#app-navigation, dialog {
 		display: none;
 		visibility: hidden;
 	}

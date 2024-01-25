@@ -38,14 +38,13 @@ export function createCoordinatesSVG(
 		pathElement = animateDrawingPath(pathElement, drawingDuration)
 	}
 
-	const { minX, minY, width, height } = determineViewBox(
-		coordinates,
-		strokeWidth
-	)
+	const viewBox = determineViewBox(coordinates,strokeWidth)
+	const { minX, minY, width, height } = viewBox
 
-	svgElement.setAttribute("viewBox", `${minX} ${minY} ${width} ${height}`)
-	group.setAttribute("transform-origin", "0 -4")
+
 	group.setAttribute("transform", `matrix(1, 0, 0, -1, 0, 0)`)
+	svgElement.setAttribute("viewBox", `${minX} ${-minY - height} ${width} ${height}`)
+
 	svgElement.appendChild(group)
 	group.appendChild(pathElement)
 
@@ -97,10 +96,12 @@ export function defineSVG(svgElement, id, title, desc) {
 function determineViewBox(coordinates, strokeWidth) {
 	var { minX, minY, maxX, maxY } = findMinMaxCoordinates(coordinates)
 
-	minX = Math.floor(minX - strokeWidth / 2)
-	minY = Math.floor(minY - strokeWidth / 2)
-	maxX = Math.ceil(maxX + strokeWidth / 2)
-	maxY = Math.ceil(maxY + strokeWidth / 2)
+	const offset = (strokeWidth / 2)
+
+	minX = Math.floor(minX - offset)
+	minY = Math.floor(minY - offset)
+	maxX = Math.ceil(maxX  + offset)
+	maxY = Math.ceil(maxY  + offset)
 
 	const width = maxX - minX
 	const height = maxY - minY
