@@ -17,34 +17,6 @@
 	min-height: 80vh;
 }
 
-#rose {
-	position: fixed;
-	top: 1em;
-	left: auto;
-	right: -5em;
-	margin-right: auto;
-	margin-left: auto;
-	z-index: -1;
-
-	width: 90%;
-	max-width: 25em;
-	opacity: 0.95;
-	padding: 0;
-}
-
-#rose path {
-	transition: fill 750ms, stroke 750ms;
-	stroke: var(--rose-stroke);
-	fill: var(--rose-fill);
-}
-
-#rose.unfilled path {
-	fill: transparent;
-}
-#rose.start path {
-	transition: fill 2.75s;
-}
-
 #action-dialog {
 	z-index: 10;
 	height: auto;
