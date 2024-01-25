@@ -1,6 +1,34 @@
 .no-js  {
-	#app-navigation, dialog {
+	#app-navigation, #action-dialog {
 		display: none;
 		visibility: hidden;
+	}
+}
+
+noscript {
+	line-height: 1.25em;
+
+
+	dialog {
+		font-size: 1em;
+
+		z-index: 1;
+
+		width: clamp(50ch, 50%, 15em);
+		top: clamp(15.25em, 45%, 22em);
+
+		box-sizing: border-box;
+
+		background: var(--background-color);
+
+
+		button {
+			padding: 0.5em 1em 0.5em 1em;
+			display: block;
+			margin-left: auto;
+    		margin-right: auto;
+			color: black;
+			font-size: x-large;
+		}
 	}
 }
