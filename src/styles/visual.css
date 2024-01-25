@@ -13,23 +13,3 @@
 	opacity: 0.95;
 	padding: 0;
 }
-
-#rose path {
-	stroke: var(--rose-stroke);
-	fill: var(--rose-fill);
-	transition: fill 475ms, stroke 475ms;
-}
-
-#rose.unfilled path {
-	fill: transparent;
-	animation: roseFill 2s ease-in-out 1s forwards;
-}
-
-@keyframes roseFill {
-	0% {
-		fill: transparent;
-	}
-	100% {
-		fill: var(--rose-fill);
-	}
-}
