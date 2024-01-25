@@ -60,19 +60,10 @@ export default function initialize(app) {
 }
 
 function drawRose(motion) {
-	var drawingDur = "5s"
-	if (motion == "no-preference") {
-		drawingDur = "3.5s"
-	}
 
-	const svgRose = rose("#E4345A", 7, drawingDur)
 
-	const roseElement = document.getElementById("rose")
-	roseElement.innerHTML = ""
-	roseElement.classList.add("start", "unfilled")
-	roseElement.appendChild(svgRose)
-	setTimeout(() => roseElement.classList.remove("unfilled"), 2750)
-	setTimeout(() => roseElement.classList.remove("start"), 5000)
+
+
 }
 
 function setLanguageSelect(app, elementId = "language-select") {

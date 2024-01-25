@@ -310,11 +310,6 @@ select {
 	transform: translateX(-0.55em) rotate(-45deg) translateY(-1em);
 }
 
-noscript {
-	line-height: 1.25em;
-	box-sizing: border-box;
-}
-
 .multicolor {
 	background: linear-gradient(to right, #EF5350, #F48FB1, #7E57C2, #2196F3, #26C6DA, #43A047, #ffd341, #F9A825, #FF5722);
 	background-clip: text;
