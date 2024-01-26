@@ -11,6 +11,7 @@ export default {
 		}
 	},
 	build: {
+		assetsInlineLimit: 8192,
 		emptyOutDir: true,
 		outDir: path.resolve(__dirname, "dist"),
 	}
