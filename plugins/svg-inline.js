@@ -150,9 +150,12 @@ function retrieveSVG(src, from) {
 		src = src.startsWith("/") ? "." + src : src // vite quirk fix
 		const svgPath = path.resolve(from, src)
 		svgString = fs.readFileSync(svgPath, "utf-8")
-	} else if (src.startsWith("data:image/svg")) {
+	} else if (src.startsWith("data:image/svg+xml;base64")) {
 		const base64svg = src.slice(src.indexOf(",") + 1)
-		svgString = decodeURIComponent(base64svg)
+		svgString = atob(base64svg)
+	} else if (src.startsWith("data:image/svg")) {
+		const dataURIsvg = src.slice(src.indexOf(",") + 1)
+		svgString = decodeURIComponent(dataURIsvg)
 	}
 
 	return svgString
