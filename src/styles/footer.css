@@ -1,9 +1,28 @@
-#main-footer {
-	margin: 1em 0 1em 0;
+footer address {
+	font-size: small;
+	font-style: normal;
+
+	a {
+		color: var(--copyright-color);
+		text-decoration: none;
+	}
+
+	a:hover { color: var(--contrast-color); }
+	a:focus { color: var(--contrast-color);}
+	a:active { color: var(--contrast-color); }
+
+	svg {
+		vertical-align: 0;
+		display: inline-block;
+		width: 1em;
+		height: 1em;
+	}
+
 }
 
+
 .copyright {
-	margin: 6em 0 0 0;
+
 	font-size: xx-small;
 	max-width: 135ch;
 	color: var(--copyright-color);

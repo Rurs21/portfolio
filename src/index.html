@@ -95,7 +95,7 @@
 			</section>
 			<section id="link-up" aria-label="Contacts">
 				<h2 data-translate="contact-me">Link up</h2>
-				<div id="contact-links" role="complementary">
+				<address id="contact-links">
 					<a class="square-icon" href="https://github.com/Rurs21" target="_blank" aria-label="My GitHub link">
 						<img src="./assets/svg/github-alt.svg" alt="GitHub Logo" width="50px" height="50px"></img>
 					</a>
@@ -105,30 +105,34 @@
 					<a class="square-icon" href="mailto:ce.pepin@icloud.com" aria-label="Email link">
 						<img src="./assets/svg/envelope_solid.svg" alt="Envelope Icon" width="50px" height="50px"></img>
 					</a>
-				</div>
+				</address>
 			</section>
 		</main>
 
 
-		<footer id="main-footer" aria-label="Contact, Copyright, Acknowledgment and other boring stuff" >
+		<footer aria-label="Contact, Copyright, Acknowledgment and other boring stuff" >
 			<section class="copyright" aria-label="Copyright">
 				<small>
 					<p>
-						Copyright © 2024 Rurs21. All Rights Reserved... but hey, sharing is caring!
+						<img id="rose" class="unfilled" src="./assets/svg/rose.svg" width="15px" height="15px"></img>
+						<strong>Copyright &copy; 2024 Rurs21.</strong> All Rights Reserved... but hey, sharing is caring!<br/>
 						My code is open – because who would want to claim it as proprietary?
-						Go ahead, have a laugh, make it better, or just wonder "what was he thinking?". Anyway, it's proudly under the MIT License.
+						Go ahead, have a laugh, make it better, or just wonder "what was he thinking?".<br/>
+						Anyway, it's proudly under the <em>MIT License</em>.
 					</p>
 					<div id="copyright-acknowledgment">
 						<details>
 							<summary>The site uses assets from the following third parties, who do not endorse me or my work:</summary>
 							<ul>
-								<li>Icons by Aniket Suvarna, from <a href="https://boxicons.com/" target="_blank">Boxicons</a> , licensed under the MIT License.</li>
-								<li>Icons by Fonticons Inc., from <a href="https://fontawesome.com" target="_blank">Font Awesome</a>, licensed under the CC BY 4.0.</li>
+								<li>Icons by Aniket Suvarna, from <a href="https://boxicons.com/" target="_blank">Boxicons</a> , licensed under the <em>MIT License</em>.</li>
+								<li>Icons by Fonticons Inc., from <a href="https://fontawesome.com" target="_blank">Font Awesome</a>, licensed under the <em>CC BY 4.0</em>.</li>
 							</ul>
 						</details>
 						<p>
-							All trademarks and registered trademarks are the property of their respective owners.<span hidden><br/>
-							P.S. I'm more of a clown than a lawyer, so if there's anything legally off here, it's unintentional. Please don't sue – I'm just here to spread digital haha! (•́⍜•̀)</span>
+							All trademarks and registered trademarks are the property of their respective owners.
+						</p>
+						<p>
+							P.S. I'm more of a clown than a lawyer, so if there's anything legally off here, it's unintentional. Please don't sue – I'm just here to spread digital haha! (•́⍜•̀)
 						</p>
 					</div>
 				</small>
@@ -136,13 +140,12 @@
 		</footer>
 	</div>
 
-	<dialog id="action-dialog">
+	<dialog id="action-dialog" font="">
 		<div id="action-dialog-text" class="glitch-text"></div>
 	</dialog>
 
-	<div id="visual" role="presentation">
-		<img id="rose" class="unfilled" src="./assets/svg/rose.svg" width="50px" height="50px"></img>
-	</div>
+
+
 </body>
 
 </html>
