@@ -97,14 +97,22 @@ a.round-button[aria-disabled="true"] {
 }
 
 #language-menu label {
-	font-size: x-large;
+	font-size: 1.15em;
 	font-weight: 150;
 }
 
 #language-menu > * {
-	margin: 0 0 0.32em 1em;
+	margin: 0 0 0.4em 1em;
 }
 
 #navigation-menu > #home-nav {
 	order: 1;
+}
+
+/* Left Handed rules */
+
+.left-handed {
+	.horizontal-menu {
+		flex-direction: row-reverse;
+	}
 }

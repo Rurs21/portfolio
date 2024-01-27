@@ -1,12 +1,31 @@
 /* index content */
 
-.hello-world > * {
+
+#hello-world {
+	display: block;
+	max-width: 60ch;
+}
+
+#hello-world > * {
 	margin-top: 4em;
 }
 
+#hello-world > header {
+	margin-top: 3em;
+}
+
 #greeting h2 {
-	font-weight: 400;
+	font-weight: normal;
 	height: 1.4em;
+}
+
+#about {
+	margin-top: 4em;
+	font-size: 1.25rem;
+	line-height: 1.75em;
+	h3 {
+		font-weight: 550;
+	}
 }
 
 #link-up h2 {
@@ -19,28 +38,10 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
+	margin-left: -0.25em;
 }
 
 #contact-links > * {
 	flex: 0 0 auto;
 	margin: 0.25em;
-}
-
-#contact-links > .icon {
-	width: 5em;
-	height: 5em;
-	padding: 0.5em;
-	margin-right: 1em;
-}
-
-#contact-links > .icon > img {
-	width: 100px;
-	height: 100px;
-}
-
-#about {
-	margin-top: 4em;
-	line-height: 1.75em;
-	font-size: 1.25em;
-	max-width: 50ch;
 }
