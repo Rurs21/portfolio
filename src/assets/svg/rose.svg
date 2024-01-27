@@ -12,7 +12,17 @@
 			fill: transparent;
 			stroke-dasharray: 2280.804931640625;
 			stroke-dashoffset: 2280.804931640625;
-			animation: dash 3s linear forwards, roseFill 2.5s ease-in-out 0.5s forwards;
+			animation: dash 3.5s linear forwards, roseFill 2.5s ease-in-out 0.5s forwards;
+		}
+
+		.reduced-motion #rose-path.rose-animation {
+			animation: dash 5s linear forwards, roseFill 4s ease-in-out 1s forwards;
+		}
+
+		@media (prefers-reduced-motion) {
+			#rose-path.rose-animation {
+				animation: dash 5s linear forwards, roseFill 4s ease-in-out 1s forwards;
+			}
 		}
 
 		@keyframes dash {
@@ -37,7 +47,7 @@
 		setTimeout(() => {
 			const rosePath = document.getElementById("rose-path")
 			rosePath.classList.remove("rose-animation")
-		}, 3000)
+		}, 5000)
 		// ]]>
 	</script>
 	<g transform="matrix(1, 0, 0, -1, 0, 0)">

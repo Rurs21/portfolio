@@ -133,7 +133,7 @@ body {
 	background: var(--background-color);
 	background-attachment: fixed;
 
-	transition: color 0.35s, border-color 0.35s;
+	transition: font-size 0.5s, color 0.35s, border-color 0.35s;
 }
 
 body > * {

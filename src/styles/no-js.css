@@ -15,7 +15,7 @@ noscript {
 		z-index: 1;
 
 		width: clamp(50ch, 50%, 15em);
-		top: clamp(15.25em, 45%, 22em);
+		top: clamp(15.25em, 50%, 20em);
 
 		box-sizing: border-box;
 

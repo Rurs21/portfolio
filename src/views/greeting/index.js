@@ -21,6 +21,7 @@ function typeOutTitle() {
 	}
 
 	titleElement.style.visibility = "hidden"
+	titleElement.classList.add("spacing")
 
 	const textElement = document.createElement("span")
 	const cursorElement = document.createElement("span")
@@ -45,7 +46,10 @@ function typeOutTitle() {
 			setTimeout(typeOut, 50) // Typing speed: 50ms per character
 		} else {
 			textElement.replaceWith(textElement.textContent)
-			setTimeout(() => cursorElement.remove(), 1750)
+			setTimeout(() => {
+				cursorElement.remove()
+				setTimeout(() => titleElement.classList.remove("spacing"), 250)
+			}, 1500)
 		}
 	}
 }
