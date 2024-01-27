@@ -1,22 +1,37 @@
 /* index content */
 
 
-#hello-world {
+.hello-world {
 	display: block;
 	max-width: 60ch;
 }
 
-#hello-world > * {
+.hello-world > * {
 	margin-top: 4em;
 }
 
-#hello-world > header {
+.hello-world > header {
 	margin-top: 3em;
 }
 
-#greeting h2 {
+#job-title {
 	font-weight: normal;
 	height: 1.4em;
+	transition: letter-spacing 0.3s 0.15s;
+}
+
+#job-title.spacing {
+	transition: none;
+	letter-spacing: 0.1375em;
+}
+
+:lang(fr) #job-title.spacing:not(:has(.cursor)) {
+	letter-spacing: 0.15em;
+}
+
+#job-title:has(.cursor) {
+	letter-spacing: normal;
+	font-family: var(--monospace);
 }
 
 #about {

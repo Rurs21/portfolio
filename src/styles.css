@@ -27,7 +27,6 @@
 		padding-right: 1em;
 		padding-left: 1em;
 	}
-
 	#contact-links > .square-icon {
 		margin-right: 1em;
 	}
@@ -71,6 +70,21 @@
 	}
 	#rose {
 		right: 20.5%;
+	}
+}
+
+@media (min-width: 2560px) {
+	:root {
+		font-size: 1.75em; /* 28px (1.75 * 16px) */
+	}
+	body > * {
+		max-width: 50%;
+	}
+	dialog {
+		max-width: 40%;
+	}
+	#rose {
+		right: 25%;
 	}
 }
 
