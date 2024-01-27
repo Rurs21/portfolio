@@ -20,3 +20,10 @@
 	text-shadow: 0.33px 0 0 var(--text-color), 0 0px 0 var(--text-color),
 		-0.33px 0 0 var(--text-color), 0 -0.33px 0 var(--text-color);
 }
+
+.multicolor {
+	background: linear-gradient(to right, #EF5350, #F48FB1, #7E57C2, #2196F3, #26C6DA, #43A047, #ffd341, #F9A825, #FF5722);
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}

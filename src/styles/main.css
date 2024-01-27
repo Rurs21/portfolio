@@ -1,8 +1,5 @@
 /*
 	Main Styling
-	- Light/Dark Themes
-	- Fonts
-	- default element
 */
 
 body, html {
@@ -16,6 +13,10 @@ body, html {
 }
 
 :root {
+	font-size: 1em;
+
+	/* variables */
+
 	--light-contrast-color: #000000;
 	--light-text-color: #333333;
 	--light-background-color: #e7e9ea; /* White Marble */
@@ -117,10 +118,8 @@ body.dark {
 }
 
 body {
-	font-size: 1em;
-	font-family: var(--system-ui);
-
 	/* Fonts */
+	font-family: var(--system-ui);
 	font-variant-position: normal;
 	font-variant-alternates: historical-forms;
 	font-variation-settings: normal;
@@ -141,6 +140,16 @@ body > * {
 	max-width: 100%;
 }
 
+h1 {
+	font-size: 2.75rem;
+}
+h2 {
+	font-size: 2.25rem;
+}
+h3 {
+	font-size: 1.5rem;
+}
+
 /* elements */
 
 svg {
@@ -153,166 +162,3 @@ a:not([href]) {
 	pointer-events: none;
 }
 
-dialog {
-	max-width: 85%;
-	font-family: var(--monospace);
-}
-
-.icon-button {
-	font-size: 1em;
-	padding: 0.5em;
-	width: 2.65em;
-	height: 2.65em;
-
-	line-height: 1em;
-
-	font-family: inherit;
-	font-style: normal;
-
-	color: var(--text-color);
-	background-color: var(--background-color);
-
-	cursor: pointer;
-	text-align: center;
-	text-decoration: none;
-
-	transition: background-color 0.3s, color 0.3s, border-color 0.3s,
-		border-radius 0.5s;
-
-	-moz-box-sizing: content-box;
-	-webkit-box-sizing: content-box;
-	box-sizing: content-box;
-}
-
-.icon-button svg,
-.icon-button img {
-	pointer-events: none;
-}
-
-.icon-button:disabled,
-.icon-button[disabled] {
-	border: 0.2em solid #999999;
-	background-color: #cccccc;
-	color: #666666;
-	transition: background-color 0.1s, color 0.1s, border-color 0.1s;
-}
-
-.round-button {
-	border: 0.185em solid var(--text-color);
-	border-radius: 50%;
-}
-
-.square-button {
-	border-radius: 0;
-	border-top: 0.2em solid var(--text-color);
-	border-left: 0.2em solid var(--text-color);
-	border-right: 0.2em solid var(--secondary-color);
-	border-bottom: 0.2em solid var(--secondary-color);
-}
-
-.icon {
-	fill: var(--text-color);
-}
-
-.icon-solid {
-	stroke: var(--text-color);
-}
-
-.square-icon {
-	color: var(--text-color);
-	background: var(--text-color);
-	height: 3.75em;
-	width: 3.75em;
-	padding: 1em;
-	border-radius: 1em;
-
-	transition: background-color 0.3s, fill 0.3s, stroke 0.3s;
-}
-
-.square-icon svg {
-	fill: var(--background-color);
-}
-
-.glyphe {
-	font-size: 2em;
-	line-height: 1em;
-}
-
-select {
-	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-
-	color: inherit;
-	background-color: transparent;
-	border: none;
-	padding: 0 1em 0 0;
-	margin: 0;
-
-	font-family: inherit;
-	font-size: inherit;
-	cursor: inherit;
-	line-height: inherit;
-}
-.select {
-	position: relative;
-	display: grid;
-	grid-template-areas: "select";
-	align-items: center;
-
-	min-width: 13ch;
-	max-width: 25ch;
-	border: 1px solid var(--secondary-color);
-	border-radius: 0.25em;
-
-	font-size: 1.15rem;
-	cursor: pointer;
-	line-height: 1.5;
-	background: var(--secondary-color);
-}
-.select::before,
-.select::after {
-	--size: 0.45rem;
-	position: absolute;
-	content: "";
-	right: 1rem;
-	pointer-events: none;
-}
-.select::before {
-	border-left: var(--size) solid transparent;
-	border-right: var(--size) solid transparent;
-	border-bottom: var(--size) solid var(--text-color);
-	top: 27.5%;
-}
-.select::after {
-	border-left: var(--size) solid transparent;
-	border-right: var(--size) solid transparent;
-	border-top: var(--size) solid var(--text-color);
-	top: 55%;
-}
-.select > select {
-	width: 100%;
-	padding: 0.55em 0.75em;
-}
-
-.cross:before,
-.cross:after {
-	position: absolute;
-	content: " ";
-	height: 3.8em;
-	width: 0.2em;
-	background-color: var(--text-color);
-}
-.cross:before {
-	transform: translateX(0.45em) rotate(45deg) translateY(-1em);
-}
-.cross:after {
-	transform: translateX(-0.55em) rotate(-45deg) translateY(-1em);
-}
-
-.multicolor {
-	background: linear-gradient(to right, #EF5350, #F48FB1, #7E57C2, #2196F3, #26C6DA, #43A047, #ffd341, #F9A825, #FF5722);
-	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-}

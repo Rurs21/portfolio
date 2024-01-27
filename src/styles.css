@@ -1,7 +1,8 @@
 @import url(styles/main.css);
+@import url(styles/components.css);
 @import url(styles/navigation.css);
-@import url(styles/footer.css);
 @import url(styles/content.css);
+@import url(styles/footer.css);
 @import url(styles/visual.css);
 @import url(styles/animation.css);
 @import url(styles/misc.css);
@@ -19,12 +20,6 @@
 	:root {
 		font-size: 1.125em; /* 18px (1.125 * 16px) */
 	}
-	h1 {
-		font-size: 2.5em;
-	}
-	h2 {
-		font-size: 2em;
-	}
 	#main-menu {
 		padding-top: 1.25em;
 	}
@@ -32,15 +27,12 @@
 		padding-right: 1em;
 		padding-left: 1em;
 	}
-	#rose {
-		width: 70%;
-	}
-	.square-icon {
-		height: 4.25em;
-		width: 4.25em;
-	}
+
 	#contact-links > .square-icon {
 		margin-right: 1em;
+	}
+	footer address svg {
+		vertical-align: -0.1em;
 	}
 }
 
@@ -60,23 +52,16 @@
 	dialog {
 		max-width: 70%;
 	}
-	h1 {
-		font-size: 3em;
-	}
-	h2 {
-		font-size: 2.5em;
-	}
 	#rose {
 		position: absolute;
 		top: 5%;
 		right: 12.75%;
-		width: 25em;
 	}
 }
 
 @media (min-width: 1440px) {
 	:root {
-		font-size: 1.375em; /* 22px (1.375 * 16px) */
+		font-size: 1.5em; /* 24px (1.5 * 16px) */
 	}
 	body > * {
 		max-width: 60%;
@@ -86,13 +71,12 @@
 	}
 	#rose {
 		right: 20.5%;
-		width: 30.5em;
 	}
 }
 
 @media (min-width: 3840px) {
 	:root {
-		font-size: 2em; /* 32px (2 * 16px) */
+		font-size: 2.25em; /* 36px (2 * 16px) */
 	}
 	body > * {
 		max-width: 40%;
@@ -100,14 +84,8 @@
 	dialog {
 		max-width: 35%;
 	}
-	h1 {
-		font-size: 4em;
-	}
-	h2 {
-		font-size: 3em;
-	}
 	#rose {
 		right: 31%;
-		width: 40em;
+
 	}
 }

@@ -3,55 +3,11 @@
 @import url(content/webgl.css);
 
 #content {
-	display: flex;
-	flex-direction: column;
 	box-sizing: border-box;
-	padding: 4em 1em 0 1em;
-}
-
-#content > * {
-	margin: 1em 0 1em 0;
+	padding: 5rem 1rem 0 1rem;
+	width: 100%;
 }
 
 #content main {
 	min-height: 80vh;
-}
-
-#action-dialog {
-	z-index: 10;
-	height: auto;
-	width: fit-content;
-	margin: 0;
-	padding: 0.5em;
-
-	position: fixed;
-	top: clamp(15.25em, 50%, 25em);
-	left: 50%;
-	transform: translate(-50%, -50%) scale(0.01);
-
-	opacity: 0.97;
-	color: var(--text-color);
-	background: var(--background-color);
-	border: none;
-	outline: none;
-
-	transition: transform 250ms;
-
-	#action-dialog-text {
-		padding: 1em;
-		box-sizing: border-box;
-
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-
-		overflow-wrap: break-word;
-
-		font-size: clamp(1.15em, 3vh, 1.75em);
-		border: 0.2em solid var(--secondary-color);
-	}
-}
-#action-dialog.dialog-scale {
-	transform: scale(1) translate(-50%, -50%);
 }
