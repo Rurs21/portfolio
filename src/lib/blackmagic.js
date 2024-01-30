@@ -102,3 +102,24 @@ window.addEventListener("popstate", () => {
 String.prototype.capitalizeFirstLetter = function() {
 	return this.charAt(0).toUpperCase() + this.slice(1)
 }
+
+/**
+ * Adds a getter and setter for the meta description of the document.
+ *
+ * @property {string|null} metaDescription - The content of the meta description tag. If the tag does not exist, the getter returns null, and the setter will create the tag.
+ */
+Object.defineProperty(Document.prototype, "description", {
+	get: function () {
+		const element = this.querySelector('meta[name="description"]')
+		return element ? element.getAttribute("content") : null
+	},
+	set: function (value) {
+		let element = this.querySelector('meta[name="description"]')
+		if (!element) {
+			element = this.createElement("meta")
+			element.setAttribute("name", "description")
+			this.head.appendChild(element)
+		}
+		element.setAttribute("content", value)
+	}
+})
