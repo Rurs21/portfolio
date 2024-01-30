@@ -8,21 +8,18 @@
 noscript {
 	line-height: 1.25em;
 
-
 	dialog {
 		font-size: 1em;
 
 		z-index: 1;
-
 		width: clamp(50ch, 50%, 15em);
 		top: clamp(15.25em, 50%, 20em);
 
 		box-sizing: border-box;
-
 		background: var(--background-color);
 
-
 		button {
+			background-color: #cccccc;
 			padding: 0.5em 1em 0.5em 1em;
 			display: block;
 			margin-left: auto;

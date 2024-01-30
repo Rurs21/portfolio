@@ -7,17 +7,20 @@ footer {
 footer details[open] > summary {
 	color: var(--text-color);
 }
+details[open] summary ~ * {
+	animation: fadeIn .5s ease-in-out;
+}
+
 .copyright > summary {
 	margin-left: auto;
 }
 .copyright > * {
-	margin-left: 0.1rem;
+	margin-left: 0.125rem;
 }
 .copyright {
 	color: var(--copyright-color);
 	font-size: xx-small;
-
-	min-height: 1.5rem;
+	padding: 0.5rem 0.05rem;
 }
 
 .copyright a { color: currentColor; }

@@ -1,7 +1,7 @@
 
 #rose {
 	font-size: 1rem;
-	position: fixed;
+	position: absolute;
 	top: 1em;
 	left: auto;
 	right: -5em;

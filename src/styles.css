@@ -10,7 +10,16 @@
 
 /* Responsive stuff */
 
+@media (max-width: 300px) {
+	:root {
+		font-size: 0.625em !important; /* 10px (0.625 * 16px) */
+	}
+}
+
 @media (max-width: 340px) {
+	:root {
+		font-size: 0.875em; /* 14px (0.875 * 16px) */
+	}
 	.horizontal-menu > * {
 		margin: 0 0 0 0.75em;
 	}
@@ -52,7 +61,6 @@
 		max-width: 70%;
 	}
 	#rose {
-		position: absolute;
 		top: 5%;
 		right: 12.75%;
 	}
