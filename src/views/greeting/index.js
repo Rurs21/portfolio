@@ -35,7 +35,7 @@ function typeOutTitle() {
 		titleElement.removeAttribute("style")
 		titleElement.append(textElement)
 		titleElement.append(cursorElement)
-		setTimeout(typeOut, 1500)
+		setTimeout(typeOut, 1000)
 	}, 100)
 
 	let currentIndex = 0
@@ -49,7 +49,7 @@ function typeOutTitle() {
 			setTimeout(() => {
 				cursorElement.remove()
 				setTimeout(() => titleElement.classList.remove("spacing"), 250)
-			}, 1500)
+			}, 1000)
 		}
 	}
 }
