@@ -1,7 +1,6 @@
 import { toValidId } from "@/utils/misc"
 
 const parser = new DOMParser()
-const descriptionSelector = 'meta[name="description"]'
 
 class View {
 	constructor(html, connectedCallback, disconnectedCallback) {
@@ -17,7 +16,7 @@ class View {
 		}
 
 		this.title = doc.title
-		this.description = doc.querySelector(descriptionSelector).content
+		this.description = doc.description
 		this.template = template
 		//this.content = template.content.children
 		this.connectedCallback = connectedCallback
@@ -26,9 +25,7 @@ class View {
 
 	setPageInfo() {
 		document.title = this.title
-		document.head
-			.querySelector(descriptionSelector)
-			.setAttribute("content", this.description)
+		document.description = this.description
 	}
 }
 
