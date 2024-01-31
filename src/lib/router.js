@@ -1,11 +1,7 @@
-import { ContentView } from "./view"
-
 class Router {
 	constructor() {
 		this.routes = {}
-		this.appView = document.getElementById('app-view')
-
-		window.onpopstate = () => {this.resolve()}
+		//window.onpopstate = () => {this.resolve()}
 	}
 
 	get currentPath() {
@@ -27,7 +23,6 @@ class Router {
 
 		try {
 			const route = this.#resolveRoute(path)
-			this.#changeRoute(route)
 			return route
 		} catch (e) {
 			console.error(e)
@@ -52,22 +47,11 @@ class Router {
 		}
 		return route
 	}
-
-	#changeRoute(route) {
-		const current = this.appView.firstElementChild
-
-		if (!current || !(current instanceof ContentView)) {
-			this.appView.append(route.contentView)
-		} else if (current !== route) {
-			current.replaceWith(route.contentView)
-		}
-
-	}
 }
 
 class Route {
 	constructor(view) {
-		this.contentView = new ContentView(view)
+		this.view = view
 	}
 }
 

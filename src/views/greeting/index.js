@@ -1,10 +1,9 @@
 import { View } from "@/lib/view"
 
-const indexContent = document.createElement("template")
-indexContent.classList.add("hello-world")
-indexContent.content.append(...document.querySelector("main").children)
-
-const greetingView = new View(indexContent, greeting)
+const indexDoc = document.implementation.createHTMLDocument(document.title)
+indexDoc.description = document.description
+indexDoc.body.append(...document.querySelector("main").children)
+const greetingView = new View(indexDoc, greeting)
 
 function greeting() {
 	try {

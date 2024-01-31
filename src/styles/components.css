@@ -159,7 +159,7 @@ select {
 
 	transition: transform 250ms;
 
-	#action-dialog-text {
+	> div {
 		padding: 1em;
 		box-sizing: border-box;
 

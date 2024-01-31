@@ -18,7 +18,6 @@ function init(event) {
 	router.addRoute("/", indexView)
 	router.addRoute(404, eror404View)
 	router.addRoute("/webgl", webglView)
-	router.resolve()
 
 	app = new App(router)
 }
@@ -27,7 +26,6 @@ function initComponents(event) {
 	try {
 		if (isCssLoaded(document)) {
 			initialize(app)
-				.visual()
 				.menu()
 				.navigation()
 				.controls.language()
