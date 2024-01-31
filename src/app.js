@@ -47,8 +47,14 @@ class App {
 		}
 	}
 
+	get view() {
+		return this.ui.appView.element
+	}
+
 	async resolveRoute(path) {
 		const route = await this.router.resolve(path)
+		this.ui.appView.view = route.view
+		return route
 	}
 
 	closeMainMenu() {

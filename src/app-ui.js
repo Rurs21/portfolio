@@ -2,8 +2,8 @@ import Menu from "@/lib/menu"
 import animation from "@/lib/animation"
 import * as language from "@/i18n/l10n"
 import { schemeToggle } from "@/lib/theme"
-import { rose } from "@/lib/flower"
 import { onLinkClick } from "@/utils/events"
+import { AppView } from "@/lib/view"
 
 export default function initialize(app) {
 	if (app == null) {
@@ -15,7 +15,7 @@ export default function initialize(app) {
 	document.querySelector("main").removeAttribute("class")
 
 	function UI() {
-
+		this.appView = setAppView(app)
 		this.actionDialog = setActionDialog()
 
 		this.menu = () => {
@@ -43,11 +43,6 @@ export default function initialize(app) {
 			return this
 		}
 
-		this.visual = () => {
-			drawRose(app.motion)
-			return this
-		}
-
 		this.nonCssFeatures = () => {
 			enableNonCssFeatures()
 			return this
@@ -59,11 +54,10 @@ export default function initialize(app) {
 	return app.ui
 }
 
-function drawRose(motion) {
-
-
-
-
+function setAppView(app, elementId = "app-view") {
+	const appView = new AppView(document.getElementById(elementId))
+	app.resolveRoute()
+	return appView
 }
 
 function setLanguageSelect(app, elementId = "language-select") {
@@ -127,6 +121,11 @@ function initNavigation(app) {
 	window.addEventListener("locationchange", function () {
 		setActiveLink()
 	})
+	window.onpopstate = function () {
+		animation.fadeInAndOut(app.view, () => {
+			app.resolveRoute()
+		})
+	}
 
 	function setNavigationLinks(selector) {
 		const navigationLinks = document.querySelectorAll(selector)
@@ -134,7 +133,7 @@ function initNavigation(app) {
 			navlink.onclick = onLinkClick((href) => {
 				if (href != window.location.href) {
 					app.closeMainMenu()
-					animation.fadeInAndOut(app.router.appView, () => {
+					animation.fadeInAndOut(app.view, () => {
 						app.resolveRoute(href)
 					})
 				}
@@ -187,8 +186,14 @@ function setNavbar() {
 }
 
 function setActionDialog() {
-	const dialog = document.getElementById("action-dialog")
-	const dialogText = document.getElementById("action-dialog-text")
+	const dialog = document.createElement("dialog")
+	dialog.id = "action-dialog"
+	const dialogText = document.createElement("div")
+	dialogText.classList.add("glitch-text")
+
+	dialog.append(dialogText)
+	document.body.append(dialog)
+
 	// Override show method
 	const showFn = dialog.show
 	dialog.show = function (text) {

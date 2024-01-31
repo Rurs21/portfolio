@@ -1,16 +1,16 @@
 /* index content */
 
 
-.hello-world {
+#hello-world {
 	max-width: 60ch;
 	display: block;
 }
 
-.hello-world > * {
+#hello-world > * {
 	margin-top: 4em;
 }
 
-.hello-world > header {
+#hello-world > header {
 	margin-top: 3em;
 }
 

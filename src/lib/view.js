@@ -5,20 +5,20 @@ const parser = new DOMParser()
 class View {
 	constructor(html, connectedCallback, disconnectedCallback) {
 		var doc = html
-		var template
 
 		if (!(html instanceof Document) && typeof html === "string") {
 			doc = parser.parseFromString(html, "text/html")
-			template = doc.body.querySelector("template")
-		} else if (html instanceof HTMLTemplateElement) {
-			doc = document
-			template = html
+		} else if (html instanceof Document) {
+			doc = html
 		}
 
 		this.title = doc.title
 		this.description = doc.description
-		this.template = template
-		//this.content = template.content.children
+
+		this.id = doc.body.id
+		this.classList = doc.body.classList
+
+		this.content = Array.from(doc.body.children)
 		this.connectedCallback = connectedCallback
 		this.disconnectedCallback = disconnectedCallback
 	}
@@ -29,37 +29,44 @@ class View {
 	}
 }
 
-const tagName = "content-view"
+class AppView {
 
-class ContentView extends HTMLElement {
-	static tagNameValue = tagName
+	#view = undefined
 
-	constructor(view) {
-		super()
-		if (view) {
-			this.view = view
-			this.id = view.template.id || toValidId(view.title)
-			this.classList = view.template.classList
-			this.append(...view.template.content.children)
-		}
+	/**
+	 *
+	 * @param {Element} element
+	 */
+	constructor(element) {
+		this.element = element
 	}
 
-	connectedCallback() {
-		if (this.view) {
-			this.view.setPageInfo()
-		}
-		if (this.view && this.view.connectedCallback) {
-			this.view.connectedCallback()
-		}
-	}
+	/**
+	 * @param {View} view
+	 */
+	set view(view) {
 
-	disconnectedCallback() {
-		if (this.view && this.view.disconnectedCallback) {
-			this.view.disconnectedCallback()
+		this.element.innerHTML = ""
+
+		if (this.#view) {
+			this.element.classList.remove(...this.#view.classList)
+			if (this.#view.disconnectedCallback) {
+				this.#view.disconnectedCallback()
+			}
 		}
+
+		view.setPageInfo()
+		this.element.id = view.id || toValidId(view.title)
+		this.element.classList.add(...view.classList)
+
+		this.element.append(...view.content)
+
+		if (view.connectedCallback ) {
+			view.connectedCallback()
+		}
+
+		this.#view = view
 	}
 }
 
-customElements.define(tagName, ContentView)
-
-export { View, ContentView }
+export { View, AppView }
