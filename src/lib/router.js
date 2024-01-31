@@ -1,11 +1,13 @@
 class Router {
+	#path = undefined
+
 	constructor() {
 		this.routes = {}
 		//window.onpopstate = () => {this.resolve()}
 	}
 
 	get currentPath() {
-		return window.location.pathname
+		return this.#path
 	}
 
 	addRoute(path, view) {
@@ -45,6 +47,7 @@ class Router {
 		if (route == undefined) {
 			return this.routes[404]
 		}
+		this.#path = path
 		return route
 	}
 }

@@ -26,7 +26,7 @@ function changeLanguage(lang) {
 		throw new Error(`Language '${lang}' is not a valid language`)
 	}
 	document.documentElement.lang = lang
-	changeContentLanguage(lang, document)
+	changeContentLanguage(lang, document.body)
 	localStorage.setItem("language", lang)
 }
 
@@ -50,7 +50,15 @@ function changeContentLanguage(lang, content) {
 	}
 
 	function translateContent(rootElement) {
-		for (const element of queryTranslateElem(rootElement)) {
+		if (rootElement.hasAttribute(translateAttr)) {
+			translate(rootElement)
+		} else {
+			for (const element of queryTranslateElem(rootElement)) {
+				translate(element)
+			}
+		}
+
+		function translate(element) {
 			const key = element.getAttribute(translateAttr)
 			element.textContent = translations[lang][key] || key
 		}
