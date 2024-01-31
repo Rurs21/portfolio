@@ -12,7 +12,7 @@ export default function initialize(app) {
 
 	document.body.classList.remove("no-js")
 	document.querySelector("noscript").remove()
-	document.querySelector("main").removeAttribute("class")
+	document.querySelector("main").id = "app-view"
 
 	function UI() {
 		this.appView = setAppView(app)

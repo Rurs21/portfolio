@@ -74,7 +74,7 @@ class App {
 function changeRoutesLang(lang, router) {
 	const routes = router.routes
 	for (const path in routes) {
-		const content = routes[path].contentView
+		const content = routes[path].view.content
 		if (path != router.currentPath && content != undefined) {
 			language.changeContentLanguage(lang, content)
 		}
