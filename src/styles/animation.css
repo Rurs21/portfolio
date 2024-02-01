@@ -105,18 +105,6 @@
 	}
 }
 
-/* Content Specific Animation */
-
-.no-js {
-	.fade-in {
-		animation: fadeIn 2s ease-in-out forwards;
-	}
-}
-
-#app-view.fade-in * > * {
-	animation: fadeIn 0.375s ease-in-out forwards;
-}
-
 /* Reduced motion */
 
 @media screen and (prefers-reduced-motion: reduce)
