@@ -19,7 +19,12 @@ export default function initialize(app) {
 		this.actionDialog = setActionDialog()
 
 		this.menu = () => {
-			app.menus = setNavbar()
+			try {
+				app.menus = setNavbar()
+			} catch (error) {
+				console.error(`UI Navbar \n${error}`)
+			}
+
 			return this
 		}
 
@@ -178,8 +183,7 @@ function setNavbar() {
 	menus["main-menu"].addSubMenu(menus["navigation-menu"])
 	menus["settings-menu"].addSubMenu(menus["language-menu"])
 
-	// Reveal overlay & navbar when menu all setup
-	document.getElementById("top-overlay").removeAttribute("hidden")
+	// Reveal navbar when menu all setup
 	document.getElementById("navbar").removeAttribute("hidden")
 
 	return menus
@@ -221,6 +225,7 @@ function setActionDialog() {
 
 function enableNonCssFeatures() {
 	// hide unused menu
+	document.getElementById("top-overlay").setAttribute("hidden", "")
 	document.getElementById("main-menu").setAttribute("hidden", "")
 	document.getElementById("settings-menu").setAttribute("hidden", "")
 	// unhide navbar
