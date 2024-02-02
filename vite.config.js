@@ -1,10 +1,10 @@
 import path from "path"
-import htmlSvgInline from "./plugins/svg-inline"
+import slim from "./plugins/slim"
 
 export default {
 	root: "src",
 	appType: "spa",
-	plugins: [htmlSvgInline()],
+	plugins: [slim()],
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "src")
