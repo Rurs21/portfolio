@@ -20,14 +20,13 @@ vite preview --host
 
 ## Assets
 
-### fonts
-
+### Fonts
 None
 
-### icons (SVG)
+### Icons (SVG)
 
 - [Font Awesome](https://github.com/FortAwesome/Font-Awesome) : Github-alt, Envelope-solid, LinkedIn-in
-- [Boxicons](https://github.com/atisawd/boxicons) : X, Trigram For Heaven, Moon, Sun, Globe, Rocket, Cog, Compass, Cube
+- [Boxicons](https://github.com/atisawd/boxicons) : X, Trigram For Heaven, Moon, Sun, brightness-half, Globe, Rocket, Cog, Compass, Cube, Meteor, Rocket
 
 ## TODO
 
@@ -43,8 +42,7 @@ None
 
 - better error handling
 - use Web Components
-- maybe minify html
-
 
 ### Fix
 
+- Firefox bookmark svg favicon (use apple-touch-icon ?)
