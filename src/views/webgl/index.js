@@ -2,9 +2,8 @@ import vertexShaderSource from "./shaders/shader.vert?raw"
 import fragmentShaderSource from "./shaders/shader.frag?raw"
 import { initBuffers } from "./init-buffers.js"
 import { drawScene } from "./draw-scene.js"
-import { observeCanvasResize } from "@/utils/canvas.js"
 
-import { View } from "@/lib/view";
+import { View } from "@/lib/view"
 import pageWebgl from "./index.html"
 
 const webglView = new View(pageWebgl, webgl)

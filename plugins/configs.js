@@ -7,7 +7,6 @@ const svgoConfig = {
 					removeComments: {
 						preservePatterns: false
 					},
-					removeTitle: false,
 					cleanupIds: {
 						remove: false
 					},
