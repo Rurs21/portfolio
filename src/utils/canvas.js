@@ -1,5 +1,5 @@
 
-const canvasToDisplaySizeMap = new Map();
+const canvasToDisplaySizeMap = new Map()
 
 function resizeCanvasToDisplaySize(canvas) {
 	var displayWidth = canvas.clientWidth,

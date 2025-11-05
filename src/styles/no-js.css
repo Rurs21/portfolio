@@ -1,5 +1,6 @@
-.no-js  {
-	#app-navigation, #action-dialog {
+.no-js {
+	#app-navigation,
+	#action-dialog {
 		display: none;
 		visibility: hidden;
 	}
@@ -27,9 +28,10 @@ noscript {
 			padding: 0.5em 1em 0.5em 1em;
 			display: block;
 			margin-left: auto;
-    		margin-right: auto;
+			margin-right: auto;
 			color: black;
 			font-size: x-large;
 		}
 	}
 }
+
