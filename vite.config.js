@@ -5,6 +5,9 @@ export default {
 	root: "src",
 	appType: "spa",
 	plugins: [slim()],
+	optimizeDeps: {
+		entries: ["src/index.html"]
+	},
 	resolve: {
 		alias: {
 			"@": path.resolve(__dirname, "src")
@@ -13,6 +16,6 @@ export default {
 	build: {
 		assetsInlineLimit: 12288,
 		emptyOutDir: true,
-		outDir: path.resolve(__dirname, "dist"),
+		outDir: path.resolve(__dirname, "dist")
 	}
 }

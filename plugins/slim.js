@@ -1,7 +1,7 @@
 import path from "path"
 import fs from "fs"
 import fsp from "fs/promises"
-import { minify } from "html-minifier"
+import { minify } from "html-minifier-terser"
 import { optimize } from "svgo"
 import { svgoConfig, htmlMinifyConfig } from "./configs.js"
 
@@ -47,7 +47,7 @@ export default function slim(options = {}) {
 
 			if (id.endsWith(".html")) {
 				let htmlContent = await readFile(id)
-				htmlContent = minify(htmlContent, htmlMinifyConfig)
+				htmlContent = await minify(htmlContent, htmlMinifyConfig)
 				return htmlContent
 			}
 
@@ -56,7 +56,7 @@ export default function slim(options = {}) {
 				let content = await readFile(id)
 				let fileLocation = path.dirname(id)
 				content = replaceImgWithInlineSVG(content, fileLocation)
-				content = minify(content, htmlMinifyConfig)
+				content = await minify(content, htmlMinifyConfig)
 				return `export default ${JSON.stringify(content)}`
 			}
 
