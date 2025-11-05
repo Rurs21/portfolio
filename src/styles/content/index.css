@@ -1,6 +1,5 @@
 /* index content */
 
-
 #hello-world {
 	max-width: 60ch;
 	display: block;
@@ -17,7 +16,9 @@
 #job-title {
 	font-weight: normal;
 	height: 2.25rem;
-	transition: font-size 0.5s 0.25s, letter-spacing 0.5s 0.25s;
+	transition:
+		font-size 0.5s 0.25s,
+		letter-spacing 0.5s 0.25s;
 }
 
 #job-title.spacing {

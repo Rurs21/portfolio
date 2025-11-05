@@ -31,15 +31,14 @@ function webgl() {
 
 	canvas.onwebglcontextrestored = (event) => {
 		console.log("webgl context restore")
-	};
-
+	}
 
 	// Set clear color to black, fully opaque
 	//gl.clearColor(0.0, 0.0, 0.0, 1.0)
 	// Clear the color buffer with specified clear color
 	//gl.clear(gl.COLOR_BUFFER_BIT)
 
-	const shaderProgram = initShaderProgram(gl,vertexShaderSource,fragmentShaderSource)
+	const shaderProgram = initShaderProgram(gl, vertexShaderSource, fragmentShaderSource)
 
 	// Collect all the info needed to use the shader program.
 	// Look up which attributes our shader program is using
