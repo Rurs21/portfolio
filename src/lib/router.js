@@ -18,7 +18,7 @@ class Router {
 		this.routes[path] = new Route(view)
 	}
 
-	async resolve(path) {
+	resolve(path) {
 		if (path) {
 			path = historyPush(path)
 		}
@@ -35,8 +35,8 @@ class Router {
 				let url = new URL(path, document.baseURI)
 				window.history.pushState({}, "", url.href)
 				return url.pathname
-			} catch (e) {
-				throw new Error(`Given route '${path}' is not a valid URL`)
+			} catch (error) {
+				throw new Error(`Given route '${path}' is not a valid URL`, { cause: error })
 			}
 		}
 	}
