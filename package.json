@@ -6,15 +6,17 @@
   "scripts": {
     "dev": "vite dev --host",
     "build": "vite build",
-    "preview": "vite build && vite preview --host"
+    "preview": "vite build && vite preview --host",
+    "debug": "vite build --sourcemap && vite preview --host"
   },
   "dependencies": {
     "gl-matrix": "^3.4.4"
   },
   "devDependencies": {
-    "vite": "^7.2.6",
+    "vite": "8.0.0-beta.0",
+    "oxlint": "^1.31.0",
+    "oxfmt": "^0.16.0",
     "svgo": "^4.0.0",
-    "html-minifier-terser": "^7.2.0",
-    "@biomejs/biome": "2.3.4"
+    "html-minifier-terser": "^7.2.0"
   }
 }

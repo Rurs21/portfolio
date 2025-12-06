@@ -2,6 +2,9 @@ import path from "path"
 import slim from "./plugins/slim"
 import pkg from './package.json' with { type: 'json' }
 
+const deps = Object.keys(pkg.dependencies || {});
+const depsRegex = new RegExp(`(${deps.join('|')})(\\/|$)`);
+
 export default {
 	root: "src",
 	appType: "spa",
@@ -20,10 +23,10 @@ export default {
 		assetsInlineLimit: 12288,
 		outDir: path.resolve(__dirname, "dist"),
 		emptyOutDir: true,
-		rollupOptions: {
+		rolldownOptions: {
 			input: {
-				index: 'src/index.html', // Your main entry point
-				sw: 'src/sw.js',    // Your service worker entry point
+				index: 'src/index.html',
+				sw: 'src/sw.js',
 			},
 			output: {
 				entryFileNames: (chunkInfo) => {
@@ -33,7 +36,15 @@ export default {
 						return `assets/[name]-v${pkg.version}.js`
 				},
 				chunkFileNames: "assets/[name]-[hash:6].js",
-				assetFileNames: `assets/[name]-v${pkg.version}.[ext]`
+				assetFileNames: `assets/[name]-v${pkg.version}.[ext]`,
+				advancedChunks: {
+					groups: [
+						{
+							test: depsRegex,
+							name(id) { return `vendor/${id.match(depsRegex)[1]}`; }
+						}
+					]
+				}
 			},
 		},
 	}
