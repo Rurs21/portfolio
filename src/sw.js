@@ -7,19 +7,24 @@ self.addEventListener('install', event => {
 		try {
 			console.log('[Service Worker] Fetching asset manifest...');
 
-			const response = await fetch(ASSET_MANIFEST, { 
+			const response = await fetch(ASSET_MANIFEST, {
 				cache: 'no-cache',
 				headers: { 'Accept': 'application/json' }
 			});
 
 			if (!response.ok) {
-      			throw new Error(`Unable to fetch asset manifestd. HTTP ${response.status}`);
+				throw new Error(`Unable to fetch asset manifestd. HTTP ${response.status}`);
 			}
 
 			const manifest = await response.json();
 
 			// extract all files to cache
-			const filesToCache = Object.values(manifest).flatMap(entry => [entry.file, ...(entry.css || [])]);
+			const filesToCache = Object.values(manifest)
+				.flatMap(entry => [entry.file, ...(entry.css || [])])
+				.filter((file) => {
+					if (file.includes("vendor/")) return false;
+					return true;
+				})
 			console.debug('[Service Worker] Files to cache:', filesToCache);
 
 			const cache = await caches.open(CACHE_NAME);
