@@ -22,8 +22,6 @@ class Router {
 		const route = this.routes[path]
 		if (route == undefined) {
 			return this.routes[404]
-		} else if (route.view instanceof Promise) {
-			route.view = (await route.view).default
 		}
 		this.#path = path
 		return route
@@ -31,8 +29,28 @@ class Router {
 }
 
 class Route {
+
+	#view = undefined
+
+	// TODO: consider having view as concrete class and returning new instance of views
+	/**
+	 * @param {View|string} view - Either an instance of View,
+	 * or a string path to a module that exports a View as the default.
+	 */
 	constructor(view) {
-		this.view = view
+		this.#view = view
+	}
+
+	get view() {
+		return Route.#resolveView(this.#view)
+	}
+
+	static async #resolveView(view) {
+		if (typeof view === 'function') {
+			const module = await view()
+			return module.default
+		}
+		return view
 	}
 }
 

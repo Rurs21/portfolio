@@ -55,7 +55,7 @@ class App {
 		try {
 			const url = new URL(href, document.baseURI)
 			const route = await this.router.resolve(url.pathname)
-			this.ui.appView.view = route.view
+			this.ui.appView.view = await route.view
 			return route
 		} catch (error) {
 			throw new Error(`Failed to resolve '${href}'`, { cause: error })
