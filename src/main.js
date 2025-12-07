@@ -1,6 +1,7 @@
 import App from "@/app.js"
 import Router from "@/lib/router.js"
 
+import initialize from "./app-ui.js"
 import { isCssLoaded } from "./utils/misc.js"
 
 import indexView from "@/views/greeting"
@@ -19,7 +20,7 @@ async function init(event) {
 	registerServiceWorker()
 
 	console.info("initiliazing router...")
-	const webglView = import("@/views/webgl")
+	const webglView = () => import("@/views/webgl")
 
 	router.addRoute("/", indexView)
 	router.addRoute("/webgl", webglView)
@@ -30,7 +31,6 @@ async function init(event) {
 
 async function initComponents(event) {
  	try {
-		const initialize = (await import("./app-ui.js")).default
 		if (isCssLoaded(document)) {
 			initialize(app)
 				.menu()

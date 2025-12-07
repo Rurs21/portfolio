@@ -34,7 +34,6 @@ class AppView {
 	#view = undefined
 
 	/**
-	 *
 	 * @param {Element} element
 	 */
 	constructor(element) {

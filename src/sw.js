@@ -20,11 +20,7 @@ self.addEventListener('install', event => {
 
 			// extract all files to cache
 			const filesToCache = Object.values(manifest)
-				.flatMap(entry => [entry.file, ...(entry.css || [])])
-				.filter((file) => {
-					if (file.includes("vendor/")) return false;
-					return true;
-				})
+				.flatMap(entry => [entry.file, ...(entry.css || [])]);
 			console.debug('[Service Worker] Files to cache:', filesToCache);
 
 			const cache = await caches.open(CACHE_NAME);
@@ -58,11 +54,13 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+	const request = event.request;
 	event.respondWith(
-		caches.match(event.request)
+		caches.match(request, { ignoreVary: true })
 		.then(response => {
+			console.debug(`${request.method} ${request.url} from ${response ? "cache" : "network"}`);
 			// Serve from cache or fetch from network
-			return response || fetch(event.request);
+			return response || fetch(request);
 		})
 	);
 });
