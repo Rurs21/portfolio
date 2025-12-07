@@ -4,7 +4,9 @@ import Router from "@/lib/router.js"
 import { isCssLoaded } from "./utils/misc.js"
 
 import indexView from "@/views/greeting"
+import error404View from "@/views/error/404"
 
+// TODO: Fix initial l10n
 const router = new Router()
 const app = new App(router)
 
@@ -13,18 +15,17 @@ window.addEventListener("load", initComponents)
 
 async function init(event) {
 
-	console.log("App initiliazing...")
+	console.info("App initiliazing...")
 	registerServiceWorker()
 
-	console.log("initiliazing router...")
-	const webglView = (await import("@/views/webgl")).default
-	const error404View = (await import("@/views/error/404")).default
+	console.info("initiliazing router...")
+	const webglView = import("@/views/webgl")
 
 	router.addRoute("/", indexView)
 	router.addRoute("/webgl", webglView)
 	router.addRoute(404, error404View)
 
-	console.log('router initialized')
+	console.info('router initialized')
 }
 
 async function initComponents(event) {

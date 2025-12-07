@@ -18,34 +18,12 @@ class Router {
 		this.routes[path] = new Route(view)
 	}
 
-	resolve(path) {
-		if (path) {
-			path = historyPush(path)
-		}
-
-		try {
-			const route = this.#resolveRoute(path)
-			return route
-		} catch (e) {
-			console.error(e)
-		}
-
-		function historyPush(path) {
-			try {
-				let url = new URL(path, document.baseURI)
-				window.history.pushState({}, "", url.href)
-				return url.pathname
-			} catch (error) {
-				throw new Error(`Given route '${path}' is not a valid URL`, { cause: error })
-			}
-		}
-	}
-
-	#resolveRoute(path) {
-		path = path || window.location.pathname || "/"
+	async resolve(path) {
 		const route = this.routes[path]
 		if (route == undefined) {
 			return this.routes[404]
+		} else if (route.view instanceof Promise) {
+			route.view = (await route.view).default
 		}
 		this.#path = path
 		return route

@@ -51,10 +51,15 @@ class App {
 		return this.ui.appView.element
 	}
 
-	async resolveRoute(path) {
-		const route = await this.router.resolve(path)
-		this.ui.appView.view = route.view
-		return route
+	async resolveRoute(href = window.location.href) {
+		try {
+			const url = new URL(href, document.baseURI)
+			const route = await this.router.resolve(url.pathname)
+			this.ui.appView.view = route.view
+			return route
+		} catch (error) {
+			throw new Error(`Failed to resolve '${href}'`, { cause: error })
+		}
 	}
 
 	closeMainMenu() {

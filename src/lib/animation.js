@@ -5,6 +5,7 @@ const animation = new function() {
 
 	this.reducedMotion = false
 
+	// TODO: Fix animation when view is loading
 	this.fadeInAndOut = function(element, callbackFn) {
 		if (!isCssLoaded(document)) {
 			callbackFn()

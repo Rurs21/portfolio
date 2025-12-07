@@ -15,7 +15,7 @@ export default function initialize(app) {
 	document.querySelector("main").id = "app-view"
 
 	function UI() {
-		this.appView = setAppView(app)
+		this.appView = setAppView()
 		this.actionDialog = setActionDialog()
 
 		this.menu = () => {
@@ -55,13 +55,13 @@ export default function initialize(app) {
 	}
 
 	app.ui = new UI()
+	app.resolveRoute()
 
 	return app.ui
 }
 
-function setAppView(app, elementId = "app-view") {
+function setAppView(elementId = "app-view") {
 	const appView = new AppView(document.getElementById(elementId))
-	app.resolveRoute()
 	return appView
 }
 
@@ -121,29 +121,29 @@ function setMotionToggler(app, elementId = "motion-toggle") {
 }
 
 function initNavigation(app) {
-	setNavigationLinks("#navigation-menu a")
+	// set navigation links
+	const navigationLinks = document.querySelectorAll("#navigation-menu a")
+	for (const navlink of navigationLinks) {
+		navlink.onclick = onLinkClick((href) => {
+			if (href != window.location.href) {
+				app.closeMainMenu()
+				animation.fadeInAndOut(app.view, () => {
+					window.history.pushState({}, "", href)
+					app.resolveRoute(href)
+				})
+			}
+		})
+	}
+
 	setActiveLink()
 	window.addEventListener("locationchange", function () {
 		setActiveLink()
 	})
+
 	window.onpopstate = function () {
 		animation.fadeInAndOut(app.view, () => {
 			app.resolveRoute()
 		})
-	}
-
-	function setNavigationLinks(selector) {
-		const navigationLinks = document.querySelectorAll(selector)
-		for (const navlink of navigationLinks) {
-			navlink.onclick = onLinkClick((href) => {
-				if (href != window.location.href) {
-					app.closeMainMenu()
-					animation.fadeInAndOut(app.view, () => {
-						app.resolveRoute(href)
-					})
-				}
-			})
-		}
 	}
 
 	function setActiveLink() {
