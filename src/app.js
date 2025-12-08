@@ -53,10 +53,12 @@ class App {
 
 	async resolveRoute(href = window.location.href) {
 		try {
-			const url = new URL(href, document.baseURI)
-			const route = await this.router.resolve(url.pathname)
-			this.ui.appView.view = await route.view
-			return route
+			const path = new URL(href, document.baseURI).pathname
+			const view = await this.router.resolve(path)
+			// avoid updating view if the path changed
+			if (path === this.router.currentPath) {
+			    this.ui.appView.view = view
+			}
 		} catch (error) {
 			throw new Error(`Failed to resolve '${href}'`, { cause: error })
 		}
@@ -75,14 +77,14 @@ class App {
 	}
 }
 
-// changing the language for each route except the current one.
+// changing the language for each route
 function changeRoutesLang(lang, router) {
+	console.debug("Change Route lang")
 	const routes = router.routes
 	for (const path in routes) {
-		const content = routes[path].view.content
-		if (path != router.currentPath && content != undefined) {
-			language.changeContentLanguage(lang, content)
-		}
+	    // TODO: this will stack callbacks on routes pending to be resolve
+		routes[path].view.then((view) => {
+			language.changeContentLanguage(lang, view.content)})
 	}
 }
 

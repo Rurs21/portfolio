@@ -10,6 +10,13 @@ class Router {
 		return this.#path
 	}
 
+	get cachedRoutes() {
+		return Object.fromEntries(
+			Object.entries(this.routes)
+			.filter(([path, route]) => route.cached === true)
+		)
+	}
+
 	addRoute(path, view) {
 		if (this.routes[path] != undefined) {
 			throw new Error(`Route "${path}" is already defined`)
@@ -19,38 +26,46 @@ class Router {
 	}
 
 	async resolve(path) {
-		const route = this.routes[path]
-		if (route == undefined) {
-			return this.routes[404]
-		}
 		this.#path = path
-		return route
+		let route = this.routes[path]
+		if (route == undefined) {
+			route = this.routes[404]
+		}
+		return route.loadView()
 	}
 }
 
 class Route {
 
-	#view = undefined
+	#deferred = undefined
 
 	// TODO: consider having view as concrete class and returning new instance of views
 	/**
-	 * @param {View|string} view - Either an instance of View,
-	 * or a string path to a module that exports a View as the default.
+	 * @param {View|Function} view - Either an instance of View,
+	 * or async function returning module exporting a View as the default.
 	 */
 	constructor(view) {
-		this.#view = view
+		this.view = new Promise((resolve, _) => {
+			if (typeof view === "function") {
+			    this.#deferred = view
+				this.resolve = resolve
+			} else {
+				resolve(view)
+			}
+		})
 	}
 
-	get view() {
-		return Route.#resolveView(this.#view)
+	get cached() {
+		return ! new Boolean(this.#deferred)
 	}
 
-	static async #resolveView(view) {
-		if (typeof view === 'function') {
-			const module = await view()
-			return module.default
+	async loadView() {
+		if (this.#deferred) {
+			const module = await this.#deferred()
+			this.resolve(module.default)
+			this.#deferred = undefined
 		}
-		return view
+		return this.view
 	}
 }
 

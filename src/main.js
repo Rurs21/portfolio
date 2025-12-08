@@ -7,9 +7,7 @@ import { isCssLoaded } from "./utils/misc.js"
 import indexView from "@/views/greeting"
 import error404View from "@/views/error/404"
 
-// TODO: Fix initial l10n
-const router = new Router()
-const app = new App(router)
+var app = undefined
 
 document.addEventListener("DOMContentLoaded", init)
 window.addEventListener("load", initComponents)
@@ -22,11 +20,14 @@ async function init(event) {
 	console.info("initiliazing router...")
 	const webglView = () => import("@/views/webgl")
 
+	const router = new Router()
 	router.addRoute("/", indexView)
 	router.addRoute("/webgl", webglView)
 	router.addRoute(404, error404View)
 
 	console.info('router initialized')
+
+	app = new App(router);
 }
 
 async function initComponents(event) {

@@ -31,4 +31,16 @@ function toValidId(str) {
 		.toLowerCase()
 }
 
-export { isCssLoaded, toValidId }
+/**
+ * Checks if the given value is an async function.
+ *
+ * @param {any} fn - The value to check.
+ * @returns {boolean} Returns `true` if `fn` is an async function, otherwise `false`.
+ */
+const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+function isAsync(fn) {
+    return fn instanceof AsyncFunction;
+}
+
+export { isCssLoaded, toValidId, isAsync }
+
