@@ -127,9 +127,9 @@ function initNavigation(app) {
 		navlink.onclick = onLinkClick((href) => {
 			if (href != window.location.href) {
 				app.closeMainMenu()
-				animation.fadeInAndOut(app.view, () => {
+				animation.fadeInAndOut(app.view, async () => {
 					window.history.pushState({}, "", href)
-					app.resolveRoute(href)
+					await app.resolveRoute(href)
 				})
 			}
 		})
@@ -141,8 +141,8 @@ function initNavigation(app) {
 	})
 
 	window.onpopstate = function () {
-		animation.fadeInAndOut(app.view, () => {
-			app.resolveRoute()
+		animation.fadeInAndOut(app.view, async () => {
+			await app.resolveRoute()
 		})
 	}
 

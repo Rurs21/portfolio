@@ -5,15 +5,15 @@ const animation = new function() {
 
 	this.reducedMotion = false
 
-	// TODO: Fix animation when view is loading
+	// TODO: Improve animation when view is loading
 	this.fadeInAndOut = function(element, callbackFn) {
 		if (!isCssLoaded(document)) {
 			callbackFn()
 		} else {
 			const animationDur = 375
 			element.classList.add("fade-out")
-			setTimeout(() => {
-				callbackFn()
+			setTimeout(async () => {
+				await callbackFn()
 				element.classList.add("fade-in")
 				element.classList.remove("fade-out")
 				setTimeout(() => element.classList.remove("fade-in"), animationDur)
