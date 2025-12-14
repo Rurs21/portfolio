@@ -1,89 +1,22 @@
 import path from "path"
 import fs from "fs"
-import fsp from "fs/promises"
-import { minify } from "html-minifier-terser"
 import { optimize } from "svgo"
-import { svgoConfig, htmlMinifyConfig } from "./configs.js"
+import { svgoConfig, } from "./configs.js"
 
 /**
- * Plugins that replace the img with referenced svg with the actual svg inline inside html files
+ * Replaces <img> elements that reference SVG images with fully inlined <svg> markup.
+ *
+ * - Preserves relevant attributes (class, id, style, size, ARIA, data-*)
+ * - Converts `alt` text into accessible SVG <title> and <desc> elements
+ * - Automatically adds `aria-labelledby` for improved accessibility
+ * - Optimizes the resulting SVG using SVGO
+ *
+ * @module svglue
  */
-export default function slim(options = {}) {
-	const postfix = "?html-import"
 
-	return {
-		name: "slim",
-		enforce: "pre",
-
-		async transformIndexHtml(html, ctx) {
-			let fileLocation = path.dirname(ctx.filename)
-			html = replaceImgWithInlineSVG(html, fileLocation)
-			return html
-		},
-
-		async resolveId(id, importer, options) {
-			if (importer && importer.endsWith(".js") && id.endsWith(".html")) {
-				let res = await this.resolve(id, importer, {
-					skipSelf: true,
-					...options
-				})
-
-				if (!res || res.external) {
-					return res
-				}
-
-				return res.id + postfix
-			}
-		},
-
-		async load(id) {
-			async function readFile(id) {
-				let content = await fsp.readFile(id, "utf-8")
-				return content
-					.replace("\t", "") // tab
-					.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "") // comment
-					.replace(/(\r\n|\n|\r)/gm, "") // newline
-			}
-
-			if (id.endsWith(".html")) {
-				let htmlContent = await readFile(id)
-				htmlContent = await minify(htmlContent, htmlMinifyConfig)
-				return htmlContent
-			}
-
-			if (id.endsWith(postfix)) {
-				id = cleanUrl(id)
-				let content = await readFile(id)
-				let fileLocation = path.dirname(id)
-				content = replaceImgWithInlineSVG(content, fileLocation)
-				content = await minify(content, htmlMinifyConfig)
-				return `export default ${JSON.stringify(content)}`
-			}
-
-			if (id.endsWith("?raw")) {
-				id = cleanUrl(id)
-				// GLSL files
-				if (id.endsWith(".vert") || id.endsWith(".frag")) {
-					let content = await readFile(id)
-					return `export default ${JSON.stringify(content)}`
-				}
-			}
-		}
-	}
-}
-
-function cleanUrl(url) {
-	let queryIndex = url.indexOf("?")
-	if (queryIndex !== -1) {
-		url = url.slice(0, queryIndex)
-	}
-	return url
-}
-
-function replaceImgWithInlineSVG(html, fileLocation) {
+function inlineSvgImages(html, fileLocation) {
 	// Regular expression to find img and image tags with SVG sources and capture attributes
-	const imgRegex =
-		/<img ([^>]*src="([^"]+\.svg|data:image\/svg\+xml[^"]+)"[^>]*)>/g
+	const imgRegex = /<img ([^>]*src="([^"]+\.svg|data:image\/svg\+xml[^"]+)"[^>]*)>/g;
 
 	const replacer = (match, attributes, src) => {
 		try {
@@ -123,8 +56,7 @@ function captureAttriubtes(attributes) {
 		return str
 	}
 
-	const attrRegex =
-		/(class|id|style|height|width|alt|aria-\w+|data-\w+)="([^"]*)"/g
+	const attrRegex = /(class|id|style|height|width|alt|aria-\w+|data-\w+)="([^"]*)"/g;
 	let attrMatch
 	while ((attrMatch = attrRegex.exec(attributes)) !== null) {
 		obj[attrMatch[1]] = attrMatch[2]
@@ -171,3 +103,5 @@ function retrieveSVG(src, from) {
 	}
 	return svgString
 }
+
+export { inlineSvgImages }

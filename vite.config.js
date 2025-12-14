@@ -1,5 +1,5 @@
 import path from "path"
-import slim from "./plugins/slim"
+import custom from "./plugins/custom"
 import pkg from './package.json' with { type: 'json' }
 
 const deps = Object.keys(pkg.dependencies || {});
@@ -8,7 +8,7 @@ const depsRegex = new RegExp(`(${deps.join('|')})(\\/|$)`);
 export default {
 	root: "src",
 	appType: "spa",
-	plugins: [slim()],
+	plugins: [custom()],
 	optimizeDeps: {
 		entries: ["src/index.html"]
 	},
