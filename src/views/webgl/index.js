@@ -4,7 +4,7 @@ import { initBuffers } from "./init-buffers.js"
 import { drawScene } from "./draw-scene.js"
 
 import { View } from "@/lib/view"
-import pageWebgl from "./index.html"
+import pageWebgl from "./index.html?raw"
 
 const webglView = new View(pageWebgl, webgl)
 
