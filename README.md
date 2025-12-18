@@ -5,7 +5,9 @@ My portfolio website,
   シャルル&ensp;<rp>(</rp><rt>Sharuru</rt><rp>)</rp>
   の<rp>(</rp><rt>no</rt><rp>)</rp>&nbsp;
   名刺&ensp;<rp>(</rp><rt>meishi</rt><rp>)</rp>
-</ruby>, inspired by the Japanese business card, emphasizing simplicity and elegance. It uses vanilla JavaScript for simplicity and is designed to be functional without CSS and presentable without JS, ensuring broad accessbility.
+</ruby>, inspired by the Japanese business card to present myself.
+
+This website is built with only vanilla JS, keeping things simple while focusing on the fundamentals.
 
 ## Dependencies
 
@@ -13,9 +15,8 @@ Made with the help of [Vite](https://vitejs.dev/) ⚡
 
 ```sh
 npm install
-vite dev --host
 vite build
-vite preview --host
+vite preview
 ```
 
 ## Assets
