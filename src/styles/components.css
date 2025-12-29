@@ -139,6 +139,30 @@ select {
 	padding: 0.55em 0.75em;
 }
 
+/*
+required to unfuck Chrome select button.
+*/
+@supports (appearance: base-select) {
+	select {
+		appearance: base-select;
+		background: var(--secondary-color);
+	}
+
+	select::picker-icon {
+		display: none;
+	}
+
+	option {
+		color: var(--text-color);
+		background: var(--background-color);
+	}
+
+	option:checked {
+		background: var(--secondary-color);
+	}
+}
+
+
 #action-dialog {
 	z-index: 10;
 	height: auto;
