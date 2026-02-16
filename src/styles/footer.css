@@ -17,6 +17,9 @@ details[open] summary ~ * {
 .copyright > * {
 	margin-left: 0.125rem;
 }
+.copyright #copyright-acknowledgment {
+	font-size: smaller;
+}
 .copyright {
 	color: var(--copyright-color);
 	font-size: xx-small;
@@ -29,26 +32,3 @@ details[open] summary ~ * {
 .copyright a:hover { color: var(--contrast-color); }
 .copyright a:focus { color: var(--contrast-color);}
 .copyright a:active { color: var(--contrast-color); }
-
-/* Contacts */
-
-footer address {
-	font-size: small;
-	font-style: normal;
-
-	a {
-		color: var(--copyright-color);
-		text-decoration: none;
-	}
-
-	a:hover { color: var(--contrast-color); }
-	a:focus { color: var(--contrast-color);}
-	a:active { color: var(--contrast-color); }
-
-	svg {
-		vertical-align: 0;
-		display: inline-block;
-		width: 1em;
-		height: 1em;
-	}
-}
