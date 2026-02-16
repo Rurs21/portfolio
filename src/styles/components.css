@@ -28,8 +28,6 @@ dialog {
 	transition: background-color 0.3s, color 0.3s, border-color 0.3s,
 		border-radius 0.5s;
 
-	-moz-box-sizing: content-box;
-	-webkit-box-sizing: content-box;
 	box-sizing: content-box;
 }
 
@@ -84,8 +82,6 @@ dialog {
 
 select {
 	appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 
 	color: inherit;
 	background-color: transparent;

@@ -57,7 +57,7 @@ class App {
 			const view = await this.router.resolve(path)
 			// avoid updating view if the path changed
 			if (path === this.router.currentPath) {
-			    this.ui.appView.view = view
+				this.ui.appView.view = view
 			}
 		} catch (error) {
 			throw new Error(`Failed to resolve '${href}'`, { cause: error })
@@ -83,8 +83,8 @@ function changeRoutesLang(lang, router) {
 	const routes = router.routes
 	for (const path in routes) {
 	    // TODO: this will stack callbacks on routes pending to be resolve
-		routes[path].view.then((view) => {
-			language.changeContentLanguage(lang, view.content)})
+		routes[path].view.then((view) =>
+			language.changeContentLanguage(lang, view.content))
 	}
 }
 

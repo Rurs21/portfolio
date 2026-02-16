@@ -11,7 +11,7 @@
 	margin: -1px;
 	position: absolute;
 	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
+	clip-path: inset(50%);
 	border: 0;
 	white-space: nowrap;
 }
@@ -28,6 +28,5 @@
 .multicolor {
 	background: linear-gradient(to right, #EF5350, #F48FB1, #7E57C2, #2196F3, #26C6DA, #43A047, #ffd341, #F9A825, #FF5722);
 	background-clip: text;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: transparent;
 }
