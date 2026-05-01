@@ -14,6 +14,7 @@ export default {
 	},
 	resolve: {
 		alias: {
+			'#root': path.resolve(__dirname),
 			"@": path.resolve(__dirname, "src")
 		}
 	},
@@ -37,7 +38,7 @@ export default {
 				},
 				chunkFileNames: "assets/[name]-[hash:6].js",
 				assetFileNames: `assets/[name]-v${pkg.version}.[ext]`,
-				advancedChunks: {
+				codeSplitting: {
 					groups: [
 						{
 							test: depsRegex,
