@@ -1,4 +1,6 @@
-const CACHE_NAME = 'cache-v1'
+import { version } from '#root/package.json' with { type: 'json' }
+
+const CACHE_NAME = `cache-v${version}`
 const ASSET_MANIFEST = '/.vite/manifest.json'
 
 self.addEventListener('install', event => {
@@ -64,4 +66,3 @@ self.addEventListener('fetch', event => {
 		})
 	);
 });
-
