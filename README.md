@@ -15,8 +15,7 @@ Made with the help of [Vite](https://vitejs.dev/) ⚡
 
 ```sh
 npm install
-vite build
-vite preview
+npm run preview
 ```
 
 ## Assets
@@ -43,7 +42,3 @@ None
 
 - better error handling
 - use Web Components
-
-### Fix
-
-- Firefox bookmark svg favicon (use apple-touch-icon ?)
