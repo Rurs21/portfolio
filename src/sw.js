@@ -57,6 +57,12 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
 	const request = event.request;
+
+	// only GET belongs in the cache
+	if (request.method !== 'GET') {
+		return;
+	}
+
 	event.respondWith(
 		caches.match(request, { ignoreVary: true })
 		.then(response => {
