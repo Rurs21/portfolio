@@ -63,6 +63,16 @@ self.addEventListener('fetch', event => {
 		return;
 	}
 
+	// client-side routes aren't cached under their own URL, the server
+	// rewrites them to the app shell — serve that, or offline reload breaks
+	if (request.mode === 'navigate') {
+		event.respondWith(
+			caches.match('/', { ignoreVary: true })
+			.then(response => response || fetch(request))
+		);
+		return;
+	}
+
 	event.respondWith(
 		caches.match(request, { ignoreVary: true })
 		.then(response => {
