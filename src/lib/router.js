@@ -56,7 +56,7 @@ class Route {
 	}
 
 	get cached() {
-		return ! new Boolean(this.#deferred)
+		return this.#deferred === undefined
 	}
 
 	async loadView() {
@@ -66,6 +66,11 @@ class Route {
 			this.#deferred = undefined
 		}
 		return this.view
+	}
+
+	// like loadView, but never triggers the lazy import
+	async loadedView() {
+		return this.cached ? this.view : undefined
 	}
 }
 

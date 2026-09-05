@@ -57,6 +57,8 @@ class App {
 			const view = await this.router.resolve(path)
 			// avoid updating view if the path changed
 			if (path === this.router.currentPath) {
+				// lazy views miss language changes made before they loaded
+				language.changeContentLanguage(this.language, view.content)
 				this.ui.appView.view = view
 			}
 		} catch (error) {
@@ -77,13 +79,13 @@ class App {
 	}
 }
 
-// changing the language for each route
+// changing the language for each route already loaded
+// deferred ones are translated on mount instead, in resolveRoute()
 function changeRoutesLang(lang, router) {
 	console.debug("Change Route lang")
-	const routes = router.routes
+	const routes = router.cachedRoutes
 	for (const path in routes) {
-	    // TODO: this will stack callbacks on routes pending to be resolve
-		routes[path].view.then((view) =>
+		routes[path].loadedView().then((view) =>
 			language.changeContentLanguage(lang, view.content))
 	}
 }
