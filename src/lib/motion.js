@@ -7,9 +7,9 @@ const mediaQuery = "(prefers-reduced-motion: reduce)"
  * @returns {"no-preference" | "reduce"} The user's motion preference, either 'no-preference' or 'reduce'.
  */
 function getUserMotionPref() {
-	const defaultMotionPref = window.matchMedia(mediaQuery)
-		? "no-preference"
-		: "reduce"
+	const defaultMotionPref = window.matchMedia(mediaQuery).matches
+		? "reduce"
+		: "no-preference"
 	const savedMotionPref = localStorage.getItem("motion")
 
 	return savedMotionPref || defaultMotionPref
