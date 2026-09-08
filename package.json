@@ -7,16 +7,20 @@
     "dev": "vite dev --host",
     "build": "vite build",
     "preview": "vite build && vite preview --host",
-    "debug": "vite build --sourcemap && vite preview --host"
+    "debug": "vite build --sourcemap && vite preview --host",
+	"fmt": "oxfmt",
+	"fmt:check": "oxfmt --check",
+	"lint": "oxlint",
+	"lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "gl-matrix": "^3.4.4"
   },
   "devDependencies": {
-    "vite": "8.0.0-beta.16",
-    "oxlint": "^1.31.0",
-    "oxfmt": "^0.16.0",
-    "svgo": "^4.0.1",
+    "vite": "8.2.2",
+    "oxlint": "^1.82.0",
+    "oxfmt": "^0.67.0",
+    "svgo": "^4.1.0",
     "html-minifier-terser": "^7.2.0"
   }
 }

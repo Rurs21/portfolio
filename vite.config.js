@@ -1,5 +1,5 @@
 import path from "path"
-import custom from "./plugins/custom"
+import custom from "./plugins/custom.js"
 import pkg from './package.json' with { type: 'json' }
 
 const deps = Object.keys(pkg.dependencies || {});
@@ -14,15 +14,15 @@ export default {
 	},
 	resolve: {
 		alias: {
-			'#root': path.resolve(__dirname),
-			"@": path.resolve(__dirname, "src")
+			'#root': path.resolve(import.meta.dirname),
+			"@": path.resolve(import.meta.dirname, "src")
 		}
 	},
 	build: {
 		target: 'baseline-widely-available',
 		manifest: true,
 		assetsInlineLimit: 12288,
-		outDir: path.resolve(__dirname, "dist"),
+		outDir: path.resolve(import.meta.dirname, "dist"),
 		emptyOutDir: true,
 		rolldownOptions: {
 			input: {
