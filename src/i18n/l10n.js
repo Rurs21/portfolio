@@ -58,9 +58,13 @@ function changeContentLanguage(lang, content) {
 			}
 		}
 
+		// falls back to English before the raw key, so content that only
+		// exists in one language (or a key added to en but not yet
+		// translated) still reads as text rather than showing its key name
 		function translate(element) {
 			const key = element.getAttribute(translateAttr)
-			element.textContent = translations[lang][key] || key
+			element.textContent =
+				translations[lang][key] ?? translations.en[key] ?? key
 		}
 	}
 }
