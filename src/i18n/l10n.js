@@ -60,7 +60,9 @@ function changeContentLanguage(lang, content) {
 
 		function translate(element) {
 			const key = element.getAttribute(translateAttr)
-			element.textContent = translations[lang][key] || key
+			// falls back to English rather than showing key name
+			element.textContent =
+				translations[lang][key] ?? translations.en[key] ?? key
 		}
 	}
 }
