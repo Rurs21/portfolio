@@ -34,11 +34,11 @@ None
 
 - accessibility
 	- [ ] prefers-contrast
-	- [x] prefers-reduces-motio
+	- [x] prefers-reduced-motion
 	- [ ] left handed menu/control ?
 - user theme-color ?
 
-### Ehancement
+### Enhancement
 
 - better error handling
 - use Web Components

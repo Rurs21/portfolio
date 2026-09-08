@@ -1,5 +1,5 @@
 {
-	"name": "Rurs' Portoflio",
+	"name": "Rurs' Portfolio",
 	"short_name": "Rurs",
 	"icons": [
 		{
@@ -13,7 +13,7 @@
 			"type": "image/png"
 		}
 	],
-	"theme_color": "#ffffff",
+	"theme_color": "#41424C",
 	"background_color": "#ffffff",
 	"display": "standalone"
 }

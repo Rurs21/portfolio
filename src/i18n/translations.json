@@ -16,11 +16,11 @@
 		"reduced-motion": "Reduced Motion"
 	},
 	"fr": {
-		"language": "Langage",
+		"language": "Langue",
 		"greeting": "Allô, moi c'est Charles.",
-		"job-title": "Développeur logiciel ",
+		"job-title": "Développeur logiciel",
 		"my-summary": "Résoudre des problèmes & faire des trucs cool",
-		"about-me": "Mon but, c’est de compiler un logiciel qui rend la journée d'une personne un peu moins pénible, soit en lui évitant du trouble, soit en tuant un peu son ennui.",
+		"about-me": "Mon but, c’est de compiler un logiciel qui rend la journée d'une personne un peu moins pénible, soit en évitant du trouble, soit en tuant un peu l'ennui.",
 		"contact-me": "Faites-moi signe",
 		"wip": "Travail en cours...",
 		"sorry": "Désolé, rien à voir ici",
