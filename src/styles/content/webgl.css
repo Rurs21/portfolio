@@ -1,5 +1,13 @@
 /* webgl content */
 
 #glcanvas {
+	display: block;
 	width: 100%;
+	aspect-ratio: 1 / 1;
+	max-height: 70vh;
+	margin-inline: auto;
+}
+
+#webgl-error {
+	text-align: center;
 }

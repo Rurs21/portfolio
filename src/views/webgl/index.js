@@ -4,127 +4,187 @@ import { initBuffers } from "./init-buffers.js"
 import { drawScene } from "./draw-scene.js"
 
 import { View } from "@/lib/view"
+import { getUserMotionPref } from "@/lib/motion"
+import { observeCanvasResize } from "@/utils/canvas"
 import pageWebgl from "./index.html?raw"
 
-const webglView = new View(pageWebgl, webgl)
-
-let cubeRotation = 0.0
-let deltaTime = 0
+// per-mount state: the canvas/context are reused across route visits, so
+// this can't live at module scope without leaking the previous mount's loop
+let session = null
 
 function webgl() {
 	const canvas = document.querySelector("#glcanvas")
-	// reset to auto after route change
-	canvas.setAttribute("height", "auto")
-	canvas.setAttribute("width", "auto")
-	// Initialize the GL context
 	const gl = canvas.getContext("webgl")
 
-	// Only continue if WebGL is available and working
 	if (gl === null) {
-		alert("Unable to initialize WebGL. Your browser or machine may not support it.")
+		showError("Unable to initialize WebGL. Your browser or machine may not support it.")
 		return
 	}
 
-	canvas.onwebglcontextlost = (event) => {
-		console.log("webgl context lost")
+	const shaderProgram = initShaderProgram(
+		gl,
+		vertexShaderSource,
+		fragmentShaderSource
+	)
+	if (shaderProgram === null) {
+		return
 	}
 
-	canvas.onwebglcontextrestored = (event) => {
-		console.log("webgl context restore")
-	}
-
-	// Set clear color to black, fully opaque
-	//gl.clearColor(0.0, 0.0, 0.0, 1.0)
-	// Clear the color buffer with specified clear color
-	//gl.clear(gl.COLOR_BUFFER_BIT)
-
-	const shaderProgram = initShaderProgram(gl, vertexShaderSource, fragmentShaderSource)
-
-	// Collect all the info needed to use the shader program.
-	// Look up which attributes our shader program is using
-	// for aVertexPosition, aVertexColor and also
-	// look up uniform locations.
 	const programInfo = {
 		program: shaderProgram,
 		attribLocations: {
-			vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+			vertexPosition: gl.getAttribLocation(
+				shaderProgram,
+				"aVertexPosition"
+			),
 			vertexNormal: gl.getAttribLocation(shaderProgram, "aVertexNormal"),
 			vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor")
 		},
 		uniformLocations: {
-			projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-			modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+			projectionMatrix: gl.getUniformLocation(
+				shaderProgram,
+				"uProjectionMatrix"
+			),
+			modelViewMatrix: gl.getUniformLocation(
+				shaderProgram,
+				"uModelViewMatrix"
+			),
 			normalMatrix: gl.getUniformLocation(shaderProgram, "uNormalMatrix")
 		}
 	}
 
 	const buffers = initBuffers(gl)
 
-	// Draw the scene
+	session = { gl, canvas, programInfo, buffers, frame: 0, listeners: [] }
+
+	const onContextLost = (event) => {
+		// required, or the context can never be restored
+		event.preventDefault()
+		stopLoop()
+		console.warn("webgl context lost")
+	}
+	const onContextRestored = () => {
+		console.warn("webgl context restored")
+	}
+
+	canvas.addEventListener("webglcontextlost", onContextLost)
+	canvas.addEventListener("webglcontextrestored", onContextRestored)
+	session.listeners.push(["webglcontextlost", onContextLost])
+	session.listeners.push(["webglcontextrestored", onContextRestored])
+
+	observeCanvasResize(canvas)
+
+	let cubeRotation = 0.0
 	let then = 0
 
-	// To Fix with router
-	//observeCanvasResize(canvas)
+	if (getUserMotionPref() === "reduce") {
+		// no loop at all: draw a single static frame
+		const redraw = () => drawScene(gl, programInfo, buffers, cubeRotation)
+		redraw()
+		window.addEventListener("resize", redraw)
+		session.onResize = redraw
+		return
+	}
 
-	// Draw the scene repeatedly
 	function render(now) {
 		now *= 0.001 // convert to seconds
-		deltaTime = now - then
+		const deltaTime = now - then
 		then = now
 
 		drawScene(gl, programInfo, buffers, cubeRotation)
 		cubeRotation += deltaTime
 
-		requestAnimationFrame(render)
+		session.frame = requestAnimationFrame(render)
 	}
-	requestAnimationFrame(render)
+
+	session.frame = requestAnimationFrame(render)
+}
+
+// stops the loop and frees GL objects; without it every route visit leaks
+// a running render loop plus the shader program and buffers
+function teardown() {
+	if (!session) {
+		return
+	}
+
+	stopLoop()
+
+	const { gl, canvas, programInfo, buffers, listeners, onResize } = session
+
+	for (const [type, handler] of listeners) {
+		canvas.removeEventListener(type, handler)
+	}
+	if (onResize) {
+		window.removeEventListener("resize", onResize)
+	}
+
+	gl.deleteBuffer(buffers.position)
+	gl.deleteBuffer(buffers.normal)
+	gl.deleteBuffer(buffers.color)
+	gl.deleteBuffer(buffers.indices)
+	gl.deleteProgram(programInfo.program)
+
+	session = null
+}
+
+function stopLoop() {
+	if (session && session.frame) {
+		cancelAnimationFrame(session.frame)
+		session.frame = 0
+	}
+}
+
+// surfaces a failure in the page instead of a blocking alert()
+function showError(message) {
+	console.error(message)
+
+	const element = document.querySelector("#webgl-error")
+	if (element) {
+		element.hidden = false
+	}
 }
 
 function initShaderProgram(gl, vsSource, fsSource) {
 	const vertexShader = loadShader(gl, gl.VERTEX_SHADER, vsSource)
 	const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource)
 
-	// Create the shader program
+	if (vertexShader === null || fragmentShader === null) {
+		return null
+	}
 
 	const shaderProgram = gl.createProgram()
 	gl.attachShader(shaderProgram, vertexShader)
 	gl.attachShader(shaderProgram, fragmentShader)
 	gl.linkProgram(shaderProgram)
 
-	// If creating the shader program failed, alert
+	// linked into the program now, so the standalone objects can be freed
+	gl.deleteShader(vertexShader)
+	gl.deleteShader(fragmentShader)
 
 	if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-		alert(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`)
+		showError(`Unable to initialize the shader program: ${gl.getProgramInfoLog(shaderProgram)}`)
+		gl.deleteProgram(shaderProgram)
 		return null
 	}
 
 	return shaderProgram
 }
 
-//
-// creates a shader of the given type, uploads the source and
-// compiles it.
-//
 function loadShader(gl, type, source) {
 	const shader = gl.createShader(type)
 
-	// Send the source to the shader object
-
 	gl.shaderSource(shader, source)
-
-	// Compile the shader program
-
 	gl.compileShader(shader)
 
-	// See if it compiled successfully
-
 	if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-		alert(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`)
+		showError(`An error occurred compiling the shaders: ${gl.getShaderInfoLog(shader)}`)
 		gl.deleteShader(shader)
 		return null
 	}
 
 	return shader
 }
+
+const webglView = new View(pageWebgl, webgl, teardown)
 
 export default webglView
