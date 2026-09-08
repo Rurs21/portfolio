@@ -39,10 +39,11 @@ export default function custom(options = {}) {
 				}
 
 				if (id.endsWith(".vert") || id.endsWith(".frag")) {
+					// Note: GLSL preprocessor directives are newline-sensitive
 					content = content
-						.replace("\t", "") // tab
-						.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "") // comment
-						.replace(/(\r\n|\n|\r)/gm, "") // newline
+						.replace(/\t/g, "") // tab
+						.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, "$1") // comment
+						.replace(/(\r\n|\n|\r)/gm, "\n") // newline
 				}
 
 				return `export default ${JSON.stringify(content)}`
