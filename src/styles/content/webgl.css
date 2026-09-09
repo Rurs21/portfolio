@@ -3,11 +3,313 @@
 #glcanvas {
 	display: block;
 	width: 100%;
+	/* draw-scene.js frames the item-box against the canvas's own aspect, so
+	   the box fills whatever shape this is. Keep it square: the box is taller
+	   than it is wide on screen, so a wider canvas only adds side gutters
+	   without ever making the box bigger. Height is what's worth capping on a
+	   phone, and max-height does that without introducing those gutters. */
 	aspect-ratio: 1 / 1;
-	max-height: 70vh;
+	/* max-width, not max-height: with width:100% + a square ratio, capping
+	   only the height leaves the element full-width with the drawing letter-
+	   boxed inside it. Capping the width shrinks the square as a unit, so the
+	   canvas ends up the size of what's actually drawn in it. */
+	max-width: min(100%, 50vh);
 	margin-inline: auto;
+	/* pan-y, not none: only a touch that lands on the box itself becomes a
+	   tumble (index.js hit-tests it and calls preventDefault), so vertical
+	   scrolling has to stay available for touches on the empty canvas around
+	   it -- otherwise the canvas becomes a dead zone the page can't be
+	   scrolled through on a phone */
+	touch-action: pan-y;
+}
+
+@media (min-width: 768px) {
+	#glcanvas {
+		max-width: min(100%, 70vh);
+	}
 }
 
 #webgl-error {
 	text-align: center;
+}
+
+#rose-controls,
+#rose-debug-controls {
+	border: 1px solid currentColor;
+	border-radius: 0.5rem;
+	padding: 0.75rem 1rem 1rem;
+}
+
+#rose-controls legend,
+#rose-debug-controls legend {
+	padding-inline: 0.5rem;
+}
+
+#rose-debug-controls {
+	display: grid;
+	grid-template-columns: max-content 1fr max-content;
+	align-items: center;
+	gap: 0.5rem 0.75rem;
+	max-width: 32rem;
+	margin-inline: auto;
+	margin-block-start: 1.5rem;
+	background: var(--background-color);
+}
+
+/* wide enough that a fixed sidebar next to the canvas doesn't overlap it or
+   the rest of the page's own content columns. Pinned near the canvas's own
+   resting position (not viewport-centered) so it reads as "next to the
+   canvas" rather than drifting over unrelated content once the page scrolls
+   past it. */
+@media (min-width: 1100px) {
+	#rose-debug-controls {
+		position: fixed;
+		top: 8rem;
+		right: 1.5rem;
+		width: 18rem;
+		max-width: 18rem;
+		margin: 0;
+		grid-template-columns: max-content 1fr;
+	}
+
+	#rose-debug-controls .rose-param {
+		display: grid;
+		grid-template-columns: subgrid;
+		grid-column: 1 / -1;
+	}
+
+	#rose-debug-controls input[type="range"] {
+		grid-column: 1 / -1;
+	}
+
+	#rose-debug-controls input[type="number"] {
+		grid-column: 1 / -1;
+		justify-self: end;
+	}
+}
+
+#rose-controls {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: center;
+	gap: 1rem 1.5rem;
+	max-width: 44rem;
+	margin-inline: auto;
+	margin-block-start: 1rem;
+}
+
+#rose-controls-params {
+	display: grid;
+	grid-template-columns: max-content max-content;
+	align-items: center;
+	gap: 0.5rem 0.75rem;
+}
+
+#rose-petal-count {
+	grid-column: 1 / -1;
+	margin-block: 0.25rem 0;
+	font-size: 0.9em;
+	opacity: 0.8;
+}
+
+.rose-param {
+	display: contents;
+}
+
+.rose-param label {
+	white-space: nowrap;
+}
+
+.rose-param input[type="number"] {
+	width: 4.5rem;
+}
+
+.rose-stepper {
+	display: flex;
+	align-items: stretch;
+	width: max-content;
+}
+
+.rose-stepper input[type="number"] {
+	width: 3.5rem;
+	text-align: center;
+	border-radius: 0;
+	border-inline: none;
+	/* the buttons on either side already communicate step direction --
+	   the native spinner would just duplicate that, smaller and less
+	   tappable */
+	appearance: textfield;
+}
+
+.rose-stepper button {
+	width: 2.25rem;
+	font-size: 1.1em;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.rose-stepper button:first-child {
+	border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.rose-stepper button:last-child {
+	border-radius: 0 0.25rem 0.25rem 0;
+}
+
+#rose-math {
+	max-width: 32rem;
+	margin-inline: auto;
+	margin-block-start: 1.5rem;
+}
+
+#rose-math h3 {
+	margin-block: 1.75rem 0.5rem;
+	font-size: 1rem;
+	opacity: 0.7;
+}
+
+#rose-math-offset-note {
+	font-size: 0.9em;
+	opacity: 0.7;
+}
+
+#rose-math-header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 0.5rem 1rem;
+}
+
+#rose-math-mode {
+	font-size: 0.8em;
+	padding: 0.35em 0.7em;
+	border: 1px solid currentColor;
+	border-radius: 0.25rem;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+#rose-math-mode:hover,
+#rose-math-mode:focus-visible {
+	opacity: 1;
+}
+
+#rose-math-green pre {
+	/* the whole joke is the line breaks, so keep them -- but let long lines
+	   wrap instead of forcing a horizontal scrollbar on a phone */
+	white-space: pre-wrap;
+	font-size: 0.9em;
+	line-height: 1.5;
+	margin: 0;
+	/* the classic greentext color, and it reads on both themes */
+	color: #789922;
+}
+
+#rose-math math {
+	display: block;
+	margin-block: 0.75rem;
+	text-align: center;
+}
+
+#rose-spiral-figure {
+	margin: 0;
+}
+
+#rose-spiral-diagram {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1 / 1;
+}
+
+#rose-spiral-path {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 0.5;
+	opacity: 0.35;
+}
+
+#rose-spiral-figure figcaption {
+	margin-block-start: 0.5rem;
+	font-size: 0.85em;
+	text-align: center;
+	opacity: 0.75;
+}
+
+/* single column below the site's own tablet breakpoint: side-by-side controls
+   and the spiral figure both get too cramped to read before this. Controls
+   also grow to comfortable touch targets (~44px) here -- the desktop sizes
+   are fine for a cursor but far too small for a thumb. */
+@media (max-width: 767px) {
+	#rose-controls,
+	#rose-controls-params,
+	#rose-debug-controls {
+		grid-template-columns: 1fr;
+	}
+
+	#rose-controls {
+		gap: 0.75rem;
+	}
+
+	/* label and its value sit together on the first row, with the slider
+	   spanning full width underneath -- keeps the readout next to the name
+	   it belongs to instead of stranding it on a row of its own */
+	.rose-param {
+		display: grid;
+		grid-template-columns: 1fr max-content;
+		align-items: center;
+		gap: 0.25rem 0.5rem;
+		margin-block-end: 0.75rem;
+	}
+
+	.rose-param label {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.rose-param > input[type="number"],
+	.rose-param > .rose-stepper {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: end;
+	}
+
+	.rose-param input[type="range"] {
+		grid-column: 1 / -1;
+		grid-row: 2;
+	}
+
+	/* a 16px-tall input is a hard thumb target. Height alone is enough --
+	   the native thumb stays centered in the taller box and the whole
+	   height is draggable, so this avoids restyling the track (which would
+	   mean re-theming it for light/dark by hand) */
+	.rose-param input[type="range"] {
+		height: 2.75rem;
+	}
+
+	.rose-param input[type="number"] {
+		min-height: 2.75rem;
+		width: 5.5rem;
+		font-size: 1rem;
+	}
+
+	.rose-stepper input[type="number"] {
+		width: 4rem;
+	}
+
+	.rose-stepper button {
+		min-width: 2.75rem;
+		min-height: 2.75rem;
+		font-size: 1.25em;
+	}
+
+	/* the figure is the point of this section on mobile, not a side note --
+	   let it use the full column instead of sitting in a narrow track */
+	#rose-spiral-figure {
+		max-width: 20rem;
+		margin-inline: auto;
+	}
 }
