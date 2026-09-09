@@ -1,71 +1,63 @@
+import { decayingLobes, sampleSpiral } from "./archimedeanSpiral.js"
+
 /**
  * Archimedean Flower
  *
- * This script generates a flower-like curve based on a polar coordinate equation inspired by
- * Archimedean spirals. The equation defines the curve as:
+ * A flower-like curve in polar coordinates:
  *
- * r(θ) = (a + bθ) [ 1 + e^-kθ c sin(θ_max/n θ) ]
+ *   r(θ) = (a + bθ) · [ 1 + c · e^(−kθ) · sin(dynamicN(θ) · θ) ]
  *
- * Components:
- * - r(θ): Radial distance from the origin to a point on the curve for a given angle θ.
+ * The spiral and the decaying-lobe modulation both come from
+ * archimedeanSpiral.js. What's specific to this curve is that the lobe rate
+ * ramps rather than staying fixed:
  *
- * - θ: The polar angle, measured in radians. As θ varies, it causes the curve to be traced out.
- *       Starts from 0 and increases up to θ_max to form the full flower shape.
+ *   dynamicN(θ) = (n / θmax) · θ
  *
- * - θ_max: The maximum value for θ. It determines the extent to which the rose is drawn.
- *          For a complete flower shape, θ_max might be set to a multiple of 2π, but it can be
- *          adjusted to generate partial flowers or specific curve spans.
+ * so it sweeps 0 → n across the curve. Lobes start slow and tighten as the
+ * spiral winds out, which is what gives the drawn rose its coiled center.
  *
- * - a, b: Constants that determine the initial size (a) and spacing (b) of the spirals.
+ * Parameters: a = starting radius, b = spiral growth per radian, c = lobe
+ * depth, n = lobe rate reached at θmax, k = how fast lobes fade.
  *
- * - e^-kθ: Introduces an exponential decay based on θ. 'e' is the base of natural logarithm.
- *          'k' determines the decay rate; larger 'k' leads to faster spiral decay.
- *
- * - c sin(θ_max/n θ): A sinusoidal component that gives the petal-like oscillations.
- *          'c' defines the amplitude or size of the petals.
- *          'n' dictates the number of petals or oscillations.
- *          θ_max/n is a normalization factor for consistent petal count across θ's range.
- *
- * By tweaking the parameters a, b, c, k, n, and θ_max, various flower-like shapes, from simple spirals
- * to complex multi-petaled flowers, can be generated.
+ * NOTE: this function reproduces src/assets/svg/rose.svg -- the site's
+ * background rose -- exactly, given (4, 4, 0.17, 5, 0.0257, 0.17, 10π).
+ * Changing the formula or the closing point below changes that artwork.
+ * Anything wanting different flower math should build its own curve on
+ * archimedeanSpiral.js instead of retuning this.
  */
-
 export function archimedeanFlower(a, b, c, n, k, thetaIncrement, thetaMax) {
-	let points = []
-	let maxPetals = n
-
-	for (let theta = 0; theta < thetaMax; theta += thetaIncrement) {
-		let dynamicN = (maxPetals / thetaMax) * theta // Gradually increase the number of petals
-
-		let r =
-			(a + b * theta) *
-			(1 + Math.exp(-k * theta) * c * Math.sin(dynamicN * theta))
-		let x = r * Math.cos(theta)
-		let y = r * Math.sin(theta)
-		points.push([x, y])
-	}
+	const rampingLobes = (theta) => (n / thetaMax) * theta
+	const points = sampleSpiral(
+		a,
+		b,
+		thetaIncrement,
+		thetaMax,
+		decayingLobes(c, k, rampingLobes)
+	)
 
 	if (points.length > 2) {
-		// Find the closest point to the last point, excluding the penultimate one
-		let lastPoint = points[points.length - 1]
-		let closestDistance = Infinity
-		let closestPointIndex = -1
-
-		for (let i = 0; i < points.length - 2; i++) {
-			// exclude the last and penultimate points
-			let distance = Math.sqrt(
-				Math.pow(points[i][0] - lastPoint[0], 2) +
-					Math.pow(points[i][1] - lastPoint[1], 2)
-			)
-			if (distance < closestDistance) {
-				closestDistance = distance
-				closestPointIndex = i
-			}
-		}
-
-		// Append the closest point found to the list
-		points.push(points[closestPointIndex])
+		points.push(points[closestToLastIndex(points)])
 	}
 
 	return points
+}
+
+// Index of the point nearest the final sample, ignoring the last two. Used
+// to close the drawn outline: the curve is stroked as an open path, so
+// repeating whichever earlier point the end passes closest to joins it back
+// onto itself.
+function closestToLastIndex(points) {
+	const [lastX, lastY] = points[points.length - 1]
+	let closestDistance = Infinity
+	let closestIndex = -1
+
+	for (let i = 0; i < points.length - 2; i++) {
+		const distance = Math.hypot(points[i][0] - lastX, points[i][1] - lastY)
+		if (distance < closestDistance) {
+			closestDistance = distance
+			closestIndex = i
+		}
+	}
+
+	return closestIndex
 }

@@ -1,143 +1,57 @@
-function initBuffers(gl) {
-	const positionBuffer = initPositionBuffer(gl)
+function initBuffers(gl, geometry) {
+	const position = gl.createBuffer()
+	gl.bindBuffer(gl.ARRAY_BUFFER, position)
+	gl.bufferData(gl.ARRAY_BUFFER, geometry.positions, gl.DYNAMIC_DRAW)
 
-	const colorBuffer = initColorBuffer(gl)
+	const normal = gl.createBuffer()
+	gl.bindBuffer(gl.ARRAY_BUFFER, normal)
+	gl.bufferData(gl.ARRAY_BUFFER, geometry.normals, gl.DYNAMIC_DRAW)
 
-	const indexBuffer = initIndexBuffer(gl)
+	const color = gl.createBuffer()
+	gl.bindBuffer(gl.ARRAY_BUFFER, color)
+	gl.bufferData(gl.ARRAY_BUFFER, geometry.colors, gl.DYNAMIC_DRAW)
 
-	const normalBuffer = initNormalBuffer(gl)
+	const indices = gl.createBuffer()
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indices)
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geometry.indices, gl.DYNAMIC_DRAW)
 
-	return {
-		position: positionBuffer,
-		normal: normalBuffer,
-		color: colorBuffer,
-		indices: indexBuffer
-	}
-}
-
-function initPositionBuffer(gl) {
-	// Create a buffer for the square's positions.
-	const positionBuffer = gl.createBuffer()
-
-	// Select the positionBuffer as the one to apply buffer
-	// operations to from here out.
-	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer)
-
-	// Now create an array of positions for the square.
-	//const positions = [1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, -1.0]
-
-	// Cube
-	const positions = [
-		// Front face
-		-1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
-
-		// Back face
-		-1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,
-
-		// Top face
-		-1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,
-
-		// Bottom face
-		-1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,
-
-		// Right face
-		1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,
-
-		// Left face
-		-1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0
-	]
-
-	// Now pass the list of positions into WebGL to build the
-	// shape. We do this by creating a Float32Array from the
-	// JavaScript array, then use it to fill the current buffer.
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW)
-
-	return positionBuffer
-}
-
-function initColorBuffer(gl) {
-	const faceColors = [
-		[1.0, 1.0, 1.0, 1.0], // Front face: white
-		[1.0, 0.0, 0.0, 1.0], // Back face: red
-		[0.0, 1.0, 0.0, 1.0], // Top face: green
-		[0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-		[1.0, 1.0, 0.0, 1.0], // Right face: yellow
-		[1.0, 0.0, 1.0, 1.0] // Left face: purple
-	]
-	var colors = []
-
-	const white = [1.0, 1.0, 1.0, 1.0]
-	const red = [1.0, 0.0, 0.0, 1.0]
-	const green = [0.0, 1.0, 0.0, 1.0]
-	const blue = [0.0, 0.0, 1.0, 1.0]
-
-	for (var j = 0; j < faceColors.length; ++j) {
-		// const c = faceColors[j]
-		// Repeat each color four times for the four vertices of the face
-		// colors = colors.concat(c, c, c, c)
-		colors = colors.concat(red, green, blue, white)
+	const buffers = {
+		position,
+		normal,
+		color,
+		indices,
+		count: geometry.indices.length
 	}
 
-	const colorBuffer = gl.createBuffer()
-	gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
-	gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
+	if (geometry.edgeIndices) {
+		const edgeIndices = gl.createBuffer()
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, edgeIndices)
+		gl.bufferData(
+			gl.ELEMENT_ARRAY_BUFFER,
+			geometry.edgeIndices,
+			gl.STATIC_DRAW
+		)
+		buffers.edgeIndices = edgeIndices
+		buffers.edgeCount = geometry.edgeIndices.length
+	}
 
-	return colorBuffer
+	return buffers
 }
 
-function initIndexBuffer(gl) {
-	const indexBuffer = gl.createBuffer()
-	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer)
+function updateBuffers(gl, buffers, geometry) {
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position)
+	gl.bufferData(gl.ARRAY_BUFFER, geometry.positions, gl.DYNAMIC_DRAW)
 
-	// This array defines each face as two triangles, using the
-	// indices into the vertex array to specify each triangle's
-	// position.
-	const indices = [
-		0, 1, 2, 0, 2, 3, // front
-		4, 5, 6, 4, 6, 7, // back
-		8, 9, 10, 8, 10, 11, // top
-		12, 13, 14, 12, 14, 15, // bottom
-		16, 17, 18, 16, 18, 19, // right
-		20, 21, 22, 20, 22, 23 // left
-	]
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal)
+	gl.bufferData(gl.ARRAY_BUFFER, geometry.normals, gl.DYNAMIC_DRAW)
 
-	// Now send the element array to GL
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color)
+	gl.bufferData(gl.ARRAY_BUFFER, geometry.colors, gl.DYNAMIC_DRAW)
 
-	gl.bufferData(
-		gl.ELEMENT_ARRAY_BUFFER,
-		new Uint16Array(indices),
-		gl.STATIC_DRAW
-	)
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
+	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geometry.indices, gl.DYNAMIC_DRAW)
 
-	return indexBuffer
+	buffers.count = geometry.indices.length
 }
 
-function initNormalBuffer(gl) {
-	const normalBuffer = gl.createBuffer()
-	gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer)
-
-	const vertexNormals = [
-		// Front
-		0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0,
-		// Back
-		0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0,
-		// Top
-		0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
-		// Bottom
-		0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0,
-		// Right
-		1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-		// Left
-		-1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0
-	]
-
-	gl.bufferData(
-		gl.ARRAY_BUFFER,
-		new Float32Array(vertexNormals),
-		gl.STATIC_DRAW
-	)
-
-	return normalBuffer
-}
-
-export { initBuffers }
+export { initBuffers, updateBuffers }
