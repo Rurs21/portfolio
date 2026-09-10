@@ -23,10 +23,17 @@ uniform highp vec3 uFillDirection;
 varying lowp vec4 vColor;
 varying highp vec3 vLighting;
 varying lowp vec3 vGlassTint;
+varying highp vec3 vViewDir;
+varying highp vec3 vNormalEye;
 
 void main(void) {
 	gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
 	vColor = aVertexColor;
+
+	// eye-space position doubles as the direction from the camera to this
+	// vertex (camera sits at the eye-space origin), used for fresnel below
+	highp vec4 positionEye = uModelViewMatrix * aVertexPosition;
+	vViewDir = positionEye.xyz;
 
 	// Apply lighting effect
 	highp vec3 ambientLight = vec3(0.4, 0.4, 0.4) * uAmbientStrength;
@@ -38,6 +45,7 @@ void main(void) {
 	// w = 0.0: a direction must not pick up the matrix translation
 	highp vec4 transformedNormal = uNormalMatrix * vec4(aVertexNormal, 0.0);
 	highp vec3 n = normalize(transformedNormal.xyz);
+	vNormalEye = n;
 
 	highp float directional = max(dot(transformedNormal.xyz, uLightDirection), 0.0);
 	highp float fill = max(dot(transformedNormal.xyz, uFillDirection), 0.0);
@@ -54,3 +62,4 @@ void main(void) {
 	tint += uGlassColors[5] * max(-n.z, 0.0);
 	vGlassTint = tint * uGlassStrength;
 }
+

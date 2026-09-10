@@ -45,6 +45,10 @@ const AMBIENT_STRENGTH = 2
 const DIRECTIONAL_STRENGTH = 1.5
 const GLASS_STRENGTH = 0.35
 
+// plain-shell edge wireframe: a fixed pale cyan, independent of light/dark
+// theme, weaker than the old theme-matched brighten(plainShellColor)
+const EDGE_COLOR = [0.9, 0.9, 0.9, 0.01]
+
 // the plain shell's light is fixed rather than orbiting, coming from
 // roughly the camera (eye space +Z) with a slight rightward offset
 const PLAIN_SHELL_LIGHT_DIRECTION = normalize([0.3, 0, 1])
@@ -251,6 +255,7 @@ function drawScene(
 		normalMatrix
 	)
 	gl.uniform3fv(programInfo.uniformLocations.glassColors, GLASS_COLORS)
+	// ambient only matters for the plain shell: with the box colored, the
 	// ambient only matters for the plain shell -- glass tint already fills
 	// in unlit surfaces on the colored box, so ambient would just muddy it
 	gl.uniform1f(
@@ -276,32 +281,27 @@ function drawScene(
 		programInfo.uniformLocations.glassStrength,
 		coloredGlass ? GLASS_STRENGTH : 0
 	)
+	gl.uniform1i(programInfo.uniformLocations.isGlassSurface, 0)
 	gl.disable(gl.BLEND)
 	drawObject(gl, programInfo, buffers)
 
 	// item-box shell second, translucent: no depth-write (or its far side
 	// hides behind its near side) but still depth-tests against the rose
 	gl.uniform1f(programInfo.uniformLocations.glassStrength, 0)
+	gl.uniform1i(programInfo.uniformLocations.isGlassSurface, 1)
 	gl.enable(gl.BLEND)
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.depthMask(false)
 	if (coloredGlass) {
 		drawObject(gl, programInfo, cubeBuffers)
 	} else {
-		// flat, low-alpha, no color tint -- barely-there panes with edges
-		// that stay a bit brighter (drawEdges below) so the box outline is
-		// still legible without the old hard-contrast wire cage
+		// flat, low-alpha panes; edges get a fixed pale-cyan tint (not tied to
+		// the plain shell's light/dark theme color) on top of the fresnel rim
 		drawObject(gl, programInfo, cubeBuffers, plainShellColor)
-		drawEdges(gl, programInfo, cubeBuffers, brighten(plainShellColor))
+		drawEdges(gl, programInfo, cubeBuffers, EDGE_COLOR)
 	}
 	gl.depthMask(true)
 	gl.disable(gl.BLEND)
-}
-
-// same color, alpha pushed up so edges read a bit brighter than the faint
-// faces they outline without going back to a fully opaque wire cage
-function brighten(color) {
-	return [color[0], color[1], color[2], Math.min(1, color[3] * 2.5)]
 }
 
 // constantColor, when given, overrides the per-vertex color buffer with one

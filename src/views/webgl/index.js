@@ -91,6 +91,10 @@ function webgl() {
 			fillDirection: gl.getUniformLocation(
 				shaderProgram,
 				"uFillDirection"
+			),
+			isGlassSurface: gl.getUniformLocation(
+				shaderProgram,
+				"uIsGlassSurface"
 			)
 		}
 	}
@@ -319,8 +323,9 @@ function setupTumbleDrag(canvas) {
 }
 
 // white on dark, black on light, so the plain shell stays visible; falls
-// back to the OS preference in "system" mode
-const PLAIN_SHELL_ALPHA = 0.12
+// back to the OS preference in "system" mode. Low: fresnel in the fragment
+// shader carries most of the visible opacity toward the box's edges
+const PLAIN_SHELL_ALPHA = 0.05
 function getPlainShellColor() {
 	if (document.body.classList.contains("dark")) {
 		return [1, 1, 1, PLAIN_SHELL_ALPHA]
@@ -533,9 +538,7 @@ function updateSpiralDiagram(params) {
 		circle.setAttribute("cx", x.toFixed(2))
 		circle.setAttribute("cy", y.toFixed(2))
 		circle.setAttribute("r", "3")
-		// height (0 = outer/flat, bloomHeight = inner/upright) doubles as
-		// the same outer->inner gradient cue the 3D petals use via their
-		// own color lerp, so the diagram reads with the same visual logic
+		// height doubles as the same outer->inner gradient cue the 3D petals use
 		const t = Math.min(1, height / (fullParams.length * 0.6))
 		circle.setAttribute("fill", petalGradientColor(t))
 		pointsGroup.appendChild(circle)
