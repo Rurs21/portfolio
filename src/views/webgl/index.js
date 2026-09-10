@@ -149,10 +149,8 @@ function webgl() {
 		const deltaTime = now - then
 		then = now
 
-		// drifts regardless of drag/idle state -- the light keeps slowly
-		// orbiting even while the box itself is being pushed around. only
-		// while the colored-glass effect is active: the plain shell uses a
-		// fixed camera-ish light instead
+		// light keeps drifting regardless of drag/idle; only while the
+		// glass effect is active, since the plain shell uses a fixed light
 		if (session.coloredGlass) {
 			session.lightAngle += deltaTime * LIGHT_ORBIT_SPEED
 		}
@@ -169,10 +167,7 @@ function webgl() {
 				deltaTime
 			)
 
-			// once any push has bled off (both near-idle), fold in a gentle
-			// idle wobble so the box never sits perfectly still -- its
-			// amplitude fades in/out based on how much spin is still left, so
-			// it doesn't fight a push that's still visibly decelerating
+			// idle wobble fades in as spin bleeds off, so it never fights a push
 			session.wobbleTime += deltaTime
 			const settleAmount = Math.min(
 				1,
@@ -181,9 +176,7 @@ function webgl() {
 					IDLE_SETTLE_SPEED
 			)
 			const wobbleStrength = 1 - settleAmount
-			// (1 - cos)/2 stays within [0, 1] and starts at 0, so the box
-			// bobs entirely upward from its resting height rather than
-			// dipping below it first
+			// (1-cos)/2 starts at 0, so the box bobs upward, not down first
 			session.idleBob =
 				((1 - Math.cos(session.wobbleTime * IDLE_WOBBLE_SPEED)) / 2) *
 				IDLE_WOBBLE_AMPLITUDE *
@@ -210,10 +203,8 @@ function webgl() {
 	session.frame = requestAnimationFrame(render)
 }
 
-// a push just decelerates (friction) instead of springing back to any fixed
-// pose -- the box keeps turning in whatever direction it was pushed and
-// slowly stops there, rather than snapping back to face-front, so it can
-// actually be "inspected" from any angle it's spun to
+// a push decelerates (friction) and stops there, instead of springing back
+// to a fixed pose -- lets the box be inspected from any angle it's spun to
 const SPIN_FRICTION = 1.4
 function freeSpinStep(offset, velocity, deltaTime) {
 	const nextVelocity = velocity * Math.max(0, 1 - SPIN_FRICTION * deltaTime)
@@ -224,10 +215,8 @@ function freeSpinStep(offset, velocity, deltaTime) {
 	return [nextOffset, nextVelocity]
 }
 
-// idle wobble: the whole box actually bobs up and down (not just tilts) once
-// it's settled from any push, so it never sits perfectly static. amplitude
-// is a world-space distance (item-box is ~1 unit across, so 0.15 reads as a
-// clear bounce without floating out of frame)
+// idle wobble: the box bobs up and down (not just tilts) once settled.
+// amplitude is world-space distance (box is ~1 unit across)
 const IDLE_WOBBLE_SPEED = 1.1
 const IDLE_WOBBLE_AMPLITUDE = 0.15
 const IDLE_SETTLE_SPEED = 0.15
@@ -236,13 +225,9 @@ const IDLE_SETTLE_SPEED = 0.15
 // revolution takes ~10s at this speed
 const LIGHT_ORBIT_SPEED = 0.63
 
-// drag in any direction (mouse or touch) to push the item-box: vertical
-// movement pushes it in pitch, horizontal movement pushes it in yaw, on top
-// of its fixed base angle. While dragging it tracks the pointer directly;
-// releasing hands off the last few frames' motion as angular velocity, so it
-// keeps spinning in that direction and gradually decelerates (friction, in
-// the render loop above) back to its idle wobble instead of snapping back to
-// a resting pose.
+// drag (mouse or touch) to push the box: vertical movement pushes pitch,
+// horizontal pushes yaw. Releasing hands off the last motion as angular
+// velocity, which decelerates via friction in the render loop above.
 function setupTumbleDrag(canvas) {
 	session.dragging = false
 	let lastX = 0
@@ -257,14 +242,11 @@ function setupTumbleDrag(canvas) {
 	const onDragStart = (event) => {
 		const x = getX(event)
 		const y = getY(event)
-		// only the box itself grabs: a press on the empty canvas around it
-		// should still scroll/select the page normally rather than silently
-		// tumbling something the pointer isn't actually on
+		// only the box grabs; a press elsewhere still scrolls/selects normally
 		if (!isPointerOnBox(canvas, x, y)) {
 			return
 		}
-		// claim the gesture up front so the browser doesn't start scrolling
-		// the page from this touch before the first touchmove arrives
+		// claim the gesture before the first touchmove, or the browser scrolls
 		if (event.touches) {
 			event.preventDefault()
 		}
@@ -279,25 +261,21 @@ function setupTumbleDrag(canvas) {
 		if (!session.dragging) {
 			return
 		}
-		// only swallow the touch once a drag has actually started (i.e. it
-		// began on the box). Touches that started on the empty canvas never
-		// set dragging, so they fall through and scroll the page as normal --
-		// which is why the canvas uses touch-action: pan-y rather than none.
+		// only swallowed once a drag actually started on the box; touches that
+		// started elsewhere fall through to scroll (canvas is touch-action: pan-y)
 		if (event.touches) {
 			event.preventDefault()
 		}
 		const x = getX(event)
 		const y = getY(event)
 		const now = performance.now()
-		// seconds since the last move, floored so a near-duplicate event
-		// (or the very first move) can't divide by ~0 and spike velocity
+		// floored so a near-duplicate event can't divide by ~0 and spike velocity
 		const dt = Math.max((now - lastMoveTime) / 1000, 1 / 120)
 		const dPitch = (y - lastY) * 0.005
 		const dYaw = (x - lastX) * 0.005
 		session.pitchOffset += dPitch
 		session.yawOffset += dYaw
-		// release velocity (units/second), carried into onDragEnd so letting
-		// go continues the motion at the speed the pointer was moving
+		// units/second, carried into onDragEnd so release continues the motion
 		session.pitchVelocity = dPitch / dt
 		session.yawVelocity = dYaw / dt
 		lastX = x
@@ -308,9 +286,7 @@ function setupTumbleDrag(canvas) {
 		session.dragging = false
 	}
 
-	// the box is the only draggable part of the canvas, and nothing about a
-	// flat rectangle says so -- switch the cursor over it so the grabbable
-	// area is discoverable instead of guesswork
+	// switch the cursor over the box so its grabbable area is discoverable
 	const onHover = (event) => {
 		if (session.dragging) {
 			return
@@ -328,9 +304,7 @@ function setupTumbleDrag(canvas) {
 	canvas.addEventListener("mousemove", onHover)
 	window.addEventListener("mousemove", onDragMove)
 	window.addEventListener("mouseup", onDragEnd)
-	// not passive: a touch that starts on the box has to be able to
-	// preventDefault, or the browser may claim the gesture as a scroll before
-	// the first touchmove lands
+	// not passive: needs preventDefault or the browser claims the gesture as a scroll
 	canvas.addEventListener("touchstart", onDragStart, { passive: false })
 	window.addEventListener("touchmove", onDragMove, { passive: false })
 	window.addEventListener("touchend", onDragEnd)
@@ -344,9 +318,8 @@ function setupTumbleDrag(canvas) {
 	session.listeners.push([window, "touchend", onDragEnd])
 }
 
-// white on a dark background, black on a light one, so the plain shell
-// stays visible regardless of theme; falls back to the OS preference in
-// "system" mode. Low alpha -- barely-there panes, not a solid box
+// white on dark, black on light, so the plain shell stays visible; falls
+// back to the OS preference in "system" mode
 const PLAIN_SHELL_ALPHA = 0.12
 function getPlainShellColor() {
 	if (document.body.classList.contains("dark")) {
@@ -363,10 +336,8 @@ function getPlainShellColor() {
 		: [0, 0, 0, PLAIN_SHELL_ALPHA]
 }
 
-// toggles the colored-glass effect: a double-click/tap on the box itself
-// (an easter egg, not the primary control -- there's no visible button for
-// it), or Enter/Space while the canvas has focus so it's still reachable
-// without a pointer
+// toggles the colored-glass effect: double-click/tap the box (an easter
+// egg, no visible button), or Enter/Space while the canvas has focus
 function setupGlassToggle(canvas) {
 	const toggle = () => {
 		session.coloredGlass = !session.coloredGlass
@@ -421,9 +392,7 @@ function setupGlassToggle(canvas) {
 	session.listeners.push([canvas, "keydown", onKeyDown])
 }
 
-// wires each param's control(s) -- a number input, an optional paired range
-// slider, and optional paired increment/decrement stepper buttons -- to
-// regenerate geometry on change
+// wires each param's number/range/stepper controls to regenerate geometry on change
 function setupControls() {
 	for (const name of Object.keys(defaultParams)) {
 		const range = document.querySelector(`#rose-${name}-range`)
@@ -479,9 +448,7 @@ function setupControls() {
 	}
 }
 
-// flips the math writeup between the plain-English version and a greentext
-// retelling of the same thing. Purely cosmetic -- both describe identical
-// geometry, so nothing here touches params or buffers.
+// flips the math writeup between plain-English and greentext -- cosmetic only
 function setupMathMode() {
 	const button = document.querySelector("#rose-math-mode")
 	const plain = document.querySelector("#rose-math-plain")
@@ -495,8 +462,7 @@ function setupMathMode() {
 		green.hidden = !toGreen
 		plain.hidden = toGreen
 		button.setAttribute("aria-pressed", String(toGreen))
-		// the label advertises where the button takes you, so it names the
-		// mode you are NOT currently in
+		// label names the mode you're NOT currently in (where the button takes you)
 		button.dataset.translate = toGreen
 			? "rose-math-mode-plain"
 			: "rose-math-mode-green"
@@ -518,18 +484,13 @@ function onParamsChange(name, value) {
 	updateSpiralDiagram(session.params)
 }
 
-// half the SVG's viewBox side (see the viewBox on #rose-spiral-diagram) --
-// outerRadius is normalized to this many SVG units so the diagram always
-// fills the same visual space regardless of the outerRadius slider, which
-// is just an overall scale on the 3D bloom and shouldn't shrink/grow the
-// diagram itself
+// half the SVG viewBox side; the diagram always fills the same visual space
+// regardless of the outerRadius slider, which only scales the 3D bloom
 const DIAGRAM_RADIUS = 90
 const SVG_NS = "http://www.w3.org/2000/svg"
 
-// top-down (radius/angle -> x/y) view of the same curve and petal
-// placement points computePetalPlacements/generateWhorls use for the 3D
-// mesh -- draws the raw spiral as a path and each petal as a dot, colored
-// outer(light)->inner(dark) to match the bloom's own color gradient
+// top-down view of the same spiral/petal placements the 3D mesh uses --
+// draws the curve as a path and each petal as a dot, colored to match the bloom
 function updateSpiralDiagram(params) {
 	const path = document.querySelector("#rose-spiral-path")
 	const pointsGroup = document.querySelector("#rose-spiral-points")
@@ -541,12 +502,8 @@ function updateSpiralDiagram(params) {
 	const fullParams = withFullParams(params)
 	const { spiralWindings, outerRadius } = fullParams
 
-	// the raw curve's own largest radius maps to DIAGRAM_RADIUS regardless
-	// of outerRadius (scale is in raw curve units); computePetalPlacements'
-	// radius is already outerRadius-scaled (its own outermost point equals
-	// outerRadius exactly), so dividing by outerRadius first puts it back
-	// in the same 0..1-ish range as the raw curve before applying
-	// DIAGRAM_RADIUS -- both end up in one shared coordinate space
+	// placements' radius is already outerRadius-scaled; dividing that back out
+	// first puts it in the same units as the raw curve before scaling to DIAGRAM_RADIUS
 	const curvePoints = computeSpiralCurve(spiralWindings)
 	const maxCurveRadius = Math.max(
 		...curvePoints.map(([x, y]) => Math.hypot(x, y))

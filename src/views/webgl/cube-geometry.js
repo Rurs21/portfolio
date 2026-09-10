@@ -1,6 +1,4 @@
-// translucent multicolor cube wrapping the rose, like an item box: same
-// face-color layout as the original tutorial cube, just alpha'd down and
-// sized to enclose the bloom
+// translucent multicolor cube wrapping the rose, like an item box
 const ALPHA = 0.2
 
 const FACE_COLORS = [

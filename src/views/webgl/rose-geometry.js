@@ -1,4 +1,4 @@
-import { decayingLobes, sampleSpiral } from "@/lib/flower/archimedeanSpiral.js"
+import { sampleSpiral } from "@/lib/flower/archimedeanSpiral.js"
 
 const BASE_COLOR = [0.55, 0.02, 0.09]
 const TIP_COLOR = [0.98, 0.55, 0.62]
@@ -31,19 +31,15 @@ function normalize(v) {
 	return [v[0] / len, v[1] / len, v[2] / len]
 }
 
-// A point on one petal's surface.
-//   u = 0 at the base, 1 at the tip
-//   v = -1 to 1 across the width
+// A point on one petal's surface. u: 0 (base) to 1 (tip). v: -1 to 1 across the width.
 function petalPoint(u, v, params) {
 	const { cup, curl, maxWidth, length } = params
 
 	// widest at the middle, pinched to nothing at base and tip
 	const halfWidth = Math.sin(Math.PI * u) * maxWidth * 0.5
 
-	// Bend that flat strip sideways into an arc so the petal cups. The arc
-	// spans `cupAngle` radians; picking its radius as halfWidth/cupAngle
-	// keeps the arc length equal to halfWidth, so the petal doesn't get
-	// narrower as it cups harder. Cupping ramps up toward the tip (u^1.5).
+	// bend the flat strip into an arc so the petal cups; radius = halfWidth/cupAngle
+	// keeps arc length constant as cupping increases toward the tip (u^1.5)
 	const cupAngle = cup * Math.pow(u, 1.5)
 	let y = halfWidth * v
 	let z = 0
@@ -53,8 +49,7 @@ function petalPoint(u, v, params) {
 		z = arcRadius - Math.cos(cupAngle * v) * arcRadius
 	}
 
-	// length, plus a quadratic lean so the petal curves rather than sticking
-	// out as a straight spike
+	// length, plus a quadratic lean so the petal curves instead of sticking out straight
 	const x = u * length + curl * u * u * length * 0.5
 
 	return [x, y, z]
@@ -106,14 +101,10 @@ function buildPetal(params, transform, colorInner, colorOuter, out) {
 	}
 }
 
-// place a petal at `radius` from the central axis, base pinned there, then
-// fold it about that base point: tilt=0 lays it flat & outward (open outer
-// petal), tilt=pi/2 curls its tip up and back in over the center (closed
-// inner petal/bud), then spin the whole thing around Y by `angle`.
-// local space: x = along petal length (base->tip), y = across petal width,
-// z = cup depth. Width (y) must end up tangential (perpendicular to the
-// radial direction, in the horizontal plane) so petals fan out angularly
-// and overlap their neighbors -- it must NOT become world-Y (height).
+// places a petal at `radius` from the axis, base pinned there, tilted about that
+// base (tilt=0 flat & open, tilt=pi/2 curled up over the center) and spun by `angle`.
+// local space: x = length, y = width, z = cup depth. Width must stay tangential
+// (not become world-Y) so petals fan out angularly instead of standing up as walls.
 function makeTransform(radius, height, angle, tilt, scale) {
 	const cosT = Math.cos(tilt)
 	const sinT = Math.sin(tilt)
@@ -125,15 +116,11 @@ function makeTransform(radius, height, angle, tilt, scale) {
 		const sy = p[1] * scale
 		const sz = p[2] * scale
 
-		// fold length+cup within the vertical plane containing the radial
-		// direction: base at radial distance `radius`, tip rises in height
-		// and pulls in toward the axis as tilt grows; cup depth (sz) also
-		// rides along the radial direction so cupping reads as bowl curvature
+		// fold length+cup into the vertical plane along the radial direction
 		const radial = radius - sx * sinT + sz * cosT
 		const py = sx * cosT + sz * sinT
 
-		// radial direction is (cosA, sinA) in the X-Z plane; tangential
-		// (petal width) direction is perpendicular to it: (-sinA, cosA)
+		// radial direction is (cosA, sinA); tangential (width) is perpendicular: (-sinA, cosA)
 		const rx = radial * cosA - sy * sinA
 		const rz = radial * sinA + sy * cosA
 
@@ -145,48 +132,29 @@ function makeTransform(radius, height, angle, tilt, scale) {
 	}
 }
 
-// The spiral the petals sit on:
-//
-//   r(theta) = (1 + theta) * (1 + c * e^(-k*theta) * sin(n*theta))
-//
-// The spiral and the decaying-lobe modulation are shared with the site's
-// background rose (see @/lib/flower/archimedeanSpiral.js). What differs
-// here is the lobe rate: it stays fixed at n rather than ramping, because
-// this curve's theta range is tied to n (thetaMax = 2*PI*n) and a ramping
-// rate would cancel against that -- (n/thetaMax)*theta reduces to
-// theta/(2*PI) whatever n is, leaving spiralWindings with no effect on
-// lobing at all.
-//
-// Only spiralWindings (n) is user-facing: it sets both how many turns the
-// spiral makes and how many lobes ride on each turn. The rest stay fixed
-// because computePetalPlacements normalizes radius so the outermost petal
-// always lands on outerRadius, which makes changing them invisible.
-const CURVE_C = 0.3 // lobe depth
-const CURVE_K = 0.15 // how fast lobes fade outward
+// Plain Archimedean spiral: r(theta) = 1 + theta. No lobing modulation --
+// computePetalPlacements normalizes radius to outerRadius anyway, which
+// flattened out a decaying-lobe wobble (see @/lib/flower/archimedeanSpiral.js)
+// when tried, so it's not worth the extra parameters.
 const SAMPLES_PER_WINDING = 8
 
-// Golden angle, ~137.5deg. Real plants rotate by this much between
-// successive leaves/petals/seeds (phyllotaxis). Because it's irrational
-// relative to a full turn, no two petals ever line up into a straight
-// spoke -- they interleave and pack tightly instead.
+// ~137.5deg, phyllotaxis. Irrational relative to a full turn, so petals
+// never line up into spokes -- they interleave instead.
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5))
 
-// The raw spiral points, exposed separately so the top-down SVG diagram can
-// draw the curve itself and not just the petals sitting on it.
+// exposed separately so the top-down SVG diagram can draw the curve itself
 function computeSpiralCurve(spiralWindings) {
 	return sampleSpiral(
 		1,
 		1,
 		(Math.PI * 2) / SAMPLES_PER_WINDING,
 		Math.PI * 2 * spiralWindings,
-		decayingLobes(CURVE_C, CURVE_K, () => spiralWindings)
+		() => 1
 	)
 }
 
-// per-petal placement (radius + angle from the central axis, plus the t
-// gradient position and derived height/tilt/scale) for the given params --
-// the single source of truth for where each petal goes, shared by the 3D
-// mesh builder (generateWhorls) and the top-down SVG diagram
+// per-petal placement (radius, angle, height, tilt, scale); shared by the
+// 3D mesh builder (generateWhorls) and the top-down SVG diagram
 function computePetalPlacements(params) {
 	const { spiralWindings, bloomOpenness, outerRadius, innerScale } = params
 
@@ -197,18 +165,12 @@ function computePetalPlacements(params) {
 
 	const points = computeSpiralCurve(spiralWindings)
 
-	// The spiral grows outward, but a bloom is the other way round: big flat
-	// petals on the outside, small upright ones converging at the center. So
-	// walk the points in reverse -- the spiral's outermost sample becomes
-	// petal 0 (outer), its innermost becomes the last (center).
+	// walk the spiral in reverse: outermost sample -> petal 0 (outer, flat),
+	// innermost -> last petal (center, upright)
 	const pointCount = points.length
-	// Divide out the curve's own largest radius so outerRadius alone decides
-	// bloom size, and the outermost petal lands on it exactly.
+	// normalize by the curve's own max radius so outerRadius alone sets bloom size
 	const maxCurveRadius = Math.max(...points.map(([x, y]) => Math.hypot(x, y)))
-	// Rotate the whole arrangement by a windings-dependent amount. Without
-	// it petal 0 would always sit at angle 0 -- and since its radius is
-	// pinned to outerRadius too, it would be the one petal that never moves
-	// when you change the spiral windings.
+	// rotates the arrangement as windings change, so the outer petal moves too
 	const windingsOffset = spiralWindings * GOLDEN_ANGLE
 
 	const placements = []
@@ -217,9 +179,7 @@ function computePetalPlacements(params) {
 		// 0 at the outer edge, 1 at the center
 		const t = pointCount > 1 ? i / (pointCount - 1) : 0
 
-		// Radius comes from the spiral; angle comes from phyllotaxis. Each
-		// petal is turned a further ~137.5deg from the last, so they
-		// interleave instead of stacking into spokes.
+		// radius from the spiral, angle from phyllotaxis -- unrelated rules
 		const radius = (Math.hypot(x, y) / maxCurveRadius) * outerRadius
 		const angle = i * GOLDEN_ANGLE + windingsOffset
 
@@ -241,10 +201,8 @@ function generateWhorls(params, out) {
 	}
 }
 
-// fills in the fixed-by-design shape constants around the user-facing
-// params (spiralWindings/bloomOpenness/outerRadius) -- shared by
-// generateRose and anything else (the top-down SVG diagram) that needs
-// computePetalPlacements' full param set without duplicating these defaults
+// fills in fixed shape constants around the user-facing params
+// (spiralWindings/bloomOpenness/outerRadius)
 function withFullParams(params) {
 	return {
 		lengthSegments: 8,
@@ -254,7 +212,10 @@ function withFullParams(params) {
 		// fixed by design, not user-tweakable: this combination reads best
 		cup: 1,
 		curl: 1,
-		innerScale: 0.15,
+		// innermost petal's own half-width has to stay well under its radius
+		// from the axis (~0.067 at default outerRadius), or petals across the
+		// center clip into each other -- 0.15 was too close to that limit
+		innerScale: 0.08,
 		...params
 	}
 }

@@ -115,14 +115,10 @@
 			</div>
 
 			<div id="rose-math-plain">
-			<p data-translate="rose-math-lede">
-				One petal shape, repeated. All that changes is where each copy sits and which way it points.
-			</p>
-
 			<h3 data-translate="rose-math-shape-title">One petal</h3>
 
 			<p data-translate="rose-math-intro">
-				A petal starts narrow, fattens in the middle, narrows to a point. That's a sine wave:
+				Every petal is the same shape, copied over and over. Narrow, wide, narrow again: a sine wave.
 			</p>
 
 			<math display="block">
@@ -143,17 +139,13 @@
 			</math>
 
 			<p data-translate="rose-math-shape-note">
-				u is how far along the petal you are, 0 at the base to 1 at the tip. It also curls into a shallow trough, more so near the tip.
+				u tracks position along the petal: 0 at the base, 1 at the tip.
 			</p>
 
-			<h3 data-translate="rose-math-place-title">Where each petal goes</h3>
+			<h3 data-translate="rose-math-spiral-title">The spiral</h3>
 
-			<p data-translate="rose-math-arrangement">
-				Each petal needs two numbers: how far out, and which way it faces. They come from unrelated rules.
-			</p>
-
-			<p data-translate="rose-math-distance">
-				Distance comes from a spiral, drawn in the diagram above. Each step out is the same size, plus a sine wave that makes it bulge and pinch as it turns &#x2014; fading outward, so the lobes sit near the middle.
+			<p data-translate="rose-math-spiral-intro">
+				A real rose doesn't grow all its petals at once. Each new one forms a bit further out than the last, tracing a spiral as the bud opens. The simplest version is the Archimedean spiral: every step outward is the same size.
 			</p>
 
 			<math display="block">
@@ -163,45 +155,20 @@
 					<mi>&#x03B8;</mi>
 					<mo stretchy="false">)</mo>
 					<mo>=</mo>
-					<mo stretchy="false">(</mo>
 					<mn>1</mn>
 					<mo>+</mo>
 					<mi>&#x03B8;</mi>
-					<mo stretchy="false">)</mo>
-					<mo>&#x22C5;</mo>
-					<mrow>
-						<mo>(</mo>
-						<mn>1</mn>
-						<mo>+</mo>
-						<mn>0.3</mn>
-						<mo>&#x22C5;</mo>
-						<msup>
-							<mi>e</mi>
-							<mrow>
-								<mo>&#x2212;</mo>
-								<mn>0.15</mn>
-								<mi>&#x03B8;</mi>
-							</mrow>
-						</msup>
-						<mo>&#x22C5;</mo>
-						<mi>sin</mi>
-						<mo stretchy="false">(</mo>
-						<mi>n</mi>
-						<mi>&#x03B8;</mi>
-						<mo stretchy="false">)</mo>
-						<mo>)</mo>
-					</mrow>
 				</mrow>
 			</math>
 
-			<p data-translate="rose-math-walk">
-				It's read outermost-first, so petal one is the big open one at the rim and the last is the bud at the center. Then everything scales so the outer petal matches your bloom size.
+			<p data-translate="rose-math-spiral-walk">
+				That's also the order they grow in: tight inner turns are the bud, big open petals at the rim are the oldest.
 			</p>
 
-			<h3 data-translate="rose-math-angle-title">Which way it points</h3>
+			<h3 data-translate="rose-math-angle-title">The golden angle</h3>
 
 			<p data-translate="rose-math-angle">
-				Direction ignores the spiral entirely. Each petal just turns a fixed amount further than the last:
+				Distance out comes from the spiral. Spacing is a separate rule: each new petal turns a fixed amount further around than the last one.
 			</p>
 
 			<math display="block">
@@ -211,11 +178,7 @@
 						<mi>i</mi>
 					</msub>
 					<mo>=</mo>
-					<mo stretchy="false">(</mo>
 					<mi>i</mi>
-					<mo>+</mo>
-					<mi>n</mi>
-					<mo stretchy="false">)</mo>
 					<mo>&#x22C5;</mo>
 					<mn>137.5</mn>
 					<mo>&#xB0;</mo>
@@ -223,19 +186,19 @@
 			</math>
 
 			<p data-translate="rose-math-outro">
-				Why 137.5&#xB0;? Turn by 120&#xB0; and petal 4 lands on petal 1, petal 5 on petal 2, forever &#x2014; three spokes and dead space. Any clean fraction of a circle does that. 137.5&#xB0; isn't one, so no petal repeats an earlier direction; each drops into the biggest gap left.
+				137.5&#xB0; isn't arbitrary. A clean fraction like 120&#xB0; makes every third petal overlap an earlier one: three spokes, wasted gaps. 137.5&#xB0; never repeats, so each petal always lands in the biggest gap left.
 			</p>
 
 			<p data-translate="rose-math-golden">
-				The number comes from the golden ratio &#x3C6; = (1+&#x221A;5)/2, the most stubbornly irrational number there is &#x2014; the hardest to approximate with any fraction. Divide a full turn by &#x3C6;&#xB2; and you get 137.507&#x2026;&#xB0;, so it resists lining up better than any other angle. Hence the name: the golden angle.
+				That angle comes from the golden ratio, &#x3C6; = (1+&#x221A;5)/2, the number fractions approximate worst. A full turn divided by &#x3C6;&#xB2; is 137.507&#x2026;&#xB0;. Nothing ever lines up with it.
 			</p>
 
 			<p data-translate="rose-math-phyllotaxis">
-				Plants do this for real; the arrangement is called phyllotaxis. A sunflower head packs its seeds at roughly this angle, and the spiral arms you can count in one are almost always consecutive Fibonacci numbers &#x2014; 34 one way, 55 the other. That's not a coincidence: ratios of consecutive Fibonacci numbers converge on &#x3C6;. Pinecones, pineapples and the leaves up a stem do the same thing, which is what stops higher leaves from shading the ones below.
+				Real plants use this angle too. It's called phyllotaxis: leaves, seeds and petals spaced so none shades or crowds the one before it. Each gets its own share of sunlight or space, packed as efficiently as possible.
 			</p>
 
 			<p data-translate="rose-math-offset-note" id="rose-math-offset-note">
-				(The + n turns the whole arrangement as you change windings, so the outer petal moves too instead of staying put.)
+				(In this model, changing the winding count also spins the whole arrangement, so the outer petal moves instead of staying fixed in place.)
 			</p>
 			</div>
 

@@ -1,36 +1,24 @@
 import { resizeCanvasToDisplaySize } from "@/utils/canvas.js"
 import * as mat4 from "gl-matrix/mat4"
 
-// fixed base tilt so the item-box sits at an angle rather than face-on;
-// spin then only turns around the vertical axis (yaw) from here, and the
-// user's drag adds extra tilt (pitch) on top of this base
+// base angle so the item-box sits tilted rather than face-on; spin turns it
+// around the vertical (yaw) from here, drag adds extra tilt (pitch) on top
 const BASE_TILT = Math.PI * -0.7
 
-// the cube (cube-geometry.js's default centerY) and the rose (which only
-// grows upward from y=0, never below) are both shifted so the item-box
-// visually wraps the bloom -- their combined visual center sits at y=0.5,
-// not the origin. Rotating about the origin therefore spins everything
-// around a point near the cube's bottom edge instead of its middle, which
-// reads as the whole thing orbiting off-anchor. Pivoting the rotation about
-// this point instead keeps it visually anchored in place while spinning.
+// visual center of the box+rose is y=0.5, not the origin -- rotating about
+// this point instead of the origin keeps it anchored in place while spinning
 const PIVOT_Y = 0.5
 
-// the item-box is generateCube(1.0, PIVOT_Y): it spans +/-1 in x/z and
-// PIVOT_Y +/-1 in y, so every corner sits sqrt(3) away from the pivot it
-// tumbles about. Framing against that radius (rather than the 1.0 half-width)
-// is what keeps a dragged/spun box from clipping at its corners.
+// item-box corners sit sqrt(3) from PIVOT_Y; framing against that (not the
+// 1.0 half-width) keeps a dragged/spun box from clipping at its corners
 const BOUNDING_RADIUS = Math.sqrt(3)
 
-// how much empty room to leave around that sphere: the box fills ~73% of the
-// frame at rest and still clears every drag angle without clipping. That only
-// works because the view is centered on PIVOT_Y below -- framing an off-center
-// object has to leave slack for the offset itself, which cost both a chunk of
-// size and the clip-free guarantee.
+// empty room around that bounding sphere so the box clears every drag angle
 const FRAMING_MARGIN = 1.1
 
-// matches cube-geometry.js's FACE_COLORS, in [+X, -X, +Y, -Y, +Z, -Z] order
-// to line up with the shader's uGlassColors indexing -- used to tint the
-// rose as if colored light were passing through the item-box's glass walls
+// matches cube-geometry.js's FACE_COLORS ([+X, -X, +Y, -Y, +Z, -Z]) to line
+// up with the shader's uGlassColors indexing -- tints the rose as if light
+// passed through the item-box's glass walls
 const GLASS_COLORS = [
 	1.0,
 	0.0,
@@ -67,27 +55,22 @@ function normalize(v) {
 	return [v[0] / len, v[1] / len, v[2] / len]
 }
 
-// the matrices the most recent frame actually drew with, kept so the pointer
-// hit-test below measures against what's on screen (including whatever the
-// current drag/spin has rotated it to) instead of recomputing that state
+// matrices the most recent frame drew with, so the hit-test below measures
+// against what's on screen instead of recomputing rotation state
 const lastFrame = {
 	projectionMatrix: null,
 	modelViewMatrix: null
 }
 
-// half-extent of the item-box in object space: generateCube(1.0, PIVOT_Y)
-// spans +/-1 on x/z and PIVOT_Y +/-1 on y
+// item-box half-extent in object space (generateCube(1.0, PIVOT_Y))
 const BOX_HALF = 1
 
-// true when (clientX, clientY) is over the item-box itself rather than the
-// empty canvas around it. Casts a ray from the pointer through the scene and
-// slab-tests it against the box's object-space bounds, which stays correct at
-// any rotation without needing a depth/color readback (the drawing buffer is
-// cleared every frame, so reading pixels back isn't reliable here).
+// true when (clientX, clientY) is over the item-box, not the canvas around
+// it. Casts a ray from the pointer and slab-tests it against the box's
+// object-space bounds -- stays correct at any rotation without a pixel readback.
 function isPointerOnBox(canvas, clientX, clientY) {
 	const { projectionMatrix, modelViewMatrix } = lastFrame
-	// nothing drawn yet -- treat it as a hit so the box never becomes
-	// undraggable if a pointer lands before the first frame
+	// nothing drawn yet -- treat it as a hit so the box is never undraggable
 	if (!projectionMatrix || !modelViewMatrix) {
 		return true
 	}
@@ -107,8 +90,7 @@ function isPointerOnBox(canvas, clientX, clientY) {
 		return true
 	}
 
-	// unproject the near and far plane points, giving the ray through the
-	// pointer expressed directly in the box's own object space
+	// unproject near/far plane points into the box's object space
 	const near = unproject(inverse, ndcX, ndcY, -1)
 	const far = unproject(inverse, ndcX, ndcY, 1)
 	if (!near || !far) {
@@ -118,8 +100,7 @@ function isPointerOnBox(canvas, clientX, clientY) {
 	const origin = near
 	const direction = [far[0] - near[0], far[1] - near[1], far[2] - near[2]]
 
-	// slab test, per axis: clip the ray's [tMin, tMax] span against each pair
-	// of parallel box faces. They still overlap at the end <=> the ray hits.
+	// slab test: clip [tMin, tMax] against each pair of parallel box faces
 	const min = [-BOX_HALF, PIVOT_Y - BOX_HALF, -BOX_HALF]
 	const max = [BOX_HALF, PIVOT_Y + BOX_HALF, BOX_HALF]
 	let tMin = 0
@@ -129,8 +110,7 @@ function isPointerOnBox(canvas, clientX, clientY) {
 		const o = origin[axis]
 		const dir = direction[axis]
 		if (Math.abs(dir) < 1e-8) {
-			// ray runs parallel to this pair of faces: it can only hit if it
-			// already starts between them
+			// parallel to this pair of faces: only hits if already between them
 			if (o < min[axis] || o > max[axis]) {
 				return false
 			}
@@ -165,9 +145,7 @@ function unproject(inverseMatrix, x, y, z) {
 	]
 }
 
-// eye-space light direction, orbiting around the vertical (Y) axis as
-// lightAngle drifts -- keeps the same elevation/distance the original
-// fixed vector had
+// eye-space light direction, orbiting around the vertical (Y) axis as lightAngle drifts
 function orbitDirection(lightAngle, x, y, z) {
 	const c = Math.cos(lightAngle)
 	const s = Math.sin(lightAngle)
@@ -195,39 +173,23 @@ function drawScene(
 	// adapt viewport to newSize
 	gl.viewport(0, 0, gl.canvas.width, gl.canvas.height)
 
-	//gl.clearColor(0.0, 0.0, 0.0, 1.0) // Clear to black, fully opaque
-	gl.clearDepth(1.0) // Clear everything
-	gl.enable(gl.DEPTH_TEST) // Enable depth testing
-	gl.depthFunc(gl.LEQUAL) // Near things obscure far things
-
-	// Clear the canvas before we start drawing on it.
+	gl.clearDepth(1.0)
+	gl.enable(gl.DEPTH_TEST)
+	gl.depthFunc(gl.LEQUAL) // near things obscure far things
 
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-	// Create a perspective matrix, a special matrix that is
-	// used to simulate the distortion of perspective in a camera.
-	// Our field of view is 45 degrees, with a width/height
-	// ratio that matches the display size of the canvas
-	// and we only want to see objects between 0.1 units
-	// and 100 units away from the camera.
-
-	const fieldOfView = (45 * Math.PI) / 180 // in radians
+	const fieldOfView = (45 * Math.PI) / 180
 	const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight
 	const zNear = 0.1
 	const zFar = 100.0
 	const projectionMatrix = mat4.create()
-
-	// note: glmatrix.js always has the first argument
-	// as the destination to receive the result.
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar)
 
-	// pull the camera to wherever the box actually fills the frame, instead of
-	// a fixed distance tuned for one canvas shape. fieldOfView is the VERTICAL
-	// angle, so a canvas narrower than it is tall (aspect < 1) is horizontally
-	// tighter than the vertical fit implies -- dividing the effective angle by
-	// the aspect there backs the camera off just enough to fit the width too.
-	// Without it the box crops on a portrait canvas and floats in dead space
-	// on a wide one.
+	// pull the camera back until the box fills the frame on any canvas shape.
+	// fieldOfView is the vertical angle, so a portrait canvas (aspect < 1) is
+	// tighter horizontally than that implies -- scale the angle by aspect to
+	// account for it, or the box crops on portrait / floats small on wide
 	const halfAngle =
 		aspect < 1
 			? Math.atan(Math.tan(fieldOfView / 2) * aspect)
@@ -235,47 +197,25 @@ function drawScene(
 	const cameraDistance =
 		(BOUNDING_RADIUS / Math.tan(halfAngle)) * FRAMING_MARGIN
 
-	// Set the drawing position to the "identity" point, which is
-	// the center of the scene.
 	const modelViewMatrix = mat4.create()
 
-	// Now move the drawing position a bit to where we want to
-	// start drawing the square.
-	// bobOffset rides on this translate (screen-space up/down, in view space
-	// before any rotation) rather than on the object's own rotated axes, so
-	// idling reads as the whole item-box physically bobbing in place instead
-	// of just tilting
-	// the box tumbles about PIVOT_Y, but the camera looks down the y=0 axis,
-	// so without pulling the view down by that same amount the whole box sits
-	// high in the frame -- clipping at the top while leaving dead space at the
-	// bottom. Offsetting here centers the pivot (and therefore the box) on the
-	// view axis, so the framing above is measured against a centered object.
-	mat4.translate(
-		modelViewMatrix, // destination matrix
-		modelViewMatrix, // matrix to translate
-		[-0.0, bobOffset - PIVOT_Y, -cameraDistance]
-	) // amount to translate
+	// bobOffset rides on this translate (screen-space, pre-rotation) so idling
+	// reads as the box bobbing in place rather than tilting. Also recenters the
+	// view on PIVOT_Y, since the camera looks down the y=0 axis by default.
+	mat4.translate(modelViewMatrix, modelViewMatrix, [
+		-0.0,
+		bobOffset - PIVOT_Y,
+		-cameraDistance
+	])
 
-	// mat4.rotate composes the new rotation into the CURRENT local frame, so
-	// calls here apply to vertices in the reverse of call order: the call
-	// listed last runs first (innermost, in object space), and the call
-	// listed first wraps around that result last (outermost, closer to the
-	// camera). We want spin to turn the object around its own untilted
-	// vertical axis first (innermost), then the fixed tilt to angle that
-	// whole spinning object toward the camera (outermost) -- so spin is
-	// called first here, tilt second. Getting this order backwards tilts the
-	// spin axis itself, making the object wobble between corner-up and
-	// corner-down instead of turning cleanly in place. yawOffset rides on
-	// the same axis as spin (dragging left/right just adds extra turn),
-	// while pitchOffset rides on the base tilt axis (dragging up/down tips
-	// it further forward/back).
-	//
-	// the two rotate calls need to happen about PIVOT_Y, not the origin (see
-	// PIVOT_Y above), so they're sandwiched between a translate up to the
-	// pivot and back down. Since these compose in reverse (last call runs
-	// first, against the raw object-space vertices), the actual order
-	// applied is: shift down by -PIVOT_Y (centering the pivot at the
-	// origin), rotate, rotate, then shift back up by +PIVOT_Y.
+	// mat4.rotate composes into the current frame, so calls apply in reverse
+	// order: spin (called first) ends up innermost, tilt (called second)
+	// outermost -- spin turns the object on its own vertical axis, then tilt
+	// angles that spinning object toward the camera. Reversing this order
+	// would tilt the spin axis itself, wobbling corner-up/corner-down instead
+	// of turning cleanly. yawOffset rides the spin axis, pitchOffset the tilt
+	// axis. Both rotations are sandwiched in a translate to/from PIVOT_Y so
+	// they happen about that point instead of the origin.
 	mat4.translate(modelViewMatrix, modelViewMatrix, [0, PIVOT_Y, 0])
 	mat4.rotate(modelViewMatrix, modelViewMatrix, spin + yawOffset, [0, 1, 0])
 	mat4.rotate(
@@ -286,9 +226,7 @@ function drawScene(
 	)
 	mat4.translate(modelViewMatrix, modelViewMatrix, [0, -PIVOT_Y, 0])
 
-	// keep the exact matrices this frame drew with, so a pointer hit-test
-	// (see isPointerOnBox) resolves against what's actually on screen rather
-	// than recomputing the camera and rotation state a second time
+	// so isPointerOnBox resolves against what's actually on screen
 	lastFrame.projectionMatrix = projectionMatrix
 	lastFrame.modelViewMatrix = modelViewMatrix
 
@@ -313,18 +251,13 @@ function drawScene(
 		normalMatrix
 	)
 	gl.uniform3fv(programInfo.uniformLocations.glassColors, GLASS_COLORS)
-	// ambient only matters for the plain shell: with the box colored, the
-	// glass tint already fills in unlit surfaces, so ambient on top just
-	// muddies it; the plain shell has no glass tint, so ambient is what
-	// keeps its unlit surfaces from going flat black
+	// ambient only matters for the plain shell -- glass tint already fills
+	// in unlit surfaces on the colored box, so ambient would just muddy it
 	gl.uniform1f(
 		programInfo.uniformLocations.ambientStrength,
 		coloredGlass ? 0 : AMBIENT_STRENGTH
 	)
-	// colored surfaces read a bit flat under the default directional
-	// strength since the glass tint already softens contrast -- boosting it
-	// here keeps the rose's shading legible without touching the plain
-	// shell, which is already tuned against ambient instead
+	// glass tint softens contrast, so boost directional to keep it legible
 	gl.uniform1f(
 		programInfo.uniformLocations.directionalStrength,
 		DIRECTIONAL_STRENGTH + (coloredGlass ? 0.5 : 0)
@@ -338,9 +271,7 @@ function drawScene(
 	gl.uniform3fv(programInfo.uniformLocations.lightDirection, lightDirection)
 	gl.uniform3fv(programInfo.uniformLocations.fillDirection, fillDirection)
 
-	// rose first: opaque, writes depth normally, tinted by the glass colors
-	// as if light passed through the box walls onto it -- only while the
-	// colored-glass effect is active, since the plain shell isn't tinting anything
+	// rose first: opaque, writes depth normally, tinted by glass colors when active
 	gl.uniform1f(
 		programInfo.uniformLocations.glassStrength,
 		coloredGlass ? GLASS_STRENGTH : 0
@@ -348,18 +279,13 @@ function drawScene(
 	gl.disable(gl.BLEND)
 	drawObject(gl, programInfo, buffers)
 
-	// item-box shell second: translucent either way, so it must not
-	// depth-write (or the far side of the cube gets hidden behind its own
-	// near side) but must still depth-test against the rose so it wraps
-	// around it correctly. No glass tint on the cube itself -- it's the
-	// light source, not the thing being lit.
+	// item-box shell second, translucent: no depth-write (or its far side
+	// hides behind its near side) but still depth-tests against the rose
 	gl.uniform1f(programInfo.uniformLocations.glassStrength, 0)
 	gl.enable(gl.BLEND)
 	gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.depthMask(false)
 	if (coloredGlass) {
-		// per-face FACE_COLORS from the vertex buffer, unlit (the glass
-		// effect reads as colored light, not a lit surface)
 		drawObject(gl, programInfo, cubeBuffers)
 	} else {
 		// flat, low-alpha, no color tint -- barely-there panes with edges
@@ -378,9 +304,8 @@ function brighten(color) {
 	return [color[0], color[1], color[2], Math.min(1, color[3] * 2.5)]
 }
 
-// constantColor, when given, replaces the per-vertex color buffer with one
-// flat color for every vertex (same technique drawEdges uses) -- used for
-// the plain shell so its faces don't pull in FACE_COLORS
+// constantColor, when given, overrides the per-vertex color buffer with one
+// flat color -- used for the plain shell so its faces skip FACE_COLORS
 function drawObject(gl, programInfo, buffers, constantColor = null) {
 	setPositionAttribute(gl, buffers, programInfo)
 	if (constantColor) {
@@ -404,13 +329,11 @@ function drawObject(gl, programInfo, buffers, constantColor = null) {
 	gl.drawElements(gl.TRIANGLES, vertexCount, type, offset)
 }
 
-// draws just the cube's 12 edges as flat-colored lines, faces skipped entirely
+// draws just the cube's 12 edges as flat-colored lines, faces skipped
 function drawEdges(gl, programInfo, buffers, color) {
 	setPositionAttribute(gl, buffers, programInfo)
 	setNormalAttribute(gl, buffers, programInfo)
 
-	// a constant color for every vertex instead of pulling per-vertex from
-	// the (unused here) color buffer
 	gl.disableVertexAttribArray(programInfo.attribLocations.vertexColor)
 	gl.vertexAttrib4f(
 		programInfo.attribLocations.vertexColor,
@@ -424,15 +347,13 @@ function drawEdges(gl, programInfo, buffers, color) {
 	gl.drawElements(gl.LINES, buffers.edgeCount, gl.UNSIGNED_SHORT, 0)
 }
 
-// Tell WebGL how to pull out the positions from the position
-// buffer into the vertexPosition attribute.
+// binds the position buffer to the vertexPosition attribute
 function setPositionAttribute(gl, buffers, programInfo) {
-	const numComponents = 3 //2 // pull out 2 values per iteration
-	const type = gl.FLOAT // the data in the buffer is 32bit floats
-	const normalize = false // don't normalize
-	const stride = 0 // how many bytes to get from one set of values to the next
-	// 0 = use type and numComponents above
-	const offset = 0 // how many bytes inside the buffer to start from
+	const numComponents = 3
+	const type = gl.FLOAT
+	const normalize = false
+	const stride = 0
+	const offset = 0
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position)
 	gl.vertexAttribPointer(
 		programInfo.attribLocations.vertexPosition,
@@ -445,8 +366,7 @@ function setPositionAttribute(gl, buffers, programInfo) {
 	gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition)
 }
 
-// Tell WebGL how to pull out the colors from the color buffer
-// into the vertexColor attribute.
+// binds the color buffer to the vertexColor attribute
 function setColorAttribute(gl, buffers, programInfo) {
 	const numComponents = 4
 	const type = gl.FLOAT
@@ -465,8 +385,7 @@ function setColorAttribute(gl, buffers, programInfo) {
 	gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor)
 }
 
-// Tell WebGL how to pull out the normals from
-// the normal buffer into the vertexNormal attribute.
+// binds the normal buffer to the vertexNormal attribute
 function setNormalAttribute(gl, buffers, programInfo) {
 	const numComponents = 3
 	const type = gl.FLOAT
