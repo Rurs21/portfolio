@@ -15,6 +15,14 @@ uniform bool uIsGlassSurface;
 // shading untouched, since the two share that uniform.
 const lowp float GLASS_LIGHTING_FLOOR = 0.9;
 
+// rim glow color: saturated cyan, like light skimming a glass edge, rather
+// than the shell's own tint -- grazing-angle glass reflects ambient/sky
+// light, not its diffuse color, so a neutral tint reads as reflection
+// instead of "more of the same paint". Kept saturated (not pale) so it
+// still reads against a white rim in dark mode, where vColor.rgb is
+// already (1,1,1) and a near-white tint would be invisible
+const lowp vec3 RIM_TINT_COLOR = vec3(0.25, 0.85, 1.0);
+
 void main(void) {
 	lowp vec3 rim = vec3(0.0);
 	lowp float alpha = vColor.a;
@@ -30,9 +38,7 @@ void main(void) {
 		highp vec3 viewDir = normalize(-vViewDir);
 		highp float fresnel = pow(1.0 - abs(dot(normalize(vNormalEye), viewDir)), 2.5);
 		alpha = mix(vColor.a, 1.0, fresnel);
-		// rim brightens toward the surface's own color rather than flat
-		// white, so it reads as light catching the glass, not a foreign glow
-		rim = vColor.rgb * fresnel * 0.5;
+		rim = RIM_TINT_COLOR * fresnel * 0.7;
 	}
 	gl_FragColor = vec4(vColor.rgb * lighting + vGlassTint + rim, alpha);
 }
