@@ -1,7 +1,9 @@
 import {
 	computePetalPlacements,
 	computeSpiralCurve,
-	withFullParams
+	withFullParams,
+	BASE_COLOR,
+	TIP_COLOR
 } from "./rose-geometry.js"
 
 // half the SVG viewBox side; the diagram always fills the same visual space
@@ -9,11 +11,10 @@ import {
 const DIAGRAM_RADIUS = 90
 const SVG_NS = "http://www.w3.org/2000/svg"
 
-// matches rose-geometry.js's BASE_COLOR (outer) -> TIP_COLOR (inner) lerp
+// the same outer -> inner lerp the 3D petals use, imported rather than
+// re-typed so recoloring the bloom can't leave the diagram behind
 function petalGradientColor(t) {
-	const base = [0.55, 0.02, 0.09]
-	const tip = [0.98, 0.55, 0.62]
-	const [r, g, b] = base.map((c, i) => c + (tip[i] - c) * t)
+	const [r, g, b] = BASE_COLOR.map((c, i) => c + (TIP_COLOR[i] - c) * t)
 	return `rgb(${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)})`
 }
 

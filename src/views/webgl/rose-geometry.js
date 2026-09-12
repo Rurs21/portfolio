@@ -253,5 +253,7 @@ export {
 	generateRose,
 	computePetalPlacements,
 	computeSpiralCurve,
-	withFullParams
+	withFullParams,
+	BASE_COLOR,
+	TIP_COLOR
 }

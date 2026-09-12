@@ -1,8 +1,9 @@
 import { resizeCanvasToDisplaySize } from "@/utils/canvas.js"
+import { VERTEX_ATTRIBUTES } from "./vertex-attributes.js"
 import * as mat4 from "gl-matrix/mat4"
 
-// base angle so the item-box sits tilted rather than face-on; spin turns it
-// around the vertical (yaw) from here, drag adds extra tilt (pitch) on top
+// base angle so the item-box sits tilted rather than face-on; drag turns it
+// around the vertical (yaw) from here and adds extra tilt (pitch) on top
 const BASE_TILT = Math.PI * -0.7
 
 // visual center of the box+rose is y=0.5, not the origin -- rotating about
@@ -16,13 +17,17 @@ const BOUNDING_RADIUS = Math.sqrt(3)
 // empty room around that bounding sphere so the box clears every drag angle
 const FRAMING_MARGIN = 1.1
 
-// matches cube-geometry.js's FACE_COLORS ([+X, -X, +Y, -Y, +Z, -Z]) to line
-// up with the shader's uGlassColors indexing -- tints the rose as if light
-// passed through the item-box's glass walls
+// axis-indexed ([+X, -X, +Y, -Y, +Z, -Z]) to match the shader's uGlassColors
+// lookup -- tints the rose as if light passed through the item-box's glass
+// walls. Deliberately NOT a straight copy of cube-geometry.js's FACE_COLORS:
+// four axes agree, but magenta and yellow are transposed relative to the
+// faces that actually paint them (+X is yellow on the shell, -Y magenta).
+// Tuned by eye at GLASS_STRENGTH, so don't "fix" the swap without looking --
+// the tint is a soft wash and matching the shell exactly is not the goal.
 const GLASS_COLORS = [
 	1.0,
 	0.0,
-	1.0, // +X: magenta (right face)
+	1.0, // +X: magenta (shell's right face is yellow)
 	0.0,
 	1.0,
 	1.0, // -X: cyan (left face)
@@ -31,7 +36,7 @@ const GLASS_COLORS = [
 	1.0, // +Y: blue (top face)
 	1.0,
 	1.0,
-	0.0, // -Y: yellow (bottom face)
+	0.0, // -Y: yellow (shell's bottom face is magenta)
 	1.0,
 	0.0,
 	0.0, // +Z: red (front face)
@@ -80,6 +85,51 @@ function normalize(v) {
 const lastFrame = {
 	projectionMatrix: null,
 	modelViewMatrix: null
+}
+
+// Uniforms that never change for the life of the program: the glass palette
+// and the whole petal-transmission block. Uploaded once at startup instead of
+// re-sent every frame, which is what kept drawScene's shape hidden behind a
+// wall of ~25 gl.uniform* calls. Must run after gl.useProgram.
+function uploadStaticUniforms(gl, programInfo) {
+	gl.useProgram(programInfo.program)
+	const { uniformLocations: u } = programInfo
+
+	gl.uniform3fv(u.glassColors, GLASS_COLORS)
+	gl.uniform3fv(u.transmissionColor, TRANSMISSION_COLOR)
+	gl.uniform1f(u.transmissionStrength, TRANSMISSION_STRENGTH)
+	gl.uniform1f(u.transmissionPower, TRANSMISSION_POWER)
+	gl.uniform1f(u.transmissionCoreRadius, TRANSMISSION_CORE_RADIUS)
+}
+
+// the two light strengths that depend on the glass toggle. It flips rarely
+// (double-click easter egg), so cache the last value and skip the upload on
+// every frame that isn't the flip itself.
+let lastGlassMode = null
+function setGlassMode(gl, programInfo, coloredGlass) {
+	if (coloredGlass === lastGlassMode) {
+		return
+	}
+	lastGlassMode = coloredGlass
+
+	// ambient only matters for the plain shell -- glass tint already fills
+	// in unlit surfaces on the colored box, so ambient would just muddy it
+	gl.uniform1f(
+		programInfo.uniformLocations.ambientStrength,
+		coloredGlass ? 0 : AMBIENT_STRENGTH
+	)
+	// glass tint softens contrast, so boost directional to keep it legible
+	gl.uniform1f(
+		programInfo.uniformLocations.directionalStrength,
+		DIRECTIONAL_STRENGTH + (coloredGlass ? 0.5 : 0)
+	)
+}
+
+// the cache above outlives a route visit, but the GL program doesn't -- a
+// remount gets a fresh program whose uniforms are all zero, so the next
+// setGlassMode must upload rather than match against the old mode
+function resetGlassModeCache() {
+	lastGlassMode = null
 }
 
 // item-box half-extent in object space (generateCube(1.0, PIVOT_Y))
@@ -177,7 +227,6 @@ function drawScene(
 	programInfo,
 	buffers,
 	cubeBuffers,
-	spin,
 	pitchOffset = 0,
 	yawOffset = 0,
 	bobOffset = 0,
@@ -229,15 +278,14 @@ function drawScene(
 	])
 
 	// mat4.rotate composes into the current frame, so calls apply in reverse
-	// order: spin (called first) ends up innermost, tilt (called second)
-	// outermost -- spin turns the object on its own vertical axis, then tilt
-	// angles that spinning object toward the camera. Reversing this order
-	// would tilt the spin axis itself, wobbling corner-up/corner-down instead
-	// of turning cleanly. yawOffset rides the spin axis, pitchOffset the tilt
-	// axis. Both rotations are sandwiched in a translate to/from PIVOT_Y so
-	// they happen about that point instead of the origin.
+	// order: yaw (called first) ends up innermost, tilt (called second)
+	// outermost -- yaw turns the object on its own vertical axis, then tilt
+	// angles that turned object toward the camera. Reversing this order would
+	// tilt the yaw axis itself, wobbling corner-up/corner-down instead of
+	// turning cleanly. Both rotations are sandwiched in a translate to/from
+	// PIVOT_Y so they happen about that point instead of the origin.
 	mat4.translate(modelViewMatrix, modelViewMatrix, [0, PIVOT_Y, 0])
-	mat4.rotate(modelViewMatrix, modelViewMatrix, spin + yawOffset, [0, 1, 0])
+	mat4.rotate(modelViewMatrix, modelViewMatrix, yawOffset, [0, 1, 0])
 	mat4.rotate(
 		modelViewMatrix,
 		modelViewMatrix,
@@ -270,19 +318,10 @@ function drawScene(
 		false,
 		normalMatrix
 	)
-	gl.uniform3fv(programInfo.uniformLocations.glassColors, GLASS_COLORS)
-	// ambient only matters for the plain shell: with the box colored, the
-	// ambient only matters for the plain shell -- glass tint already fills
-	// in unlit surfaces on the colored box, so ambient would just muddy it
-	gl.uniform1f(
-		programInfo.uniformLocations.ambientStrength,
-		coloredGlass ? 0 : AMBIENT_STRENGTH
-	)
-	// glass tint softens contrast, so boost directional to keep it legible
-	gl.uniform1f(
-		programInfo.uniformLocations.directionalStrength,
-		DIRECTIONAL_STRENGTH + (coloredGlass ? 0.5 : 0)
-	)
+	// the glass toggle changes two light strengths; everything else about the
+	// lighting is uploaded once at startup (see uploadStaticUniforms)
+	setGlassMode(gl, programInfo, coloredGlass)
+
 	const lightDirection = coloredGlass
 		? orbitDirection(lightAngle, 5, 5.2, 10)
 		: PLAIN_SHELL_LIGHT_DIRECTION
@@ -291,23 +330,6 @@ function drawScene(
 		: PLAIN_SHELL_FILL_DIRECTION
 	gl.uniform3fv(programInfo.uniformLocations.lightDirection, lightDirection)
 	gl.uniform3fv(programInfo.uniformLocations.fillDirection, fillDirection)
-
-	gl.uniform3fv(
-		programInfo.uniformLocations.transmissionColor,
-		TRANSMISSION_COLOR
-	)
-	gl.uniform1f(
-		programInfo.uniformLocations.transmissionStrength,
-		TRANSMISSION_STRENGTH
-	)
-	gl.uniform1f(
-		programInfo.uniformLocations.transmissionPower,
-		TRANSMISSION_POWER
-	)
-	gl.uniform1f(
-		programInfo.uniformLocations.transmissionCoreRadius,
-		TRANSMISSION_CORE_RADIUS
-	)
 
 	// rose first: opaque, writes depth normally, tinted by glass colors when active
 	gl.uniform1f(
@@ -340,121 +362,50 @@ function drawScene(
 // constantColor, when given, overrides the per-vertex color buffer with one
 // flat color -- used for the plain shell so its faces skip FACE_COLORS
 function drawObject(gl, programInfo, buffers, constantColor = null) {
-	setPositionAttribute(gl, buffers, programInfo)
-	if (constantColor) {
-		gl.disableVertexAttribArray(programInfo.attribLocations.vertexColor)
-		gl.vertexAttrib4f(
-			programInfo.attribLocations.vertexColor,
-			constantColor[0],
-			constantColor[1],
-			constantColor[2],
-			constantColor[3]
-		)
-	} else {
-		setColorAttribute(gl, buffers, programInfo)
-	}
-	setNormalAttribute(gl, buffers, programInfo)
-	setPetalUAttribute(gl, buffers, programInfo)
+	bindAttributes(gl, programInfo, buffers, constantColor)
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
-
-	const vertexCount = buffers.count
-	const type = gl.UNSIGNED_SHORT
-	const offset = 0
-	gl.drawElements(gl.TRIANGLES, vertexCount, type, offset)
+	gl.drawElements(gl.TRIANGLES, buffers.count, gl.UNSIGNED_SHORT, 0)
 }
 
 // draws just the cube's 12 edges as flat-colored lines, faces skipped
 function drawEdges(gl, programInfo, buffers, color) {
-	setPositionAttribute(gl, buffers, programInfo)
-	setNormalAttribute(gl, buffers, programInfo)
-	setPetalUAttribute(gl, buffers, programInfo)
-
-	gl.disableVertexAttribArray(programInfo.attribLocations.vertexColor)
-	gl.vertexAttrib4f(
-		programInfo.attribLocations.vertexColor,
-		color[0],
-		color[1],
-		color[2],
-		color[3]
-	)
-
+	bindAttributes(gl, programInfo, buffers, color)
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.edgeIndices)
 	gl.drawElements(gl.LINES, buffers.edgeCount, gl.UNSIGNED_SHORT, 0)
 }
 
-// binds the position buffer to the vertexPosition attribute
-function setPositionAttribute(gl, buffers, programInfo) {
-	const numComponents = 3
-	const type = gl.FLOAT
-	const normalize = false
-	const stride = 0
-	const offset = 0
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position)
-	gl.vertexAttribPointer(
-		programInfo.attribLocations.vertexPosition,
-		numComponents,
-		type,
-		normalize,
-		stride,
-		offset
-	)
-	gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition)
-}
+// Points every vertex attribute at its buffer. Two attributes need more than
+// the straight bind, and both fall back to a constant via vertexAttrib*:
+//
+//   color  -- constantColor, when given, replaces the per-vertex buffer with
+//             one flat color (the plain shell and the edge wireframe)
+//   petalU -- geometry without petals (the item-box) has no buffer at all;
+//             feeding 0.0 puts every vertex at the petal base, where the
+//             shader's transmission glow falls to nothing
+function bindAttributes(gl, programInfo, buffers, constantColor = null) {
+	for (const { buffer, location, size, optional } of VERTEX_ATTRIBUTES) {
+		const index = programInfo.attribLocations[location]
+		// the linker drops attributes the shader never reads
+		if (index < 0) {
+			continue
+		}
 
-// binds the color buffer to the vertexColor attribute
-function setColorAttribute(gl, buffers, programInfo) {
-	const numComponents = 4
-	const type = gl.FLOAT
-	const normalize = false
-	const stride = 0
-	const offset = 0
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color)
-	gl.vertexAttribPointer(
-		programInfo.attribLocations.vertexColor,
-		numComponents,
-		type,
-		normalize,
-		stride,
-		offset
-	)
-	gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor)
-}
+		if (location === "vertexColor" && constantColor) {
+			gl.disableVertexAttribArray(index)
+			gl.vertexAttrib4fv(index, constantColor)
+			continue
+		}
 
-// binds the per-vertex position-along-petal, or a constant for geometry with
-// no petals (the item-box): 0.0 is the petal base, where the shader's glow
-// falls to nothing, so the box never picks up the transmission effect
-function setPetalUAttribute(gl, buffers, programInfo) {
-	const location = programInfo.attribLocations.vertexPetalU
-	if (location < 0) {
-		return
+		if (optional && !buffers[buffer]) {
+			gl.disableVertexAttribArray(index)
+			gl.vertexAttrib1f(index, 0.0)
+			continue
+		}
+
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers[buffer])
+		gl.vertexAttribPointer(index, size, gl.FLOAT, false, 0, 0)
+		gl.enableVertexAttribArray(index)
 	}
-	if (!buffers.petalU) {
-		gl.disableVertexAttribArray(location)
-		gl.vertexAttrib1f(location, 0.0)
-		return
-	}
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.petalU)
-	gl.vertexAttribPointer(location, 1, gl.FLOAT, false, 0, 0)
-	gl.enableVertexAttribArray(location)
 }
 
-// binds the normal buffer to the vertexNormal attribute
-function setNormalAttribute(gl, buffers, programInfo) {
-	const numComponents = 3
-	const type = gl.FLOAT
-	const normalize = false
-	const stride = 0
-	const offset = 0
-	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.normal)
-	gl.vertexAttribPointer(
-		programInfo.attribLocations.vertexNormal,
-		numComponents,
-		type,
-		normalize,
-		stride,
-		offset
-	)
-	gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal)
-}
-
-export { drawScene, isPointerOnBox }
+export { drawScene, isPointerOnBox, uploadStaticUniforms, resetGlassModeCache }

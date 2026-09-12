@@ -3,7 +3,12 @@ import fragmentShaderSource from "./shaders/shader.frag?raw"
 import { generateRose } from "./rose-geometry.js"
 import { generateCube } from "./cube-geometry.js"
 import { initBuffers } from "./init-buffers.js"
-import { drawScene } from "./draw-scene.js"
+import { VERTEX_ATTRIBUTES } from "./vertex-attributes.js"
+import {
+	drawScene,
+	uploadStaticUniforms,
+	resetGlassModeCache
+} from "./draw-scene.js"
 import { createProgramInfo, showError } from "./gl-setup.js"
 import { setupTumbleDrag, stepIdlePhysics } from "./tumble-input.js"
 import { setupGlassToggle } from "./glass-toggle.js"
@@ -62,6 +67,10 @@ function webgl() {
 		return
 	}
 
+	// lighting constants that never change: sent once, not per frame
+	resetGlassModeCache()
+	uploadStaticUniforms(gl, programInfo)
+
 	const params = { ...defaultParams }
 	const geometry = generateRose(params)
 	const buffers = initBuffers(gl, geometry)
@@ -108,7 +117,6 @@ function webgl() {
 	setupGlassToggle(session, canvas)
 	setupTumbleDrag(session, canvas)
 
-	const spin = 0.0
 	let then = 0
 
 	function render(now) {
@@ -131,7 +139,6 @@ function webgl() {
 			programInfo,
 			session.buffers,
 			session.cubeBuffers,
-			spin,
 			session.pitchOffset,
 			session.yawOffset,
 			session.idleBob,
@@ -192,16 +199,15 @@ function teardown() {
 		}
 	}
 
-	gl.deleteBuffer(buffers.position)
-	gl.deleteBuffer(buffers.normal)
-	gl.deleteBuffer(buffers.color)
-	gl.deleteBuffer(buffers.petalU)
-	gl.deleteBuffer(buffers.indices)
-	gl.deleteBuffer(cubeBuffers.position)
-	gl.deleteBuffer(cubeBuffers.normal)
-	gl.deleteBuffer(cubeBuffers.color)
-	gl.deleteBuffer(cubeBuffers.indices)
-	gl.deleteBuffer(cubeBuffers.edgeIndices)
+	// driven off VERTEX_ATTRIBUTES rather than a hand-written list, so adding
+	// an attribute can't leave a buffer behind here
+	for (const meshBuffers of [buffers, cubeBuffers]) {
+		for (const { buffer } of VERTEX_ATTRIBUTES) {
+			gl.deleteBuffer(meshBuffers[buffer])
+		}
+		gl.deleteBuffer(meshBuffers.indices)
+		gl.deleteBuffer(meshBuffers.edgeIndices)
+	}
 	gl.deleteProgram(programInfo.program)
 
 	session = null
