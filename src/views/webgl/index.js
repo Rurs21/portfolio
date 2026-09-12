@@ -195,6 +195,7 @@ function teardown() {
 	gl.deleteBuffer(buffers.position)
 	gl.deleteBuffer(buffers.normal)
 	gl.deleteBuffer(buffers.color)
+	gl.deleteBuffer(buffers.petalU)
 	gl.deleteBuffer(buffers.indices)
 	gl.deleteBuffer(cubeBuffers.position)
 	gl.deleteBuffer(cubeBuffers.normal)

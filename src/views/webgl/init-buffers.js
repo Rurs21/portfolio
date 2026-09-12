@@ -23,6 +23,15 @@ function initBuffers(gl, geometry) {
 		count: geometry.indices.length
 	}
 
+	// petals only: the item-box has no petals to transmit light through, so
+	// its draw call feeds the attribute a constant instead (see drawObject)
+	if (geometry.petalU) {
+		const petalU = gl.createBuffer()
+		gl.bindBuffer(gl.ARRAY_BUFFER, petalU)
+		gl.bufferData(gl.ARRAY_BUFFER, geometry.petalU, gl.DYNAMIC_DRAW)
+		buffers.petalU = petalU
+	}
+
 	if (geometry.edgeIndices) {
 		const edgeIndices = gl.createBuffer()
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, edgeIndices)
@@ -47,6 +56,11 @@ function updateBuffers(gl, buffers, geometry) {
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color)
 	gl.bufferData(gl.ARRAY_BUFFER, geometry.colors, gl.DYNAMIC_DRAW)
+
+	if (buffers.petalU && geometry.petalU) {
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffers.petalU)
+		gl.bufferData(gl.ARRAY_BUFFER, geometry.petalU, gl.DYNAMIC_DRAW)
+	}
 
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
 	gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, geometry.indices, gl.DYNAMIC_DRAW)

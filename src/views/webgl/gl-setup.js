@@ -71,7 +71,8 @@ function createProgramInfo(gl, vertexShaderSource, fragmentShaderSource) {
 				"aVertexPosition"
 			),
 			vertexNormal: gl.getAttribLocation(shaderProgram, "aVertexNormal"),
-			vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor")
+			vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor"),
+			vertexPetalU: gl.getAttribLocation(shaderProgram, "aVertexPetalU")
 		},
 		uniformLocations: {
 			projectionMatrix: gl.getUniformLocation(
@@ -107,6 +108,22 @@ function createProgramInfo(gl, vertexShaderSource, fragmentShaderSource) {
 			isGlassSurface: gl.getUniformLocation(
 				shaderProgram,
 				"uIsGlassSurface"
+			),
+			transmissionColor: gl.getUniformLocation(
+				shaderProgram,
+				"uTransmissionColor"
+			),
+			transmissionStrength: gl.getUniformLocation(
+				shaderProgram,
+				"uTransmissionStrength"
+			),
+			transmissionPower: gl.getUniformLocation(
+				shaderProgram,
+				"uTransmissionPower"
+			),
+			transmissionCoreRadius: gl.getUniformLocation(
+				shaderProgram,
+				"uTransmissionCoreRadius"
 			)
 		}
 	}

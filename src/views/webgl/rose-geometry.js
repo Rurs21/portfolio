@@ -83,6 +83,13 @@ function buildPetal(params, transform, colorInner, colorOuter, out) {
 			out.positions.push(world[0], world[1], world[2])
 			out.normals.push(n[0], n[1], n[2])
 
+			// position along the petal (0 base, 1 tip), for the shader's
+			// light-transmission term. Raw u, not the sin(pi*u) width profile:
+			// that profile is symmetric, so it can't tell the thin tip from the
+			// thin base, and only the tip should glow (petal bases all crowd
+			// into the core, where overlapping glows would stack to white)
+			out.petalU.push(u)
+
 			const color = lerp3(colorInner, colorOuter, u)
 			out.colors.push(color[0], color[1], color[2], 1.0)
 		}
@@ -223,7 +230,13 @@ function withFullParams(params) {
 function generateRose(params) {
 	const fullParams = withFullParams(params)
 
-	const out = { positions: [], normals: [], colors: [], indices: [] }
+	const out = {
+		positions: [],
+		normals: [],
+		colors: [],
+		petalU: [],
+		indices: []
+	}
 
 	generateWhorls(fullParams, out)
 
@@ -231,6 +244,7 @@ function generateRose(params) {
 		positions: new Float32Array(out.positions),
 		normals: new Float32Array(out.normals),
 		colors: new Float32Array(out.colors),
+		petalU: new Float32Array(out.petalU),
 		indices: new Uint16Array(out.indices)
 	}
 }

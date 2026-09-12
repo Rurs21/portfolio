@@ -45,6 +45,22 @@ const AMBIENT_STRENGTH = 2
 const DIRECTIONAL_STRENGTH = 1.5
 const GLASS_STRENGTH = 0.35
 
+// petal light-transmission (fake subsurface scattering). Warmer and more
+// saturated than the petals' own red: light passing through thin tissue picks
+// up saturation on the way, which is what reads as light coming from *inside*
+// the petal rather than a brighter highlight sitting on top of it.
+const TRANSMISSION_COLOR = [1.0, 0.28, 0.22]
+const TRANSMISSION_STRENGTH = 0.85
+// how tightly the glow focuses around looking straight into the light through
+// the petal. Low values wash the whole bloom; this keeps it to the petals
+// actually between the viewer and the light.
+const TRANSMISSION_POWER = 4.0
+// petals whose surface sits nearer than this to the bloom's vertical axis
+// transmit nothing, ramping to full past it. The innermost petals are shrunk
+// to innerScale and stand upright, so their tips converge on the axis; without
+// this they'd stack glows into a white pip at the center of the bloom.
+const TRANSMISSION_CORE_RADIUS = 0.35
+
 // plain-shell edge wireframe: a fixed pale cyan, independent of light/dark
 // theme, weaker than the old theme-matched brighten(plainShellColor)
 const EDGE_COLOR = [0.9, 0.9, 0.9, 0.01]
@@ -276,6 +292,23 @@ function drawScene(
 	gl.uniform3fv(programInfo.uniformLocations.lightDirection, lightDirection)
 	gl.uniform3fv(programInfo.uniformLocations.fillDirection, fillDirection)
 
+	gl.uniform3fv(
+		programInfo.uniformLocations.transmissionColor,
+		TRANSMISSION_COLOR
+	)
+	gl.uniform1f(
+		programInfo.uniformLocations.transmissionStrength,
+		TRANSMISSION_STRENGTH
+	)
+	gl.uniform1f(
+		programInfo.uniformLocations.transmissionPower,
+		TRANSMISSION_POWER
+	)
+	gl.uniform1f(
+		programInfo.uniformLocations.transmissionCoreRadius,
+		TRANSMISSION_CORE_RADIUS
+	)
+
 	// rose first: opaque, writes depth normally, tinted by glass colors when active
 	gl.uniform1f(
 		programInfo.uniformLocations.glassStrength,
@@ -321,6 +354,7 @@ function drawObject(gl, programInfo, buffers, constantColor = null) {
 		setColorAttribute(gl, buffers, programInfo)
 	}
 	setNormalAttribute(gl, buffers, programInfo)
+	setPetalUAttribute(gl, buffers, programInfo)
 	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
 
 	const vertexCount = buffers.count
@@ -333,6 +367,7 @@ function drawObject(gl, programInfo, buffers, constantColor = null) {
 function drawEdges(gl, programInfo, buffers, color) {
 	setPositionAttribute(gl, buffers, programInfo)
 	setNormalAttribute(gl, buffers, programInfo)
+	setPetalUAttribute(gl, buffers, programInfo)
 
 	gl.disableVertexAttribArray(programInfo.attribLocations.vertexColor)
 	gl.vertexAttrib4f(
@@ -383,6 +418,24 @@ function setColorAttribute(gl, buffers, programInfo) {
 		offset
 	)
 	gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor)
+}
+
+// binds the per-vertex position-along-petal, or a constant for geometry with
+// no petals (the item-box): 0.0 is the petal base, where the shader's glow
+// falls to nothing, so the box never picks up the transmission effect
+function setPetalUAttribute(gl, buffers, programInfo) {
+	const location = programInfo.attribLocations.vertexPetalU
+	if (location < 0) {
+		return
+	}
+	if (!buffers.petalU) {
+		gl.disableVertexAttribArray(location)
+		gl.vertexAttrib1f(location, 0.0)
+		return
+	}
+	gl.bindBuffer(gl.ARRAY_BUFFER, buffers.petalU)
+	gl.vertexAttribPointer(location, 1, gl.FLOAT, false, 0, 0)
+	gl.enableVertexAttribArray(location)
 }
 
 // binds the normal buffer to the vertexNormal attribute
