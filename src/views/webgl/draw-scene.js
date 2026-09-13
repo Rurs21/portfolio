@@ -222,18 +222,23 @@ function orbitDirection(lightAngle, x, y, z) {
 	return normalize([x * c - z * s, y, x * s + z * c])
 }
 
-function drawScene(
-	gl,
-	programInfo,
-	buffers,
-	cubeBuffers,
-	pitchOffset = 0,
-	yawOffset = 0,
-	bobOffset = 0,
-	lightAngle = 0,
-	coloredGlass = false,
-	plainShellColor = [1, 1, 1, 1]
-) {
+// Everything but the shell color comes off the live session: the render loop
+// already owns that state, so threading it through as positional arguments
+// only made the call site a column of unlabeled values. plainShellColor stays
+// separate because it's read from the DOM (theme class) each frame, not held
+// on the session.
+function drawScene(session, plainShellColor = [1, 1, 1, 1]) {
+	const {
+		gl,
+		programInfo,
+		buffers,
+		cubeBuffers,
+		pitchOffset = 0,
+		yawOffset = 0,
+		idleBob: bobOffset = 0,
+		lightAngle = 0,
+		coloredGlass = false
+	} = session
 	// https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
 	// make the drawingbuffer match whatever size the browser has stretched the canvas
 	if (document.styleSheets.length > 0) {

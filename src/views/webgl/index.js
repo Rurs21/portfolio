@@ -134,18 +134,7 @@ function webgl() {
 			stepIdlePhysics(session, deltaTime)
 		}
 
-		drawScene(
-			gl,
-			programInfo,
-			session.buffers,
-			session.cubeBuffers,
-			session.pitchOffset,
-			session.yawOffset,
-			session.idleBob,
-			session.lightAngle,
-			session.coloredGlass,
-			getPlainShellColor()
-		)
+		drawScene(session, getPlainShellColor())
 
 		session.frame = requestAnimationFrame(render)
 	}
