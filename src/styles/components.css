@@ -36,6 +36,20 @@ dialog {
 	pointer-events: none;
 }
 
+/*
+	Visible keyboard focus. Uses --contrast-color so the ring clears 3:1
+	against both the page and the button fill in either scheme.
+*/
+.icon-button:focus-visible,
+.square-icon:focus-visible,
+.select:has(> select:focus-visible),
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+	outline: 0.185em solid var(--contrast-color);
+	outline-offset: 0.185em;
+}
+
 .icon-button:disabled,
 .icon-button[disabled] {
 	border: 0.2em solid #999999;
@@ -53,8 +67,8 @@ dialog {
 	border-radius: 0;
 	border-top: 0.2em solid var(--text-color);
 	border-left: 0.2em solid var(--text-color);
-	border-right: 0.2em solid var(--secondary-color);
-	border-bottom: 0.2em solid var(--secondary-color);
+	border-right: 0.2em solid var(--border-color);
+	border-bottom: 0.2em solid var(--border-color);
 }
 
 .icon {
@@ -102,7 +116,7 @@ select {
 
 	min-width: 13ch;
 	max-width: 25ch;
-	border: 1px solid var(--secondary-color);
+	border: 1px solid var(--border-color);
 	border-radius: 0.25em;
 
 	font-size: 1.1em;
@@ -191,7 +205,7 @@ required to unfuck Chrome select button.
 		overflow-wrap: break-word;
 
 		font-size: clamp(1.15em, 3vh, 1.75em);
-		border: 0.2em solid var(--secondary-color);
+		border: 0.2em solid var(--border-color);
 	}
 }
 #action-dialog.dialog-scale {

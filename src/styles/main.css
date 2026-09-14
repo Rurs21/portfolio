@@ -22,6 +22,7 @@ body, html {
 	--light-text-color: #333333;
 	--light-background-color: #e7e9ea; /* White Marble */
 	--light-secondary-color: #c0c0c0;
+	--light-border-color: #858585;
 	--light-copyright-color: #676869;
 	--light-rose-stroke: #fbc4d0;
 	--light-rose-fill: #f7f0f2;
@@ -33,8 +34,9 @@ body, html {
 	--dark-text-color: #eeeeee;
 	--dark-background-color: #1c1e1e; /* Raven Black */
 	--dark-secondary-color: #41424c;
+	--dark-border-color: #676878;
 	--dark-copyright-color: #858585;
-	--dark-rose-stroke: #e4345a;
+	--dark-rose-stroke: #d31c44;
 	--dark-rose-fill: #960018;
 	--dark-glitch-text-color1: #00ffff;
 	--dark-glitch-text-color2: #ff00ff;
@@ -44,6 +46,7 @@ body, html {
 	--text-color: var(--light-text-color);
 	--background-color: var(--light-background-color);
 	--secondary-color: var(--light-secondary-color);
+	--border-color: var(--light-border-color);
 	--copyright-color: var(--light-copyright-color);
 	--rose-stroke: var(--light-rose-stroke);
 	--rose-fill: var(--light-rose-fill);
@@ -69,6 +72,7 @@ body, html {
 		--text-color: var(--dark-text-color);
 		--background-color: var(--dark-background-color);
 		--secondary-color: var(--dark-secondary-color);
+		--border-color: var(--dark-border-color);
 		--copyright-color: var(--dark-copyright-color);
 		--rose-stroke: var(--dark-rose-stroke);
 		--rose-fill: var(--dark-rose-fill);
@@ -87,6 +91,7 @@ body.light {
 	--text-color: var(--light-text-color);
 	--background-color: var(--light-background-color);
 	--secondary-color: var(--light-secondary-color);
+	--border-color: var(--light-border-color);
 	--copyright-color: var(--light-copyright-color);
 	--rose-stroke: var(--light-rose-stroke);
 	--rose-fill: var(--light-rose-fill);
@@ -100,6 +105,7 @@ body.dark {
 	--text-color: var(--dark-text-color);
 	--background-color: var(--dark-background-color);
 	--secondary-color: var(--dark-secondary-color);
+	--border-color: var(--dark-border-color);
 	--copyright-color: var(--dark-copyright-color);
 	--rose-stroke: var(--dark-rose-stroke);
 	--rose-fill: var(--dark-rose-fill);

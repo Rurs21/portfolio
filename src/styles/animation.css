@@ -15,7 +15,7 @@
 	height: 1.3em;
 	position: absolute;
 	background-color: var(--text-color);
-	animation: blink 900ms infinite !important;
+	animation: blink 900ms infinite;
 }
 
 .glitch-text {
@@ -113,10 +113,16 @@
 		text-shadow: none;
 		animation: none;
 	}
+	.cursor {
+		animation: none;
+	}
 }
 .reduced-motion {
 	.glitch-text {
 		text-shadow: none;
+		animation: none;
+	}
+	.cursor {
 		animation: none;
 	}
 }
