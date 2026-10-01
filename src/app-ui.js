@@ -130,6 +130,7 @@ function initNavigation(app) {
 				animation.fadeInAndOut(app.view, async () => {
 					window.history.pushState({}, "", href)
 					await app.resolveRoute(href)
+					focusView(app.view)
 				})
 			}
 		})
@@ -143,25 +144,25 @@ function initNavigation(app) {
 	window.onpopstate = function () {
 		animation.fadeInAndOut(app.view, async () => {
 			await app.resolveRoute()
+			focusView(app.view)
 		})
 	}
 
+	// move focus to the new view so keyboard and screen reader users land on it
+	function focusView(view) {
+		const target = view.querySelector("h1") ?? view
+		target.setAttribute("tabindex", "-1")
+		target.focus({ preventScroll: true })
+		window.scrollTo(0, 0)
+	}
+
 	function setActiveLink() {
-		// set previously active links back
-		const previouslyActives = document.querySelectorAll("a:not([href])")
-		for (const link of previouslyActives) {
-			const url = new URL(link.getAttribute("data-href"))
-			link.href = url.pathname
-		}
-		// disable active path links
 		const relativeLinks = 'a[href^="./"], a[href^="/"]'
 		for (const link of document.querySelectorAll(relativeLinks)) {
-			if (link.href == window.location.href) {
-				link.setAttribute("aria-disabled", true)
-				link.setAttribute("data-href", link.href)
-				link.removeAttribute("href")
+			if (link.pathname === window.location.pathname) {
+				link.setAttribute("aria-current", "page")
 			} else {
-				link.setAttribute("aria-disabled", false)
+				link.removeAttribute("aria-current")
 			}
 		}
 	}

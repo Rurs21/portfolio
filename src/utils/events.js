@@ -69,6 +69,10 @@ function onLanguageChange(callback) {
  */
 function onLinkClick(callback) {
 	return (event) => {
+		// let the browser handle new tab/window clicks
+		if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+			return
+		}
 		// handle event target is the child <img> or <svg> instead of the <a>
 		let href = event.target.href || event.target.closest("a")?.href
 		if (href) {

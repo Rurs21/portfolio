@@ -76,7 +76,7 @@
 	background-color: var(--rose-fill);
 }
 
-a.round-button[aria-disabled="true"] {
+a.round-button[aria-current="page"] {
 	border-radius: 0.75em;
 	border: 0.2em solid var(--rose-stroke);
 	background-color: var(--rose-fill);
@@ -108,4 +108,9 @@ a.round-button[aria-disabled="true"] {
 	.horizontal-menu {
 		flex-direction: row-reverse;
 	}
+}
+
+/* programmatic focus on the view after navigation */
+[tabindex="-1"]:focus {
+	outline: none;
 }
