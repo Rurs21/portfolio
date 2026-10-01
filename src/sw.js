@@ -2,6 +2,8 @@ import { version } from '#root/package.json' with { type: 'json' }
 
 const CACHE_NAME = `cache-v${version}`
 const ASSET_MANIFEST = '/.vite/manifest.json'
+// public/ files that aren't routes: never answer with the app shell
+const PUBLIC_FILES = ['/robots.txt', '/llms.txt', '/.well-known/']
 
 self.addEventListener('install', event => {
 	console.log('[Service Worker] Install')
@@ -65,7 +67,9 @@ self.addEventListener('fetch', event => {
 
 	// client-side routes aren't cached under their own URL, the server
 	// rewrites them to the app shell — serve that, or offline reload breaks
-	if (request.mode === 'navigate') {
+	const { pathname } = new URL(request.url)
+	const isPublicFile = PUBLIC_FILES.some(path => pathname.startsWith(path))
+	if (request.mode === 'navigate' && !isPublicFile) {
 		event.respondWith(
 			caches.match('/', { ignoreVary: true })
 			.then(response => response || fetch(request))

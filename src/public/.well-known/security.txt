@@ -1,0 +1,4 @@
+Contact: mailto:ce.pepin@icloud.com
+Contact: https://github.com/Rurs21
+Preferred-Languages: en, fr
+Expires: 2027-09-22T00:00:00.000Z
