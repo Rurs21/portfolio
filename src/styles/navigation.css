@@ -10,7 +10,7 @@
 	z-index: 1;
 }
 
-#navbar > *[role="menu"] {
+#navbar > .top-menu {
 	border-bottom: 0.15em solid var(--text-color);
 
 	background: var(--background-color);

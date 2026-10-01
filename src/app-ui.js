@@ -184,6 +184,15 @@ function setNavbar() {
 	menus["main-menu"].addSubMenu(menus["navigation-menu"])
 	menus["settings-menu"].addSubMenu(menus["language-menu"])
 
+	// Escape closes the menus and hands focus back to the opener
+	document.addEventListener("keydown", (event) => {
+		const main = menus["main-menu"]
+		if (event.key === "Escape" && !main.isClosed()) {
+			main.toggle()
+			document.getElementById("menu-button").focus()
+		}
+	})
+
 	// Reveal navbar when menu all setup
 	document.getElementById("navbar").removeAttribute("hidden")
 
