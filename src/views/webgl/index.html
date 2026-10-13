@@ -1,13 +1,210 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<meta name="description" content="WebGL">
-	<title>WebGL</title>
-</head>
-<body id="webgl">
-	<h1 data-translate="wip">Work in progress...</h1>
-	<h2 data-translate="sorry">Sorry nothing to see here</h2>
-	<canvas id="glcanvas"></canvas>
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="description"
+			content="A 3D rose grown from parametric equations, tweakable live"
+		/>
+		<title>WebGL Rose</title>
+	</head>
+	<body id="webgl">
+		<h1 data-translate="rose-title">A rose, by the numbers</h1>
+		<canvas id="glcanvas" tabindex="0"></canvas>
+		<p id="webgl-error" hidden data-translate="webgl-unavailable"></p>
+
+		<fieldset id="rose-controls">
+			<legend data-translate="rose-controls-legend">Shape</legend>
+
+			<div id="rose-controls-params">
+				<div class="rose-param">
+					<label
+						data-translate="rose-param-spiralWindings"
+						for="rose-spiralWindings-number"
+						>Spiral windings</label
+					>
+					<div class="rose-stepper">
+						<button
+							type="button"
+							id="rose-spiralWindings-decrement"
+							aria-label="Decrease spiral windings"
+						>
+							−
+						</button>
+						<input type="number" id="rose-spiralWindings-number" />
+						<button
+							type="button"
+							id="rose-spiralWindings-increment"
+							aria-label="Increase spiral windings"
+						>
+							+
+						</button>
+					</div>
+				</div>
+
+				<p id="rose-petal-count">
+					<span data-translate="rose-petal-count-label"
+						>Total petals</span
+					>: <span id="rose-petal-count-value"></span>
+				</p>
+			</div>
+
+			<figure id="rose-spiral-figure">
+				<svg
+					id="rose-spiral-diagram"
+					viewBox="-110 -110 220 220"
+					role="img"
+					aria-labelledby="rose-spiral-diagram-title"
+				>
+					<title
+						id="rose-spiral-diagram-title"
+						data-translate="rose-spiral-diagram-title"
+					>
+						Top-down view of the spiral and each petal's placement
+						point
+					</title>
+					<path id="rose-spiral-path" />
+					<g id="rose-spiral-points"></g>
+				</svg>
+				<figcaption
+					data-translate="rose-spiral-caption"
+					id="rose-spiral-caption"
+				>
+					The spiral curve (radius only) and where each petal actually
+					lands on it, seen from above.
+				</figcaption>
+			</figure>
+		</fieldset>
+
+		<fieldset id="rose-debug-controls">
+			<legend data-translate="rose-debug-legend">Debug</legend>
+
+			<div class="rose-param">
+				<label
+					data-translate="rose-param-bloomOpenness"
+					for="rose-bloomOpenness-range"
+					>Openness</label
+				>
+				<input type="range" id="rose-bloomOpenness-range" />
+				<input type="number" id="rose-bloomOpenness-number" />
+			</div>
+
+			<div class="rose-param">
+				<label
+					data-translate="rose-param-outerRadius"
+					for="rose-outerRadius-range"
+					>Bloom size</label
+				>
+				<input type="range" id="rose-outerRadius-range" />
+				<input type="number" id="rose-outerRadius-number" />
+			</div>
+		</fieldset>
+
+		<section id="rose-math">
+			<div id="rose-math-header">
+				<h2 data-translate="rose-math-title">The math</h2>
+				<button
+					type="button"
+					id="rose-math-mode"
+					aria-pressed="false"
+					aria-controls="rose-math-plain rose-math-green"
+					data-translate="rose-math-mode-green"
+				>
+					explain like I'm on 4chan
+				</button>
+			</div>
+
+			<div id="rose-math-plain">
+			<h3 data-translate="rose-math-shape-title">One petal</h3>
+
+			<p data-translate="rose-math-intro">
+				Every petal is the same shape, copied over and over. Narrow, wide, narrow again: a sine wave.
+			</p>
+
+			<math display="block">
+				<mrow>
+					<mtext>width</mtext>
+					<mo stretchy="false">(</mo>
+					<mi>u</mi>
+					<mo stretchy="false">)</mo>
+					<mo>=</mo>
+					<mtext>maxWidth</mtext>
+					<mo>&#x22C5;</mo>
+					<mi>sin</mi>
+					<mo stretchy="false">(</mo>
+					<mi>&#x03C0;</mi>
+					<mi>u</mi>
+					<mo stretchy="false">)</mo>
+				</mrow>
+			</math>
+
+			<p data-translate="rose-math-shape-note">
+				u tracks position along the petal: 0 at the base, 1 at the tip.
+			</p>
+
+			<h3 data-translate="rose-math-spiral-title">The spiral</h3>
+
+			<p data-translate="rose-math-spiral-intro">
+				A real rose doesn't grow all its petals at once. Each new one forms a bit further out than the last, tracing a spiral as the bud opens. The simplest version is the Archimedean spiral: every step outward is the same size.
+			</p>
+
+			<math display="block">
+				<mrow>
+					<mi>r</mi>
+					<mo stretchy="false">(</mo>
+					<mi>&#x03B8;</mi>
+					<mo stretchy="false">)</mo>
+					<mo>=</mo>
+					<mn>1</mn>
+					<mo>+</mo>
+					<mi>&#x03B8;</mi>
+				</mrow>
+			</math>
+
+			<p data-translate="rose-math-spiral-walk">
+				That's also the order they grow in: tight inner turns are the bud, big open petals at the rim are the oldest.
+			</p>
+
+			<h3 data-translate="rose-math-angle-title">The golden angle</h3>
+
+			<p data-translate="rose-math-angle">
+				Distance out comes from the spiral. Spacing is a separate rule: each new petal turns a fixed amount further around than the last one.
+			</p>
+
+			<math display="block">
+				<mrow>
+					<msub>
+						<mtext>angle</mtext>
+						<mi>i</mi>
+					</msub>
+					<mo>=</mo>
+					<mi>i</mi>
+					<mo>&#x22C5;</mo>
+					<mn>137.5</mn>
+					<mo>&#xB0;</mo>
+				</mrow>
+			</math>
+
+			<p data-translate="rose-math-outro">
+				137.5&#xB0; isn't arbitrary. A clean fraction like 120&#xB0; makes every third petal overlap an earlier one: three spokes, wasted gaps. 137.5&#xB0; never repeats, so each petal always lands in the biggest gap left.
+			</p>
+
+			<p data-translate="rose-math-golden">
+				That angle comes from the golden ratio, &#x3C6; = (1+&#x221A;5)/2, the number fractions approximate worst. A full turn divided by &#x3C6;&#xB2; is 137.507&#x2026;&#xB0;. Nothing ever lines up with it.
+			</p>
+
+			<p data-translate="rose-math-phyllotaxis">
+				Real plants use this angle too. It's called phyllotaxis: leaves, seeds and petals spaced so none shades or crowds the one before it. Each gets its own share of sunlight or space, packed as efficiently as possible.
+			</p>
+
+			<p data-translate="rose-math-offset-note" id="rose-math-offset-note">
+				(In this model, changing the winding count also spins the whole arrangement, so the outer petal moves instead of staying fixed in place.)
+			</p>
+			</div>
+
+			<div id="rose-math-green" hidden>
+				<pre data-translate="rose-math-greentext"></pre>
+			</div>
+		</section>
+	</body>
 </html>
