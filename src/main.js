@@ -14,10 +14,10 @@ window.addEventListener("load", initComponents)
 
 async function init(event) {
 
-	console.info("App initiliazing...")
+	console.info("App initializing...")
 	registerServiceWorker()
 
-	console.info("initiliazing router...")
+	console.info("initializing router...")
 	const webglView = () => import("@/views/webgl")
 
 	const router = new Router()
@@ -45,9 +45,9 @@ async function initComponents(event) {
 				.navigation()
 				.controls.language()
 		}
-		console.log(`app initiliazed`)
+		console.log(`app initialized`)
  	} catch (error) {
-		console.error(`Error while initiliazing app \n${error}`)
+		console.error(`Error while initializing app \n${error}`)
 	}
 }
 
