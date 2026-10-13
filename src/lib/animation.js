@@ -5,19 +5,21 @@ const animation = new function() {
 
 	this.reducedMotion = false
 
-	// TODO: Improve animation when view is loading
-	this.fadeInAndOut = function(element, callbackFn) {
-		if (!isCssLoaded(document)) {
-			callbackFn()
-		} else {
-			const animationDur = 375
-			element.classList.add("fade-out")
-			setTimeout(async () => {
-				await callbackFn()
-				element.classList.add("fade-in")
-				element.classList.remove("fade-out")
-				setTimeout(() => element.classList.remove("fade-in"), animationDur)
-			}, animationDur)
+	// Glitch the element out, run the callback (the view swap), glitch it back in.
+	// Durations match the glitch-out / glitch-in rules in animation.css.
+	this.glitchCut = async function(element, callbackFn) {
+		if (this.reducedMotion || !isCssLoaded(document)) {
+			return callbackFn()
+		}
+		const outDur = 180
+		const inDur = 220
+		element.classList.add("glitch-out")
+		await new Promise((resolve) => setTimeout(resolve, outDur))
+		try {
+			await callbackFn()
+		} finally {
+			element.classList.replace("glitch-out", "glitch-in")
+			setTimeout(() => element.classList.remove("glitch-in"), inDur)
 		}
 	}
 

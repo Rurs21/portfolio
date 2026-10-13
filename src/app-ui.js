@@ -127,7 +127,7 @@ function initNavigation(app) {
 		navlink.onclick = onLinkClick((href) => {
 			if (href != window.location.href) {
 				app.closeMainMenu()
-				animation.fadeInAndOut(app.view, async () => {
+				animation.glitchCut(app.view, async () => {
 					window.history.pushState({}, "", href)
 					await app.resolveRoute(href)
 					focusView(app.view)
@@ -142,7 +142,7 @@ function initNavigation(app) {
 	})
 
 	window.onpopstate = function () {
-		animation.fadeInAndOut(app.view, async () => {
+		animation.glitchCut(app.view, async () => {
 			await app.resolveRoute()
 			focusView(app.view)
 		})
