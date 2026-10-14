@@ -13,6 +13,11 @@ const svgoConfig = {
 					inlineStyles: false
 				}
 			}
+		},
+		// only sets viewBox when the SVG has none (e.g. Boxicons v3)
+		{
+			name: "addAttributesToSVGElement",
+			params: { attributes: [{ viewBox: "0 0 24 24" }] }
 		}
 	]
 }

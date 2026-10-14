@@ -34,7 +34,7 @@ export default function custom(options = {}) {
 				let content = await fs.readFile(id, "utf-8")
 
 				if (id.endsWith(".html")) {
-					content = inlineSvgImages(content, id)
+					content = inlineSvgImages(content, path.dirname(id))
 					content = await htmlMinify(content)
 				}
 

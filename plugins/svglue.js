@@ -1,5 +1,6 @@
 import path from "path"
 import fs from "fs"
+import { createRequire } from "module"
 import { optimize } from "svgo"
 import { svgoConfig, } from "./configs.js"
 
@@ -13,6 +14,8 @@ import { svgoConfig, } from "./configs.js"
  *
  * @module svglue
  */
+
+const require = createRequire(import.meta.url)
 
 function inlineSvgImages(html, fileLocation) {
 	// Regular expression to find img and image tags with SVG sources and capture attributes
@@ -90,7 +93,10 @@ function setAriaAttributes(svgString, capturedAttributes) {
 
 function retrieveSVG(src, from) {
 	var svgString = undefined
-	if (src.endsWith(".svg")) {
+	if (src.startsWith("node-modules:")) {
+		// package file, e.g. node-modules:@fortawesome/fontawesome-free/svgs/solid/envelope.svg
+		svgString = fs.readFileSync(require.resolve(src.slice("node-modules:".length)), "utf-8")
+	} else if (src.endsWith(".svg")) {
 		src = src.startsWith("/") ? "." + src : src // vite quirk fix
 		const svgPath = path.resolve(from, src)
 		svgString = fs.readFileSync(svgPath, "utf-8")

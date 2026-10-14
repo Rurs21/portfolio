@@ -21,6 +21,8 @@
     "oxlint": "^1.82.0",
     "oxfmt": "^0.67.0",
     "svgo": "^4.1.0",
-    "html-minifier-terser": "^7.2.0"
+    "html-minifier-terser": "^7.2.0",
+    "@boxicons/core": "^1.0.6",
+    "@fortawesome/fontawesome-free": "^7.3.1"
   }
 }

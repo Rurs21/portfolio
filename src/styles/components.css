@@ -80,7 +80,7 @@ summary:focus-visible {
 }
 
 .square-icon {
-	color: var(--text-color);
+	color: var(--background-color);
 	background: var(--text-color);
 	height: 4em;
 	width: 4em;
@@ -88,10 +88,6 @@ summary:focus-visible {
 	border-radius: 1em;
 
 	transition: background-color 0.3s, fill 0.3s, stroke 0.3s;
-}
-
-.square-icon svg {
-	fill: var(--background-color);
 }
 
 select {

@@ -162,6 +162,7 @@ h3 {
 /* elements */
 
 svg {
+	fill: currentColor;
 	width: 100%;
 	height: auto;
 	max-width: 100%;
